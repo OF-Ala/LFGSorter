@@ -1,0 +1,13 @@
+## Interface: 11306
+## Title: LFGSorter
+## X-Category: Chat & Communication
+## Author: OF_Ala
+## X-Email: 
+## X-Notes: 
+## Notes: 
+## OptionalDeps: AceGUI-3.0,LibDataBroker-1.1
+## RequiredDeps: 
+## SavedVariablesPerCharacter: LFGSortFirstUse, LFG_sorter_settings, CustomTable, mmap_pos, LFG_sorter_opt
+## Version: 1.13
+
+LFGSort.xml
