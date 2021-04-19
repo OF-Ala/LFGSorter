@@ -6,7 +6,7 @@ local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
 local addon = LibStub("AceAddon-3.0"):NewAddon("LFGSorter", "AceConsole-3.0");
 --local AceDB = LibStub("AceDB-3.0")
---local L = LibStub("AceLocale-3.0"):GetLocale("NovaWorldBuffs");
+local L = LibStub("AceLocale-3.0"):GetLocale("LFGSorter");
 
 local bLogOn = 0;
 local hooks = {}
@@ -27,7 +27,7 @@ function LFGSort_OnEvent(self, event, ...)
 	if (event == "VARIABLES_LOADED") then
 	
 		if (LFGSortFirstUse ~= version) then
-			print("LFG sorter loading default");
+			print(L["LFG sorter loading default"]);
 			LFGNum = 4;
 		    LFGSortFirstUse = version;
 			
@@ -57,7 +57,7 @@ function LFGSort_OnEvent(self, event, ...)
 		
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", filterAddonChatMsg);
 
-		for index = 2, NUM_CHAT_WINDOWS do
+		for index = 1, NUM_CHAT_WINDOWS do
 			local chatFrame = _G["ChatFrame" .. index]
 			LFGSort_Message(chatFrame)
 			if chatFrame ~= _G.COMBATLOG then
@@ -73,15 +73,24 @@ end
 function filterAddonChatMsg(self, event, msg, author, ...)
 	if (event == "CHAT_MSG_CHANNEL") then
 		instID = '';
-		for k,v in pairs(LFGSort_Inst) do
-			if string.find(msg, k) then
-				LFGSort_Debug_Message('filtering msg: '..instID);
-				instID = v;
+		for i,j in pairs(LFGSort_Inst_ect) do
+			if string.find(msg, i) then
+				--LFGSort_Debug_Message('filtering msg: '..instID);
+				instID = j;
 
 				break;
 			end
 		end
-		
+		if instID == '' then
+			for k,v in pairs(LFGSort_Inst) do
+				if string.find(msg, k) then
+					--LFGSort_Debug_Message('filtering msg: '..instID);
+					instID = v;
+
+					break;
+				end
+			end
+		end
 		if instID == '' then
 			
 			return false, msg, author, ...;
@@ -102,45 +111,10 @@ function filterAddonChatMsg(self, event, msg, author, ...)
 	
 end
 
-function NewCustomTable_test()
-	-- inst abbr + hide + sound + color
-	newTable = {};
-	newTable[1] = {'АФК', 0, 0, '|cb3b1aa60'};
-	newTable[2] = {'БАФФ', 0, 0, '|cffff6060'};
-	newTable[3] = {'МАО', 0, 0, '|c218f2cf1'};
-	newTable[4] = {'МАРА', 0, 0, '|c6d65c9f1'};
-	newTable[5] = {'КТК', 0, 0, '|cbc20e3f1'};
-	newTable[6] = {'ЛИ', 0, 0, '|ce320cff1'};
-	newTable[7] = {'ГЧГ', 0, 0, '|c782d17f1'};
-	newTable[8] = {'ЗФ', 0, 0, '|c457a0ff1'};
-	newTable[9] = {'НП', 0, 0, '|c02754bf1'};
-	newTable[10] = {'УЛЬДА', 0, 0, '|c02754bf1'};
-	newTable[11] = {'КИ', 0, 0, '|cbde861f1'};
-	newTable[12] = {'ПС', 0, 0, '|c61e8c0f1'};
-	newTable[13] = {'ХРАМ', 0, 0, '|c61e8d8f1'};
-	newTable[14] = {'МК', 0, 0, '|ce861b2f1'};
-	newTable[15] = {'ТЮ', 0, 0, '|cbd61e8f1'};
-	newTable[16] = {'ГНОМ', 0, 0, '|c617fe8f1'};
-	newTable[17] = {'ДМ', 0, 0, '|c617fe8f1'};
-	newTable[18] = {'СТРАТ', 0, 0, '|ca913cffb'};
-	newTable[19] = {'ШОЛО', 0, 0, '|c1396cffb'};
-	newTable[20] = {'ОН', 0, 0, '|c780a11fb'};
-	newTable[21] = {'ЛБРС', 0, 0, '|c1aa4ad0d'};
-	newTable[22] = {'УБРС', 0, 1, '|cffDA70D6'};
-	newTable[23] = {'ЗГ', 0, 0, '|c8eb81cf7'};
-	newTable[24] = {'АК20', 0, 0, '|ccf5813fb'};
-	newTable[25] = {'АК40', 0, 0, '|cffFF6EB4'};
-	newTable[26] = {'БВЛ', 0, 0, '|cffFF4500'};
-	newTable[27] = {'НАКС', 0, 0, '|cffFFC125'};
-	newTable[28] = {'ОНЯ', 0, 0, '|cffFFC125'};
-	return newTable;
-
-end
-
 function SettingsTable()
 	-- inst abbr + hide + sound + color
 	LFG_Settings_Table = {};
-	LFG_Settings_Table[1] = {name = 'Raids & other', data = 
+	LFG_Settings_Table[1] = {name = L['Raids & other'], data = 
 	{'АФК', 
 	'БАФФ',
 	'ЗГ',
@@ -152,7 +126,7 @@ function SettingsTable()
 	'НАКС'}
 	};
 	
-	LFG_Settings_Table[2] = {name = '5 ppl 1', data = {
+	LFG_Settings_Table[2] = {name = L['5 ppl 1'], data = {
 	'ОП',
 	'ПС',
 	'МК',
@@ -165,7 +139,7 @@ function SettingsTable()
 	'КИ'
 	}}
 	
-	LFG_Settings_Table[3] = {name = '5 ppl 2', data = {
+	LFG_Settings_Table[3] = {name = L['5 ppl 2'], data = {
 	'МАРА',
 	'ЗФ',
 	'УЛЬДА',
@@ -222,151 +196,10 @@ function NewCustomTable()
 end
 
 function GetInstTable()
-	
-	-- 0. AFK / boost /
-	--LFGSort_Inst['[^|%s][Аа][Фф][кК][%s|$]'] = 'АФК';
-	LFGSort_Inst_ect['АФК'] = 'АФК';
-	LFGSort_Inst_ect['AFK'] = 'АФК';
-	LFGSort_Inst_ect['афк'] = 'АФК';
-	LFGSort_Inst_ect['БУСТ'] = 'АФК';
-	LFGSort_Inst_ect['Буст'] = 'АФК';
-	LFGSort_Inst_ect['буст'] = 'АФК';
-	LFGSort_Inst_ect['boost'] = 'АФК';
-	LFGSort_Inst_ect['g%-ран'] = 'АФК';
-	LFGSort_Inst_ect['g ран'] = 'АФК';
-	LFGSort_Inst_ect['g/ран'] = 'АФК';
-	LFGSort_Inst_ect['г%-ран'] = 'АФК';
-	LFGSort_Inst_ect['г ран'] = 'АФК';
-	LFGSort_Inst_ect['г/ран'] = 'АФК';
-	-- 1. Баффы ДМ
-	LFGSort_Inst_ect['баф.*ДМ'] = 'БАФФ';
-	LFGSort_Inst_ect['Баф.*ДМ'] = 'БАФФ';
-	LFGSort_Inst_ect['БАФ.*ДМ'] = 'БАФФ';
-	LFGSort_Inst_ect['ДМ.*Баф'] = 'БАФФ';
-	LFGSort_Inst_ect['дм.*баф'] = 'БАФФ';
-	LFGSort_Inst_ect['дм.*БАФ'] = 'БАФФ';
 
-	-- 2. МАО
-	LFGSort_Inst['мао'] = 'МАО';
-	LFGSort_Inst['МАО'] = 'МАО';
-	LFGSort_Inst['[мМ]онастырь'] = 'МАО';
-	LFGSort_Inst['СМ'] = 'МАО';
-	LFGSort_Inst['SM'] = 'МАО';
-	LFGSort_Inst['[кК]ладбищ'] = 'МАО';
-	LFGSort_Inst['[бБ]иблиотек'] = 'МАО';
-	LFGSort_Inst['[сС]обор'] = 'МАО';
-	-- 3. Мародон
-	LFGSort_Inst['марадон'] = 'МАРА';
-	LFGSort_Inst['[мМ]ара[уд%s]'] = 'МАРА';
-	LFGSort_Inst['[мМ]аро[уд]'] = 'МАРА';
-	LFGSort_Inst['МАРА'] = 'МАРА';
-	LFGSort_Inst[' [Мм]ару'] = 'МАРА';
-	-- 4. КТК
-	LFGSort_Inst['[Тт]емного клыка'] = 'КТК';
-	LFGSort_Inst['ТЕМНОГО КЛЫКА'] = 'КТК';
-	LFGSort_Inst['КТК'] = 'КТК';
-	LFGSort_Inst[' ктк'] = 'КТК';
-	-- 5. ЛИ
-	LFGSort_Inst['[^И]ЛИ'] = 'ЛИ'; -- без ИЛИ
-	LFGSort_Inst['лабиринты'] = 'ЛИ';
-	-- 6. ГЧГ
-	LFGSort_Inst['ГЧГ'] = 'ГЧГ';
-	LFGSort_Inst['ГчГ'] = 'ГЧГ';
-	LFGSort_Inst['Гчг'] = 'ГЧГ';
-	LFGSort_Inst['БРД'] = 'ГЧГ';
-	LFGSort_Inst['BRD'] = 'ГЧГ';
-	LFGSort_Inst['гчг'] = 'ГЧГ';
-	LFGSort_Inst['брд'] = 'ГЧГ';
-	LFGSort_Inst['brd'] = 'ГЧГ';
-	-- 7. ЗФ
-	LFGSort_Inst['ЗФ'] = 'ЗФ';
-	LFGSort_Inst['[фФ]арак'] = 'ЗФ';
-	LFGSort_Inst['ФАРАК'] = 'ЗФ';
-	LFGSort_Inst['[фФ]аррак'] = 'ЗФ';
-	LFGSort_Inst['ФАРРАК'] = 'ЗФ';
-	-- 8. НП пучина
-	LFGSort_Inst['НП'] = 'НП';
-	LFGSort_Inst['[Пп]учин'] = 'НП';
-	-- 9. Ульдаман
-	LFGSort_Inst['[уУ]льда'] = 'УЛЬДА';
-	-- 10. Курганы И
-	LFGSort_Inst['КИ'] = 'КИ';
-	LFGSort_Inst['[Кк]урган'] = 'КИ'; -- КУРГАНЫ
-	LFGSort_Inst['КУРГАН'] = 'КИ';
-	-- 11. Пещеры стенаний
-	LFGSort_Inst['wc'] = 'ПС';
-	-- 12. Храм
-	LFGSort_Inst['[хХ]рам'] = 'ХРАМ';
-	LFGSort_Inst['[хХ]аккар'] = 'ХРАМ';
-	LFGSort_Inst['[аА]ттал'] = 'ХРАМ';
-	LFGSort_Inst['[аА]тал'] = 'ХРАМ';
-	-- 13. Мертвые копи
-	LFGSort_Inst[' мк'] = 'МК';
-	LFGSort_Inst['мк '] = 'МК';
-	LFGSort_Inst['МК'] = 'МК';
-	LFGSort_Inst['[Кк]опи'] = 'МК';
-	-- 14. Тюрьма
-	LFGSort_Inst['[тТ]юрьм'] = 'ТЮ';
-	-- 15. Забытый город
-	LFGSort_Inst['ДМ'] = 'ДМ';
-	-- 16. Гномер
-	LFGSort_Inst['[гГ]номер'] = 'ГНОМ';
-	LFGSort_Inst['[гГ]номре'] = 'ГНОМ';
-	-- 17. Страт
-	LFGSort_Inst['[сС]трат'] = 'СТРАТ';
-	LFGSort_Inst['СТРАТ'] = 'СТРАТ';
-	-- 18. Шоло
-	LFGSort_Inst['ШОЛО'] = 'ШОЛО';
-	LFGSort_Inst['шоло'] = 'ШОЛО';
-	LFGSort_Inst['[шШ]оло'] = 'ШОЛО';
-	LFGSort_Inst['[Нн]екро'] = 'ШОЛО';
-	-- 19. ОП
-	LFGSort_Inst['ОП'] = 'ОП';
-	-- 20. УБРС
-	LFGSort_Inst['УБРС'] = 'УБРС';
-	LFGSort_Inst['убрс'] = 'УБРС';
-	LFGSort_Inst['[Рр]енд.*[Рр]ан'] = 'УБРС';
-	-- 21. ЛБРС
-	LFGSort_Inst['ЛБРС'] = 'ЛБРС';
-	LFGSort_Inst['лбрс'] = 'ЛБРС';
-	LFGSort_Inst['lbrs'] = 'ЛБРС';
-	-- 22. ЗГ
-	LFGSort_Inst['Зг%s'] = 'ЗГ';
-	LFGSort_Inst['ЗГ'] = 'ЗГ';
-	LFGSort_Inst['[Гг]уруб'] = 'ЗГ';
-	LFGSort_Inst['ГУРУБ[^Аа]'] = 'ЗГ';
-	-- 23. АК20
-	LFGSort_Inst['АК%s*20^г'] = 'АК20';
-	LFGSort_Inst['AQ%s*20^г'] = 'АК20';
-	LFGSort_Inst['[аА]к.*20^г'] = 'АК20';
-	LFGSort_Inst['[кК]ираж%s*20^г'] = 'АК40';
-	-- 24. АК40
-	LFGSort_Inst['АК.*40^г'] = 'АК40';
-	LFGSort_Inst['[Аа]к%s*40^г'] = 'АК40';
-	LFGSort_Inst['[кК]ираж%s*40^г'] = 'АК40';
-	-- 25. ОП
-	LFGSort_Inst['МС'] = 'ОН';
-	LFGSort_Inst['MC'] = 'ОН';
-	LFGSort_Inst['[mM]olten [Cc]ore'] = 'ОН';
-	LFGSort_Inst['[нН]едра'] = 'ОН';
-	-- 26. БВЛ
-	LFGSort_Inst['БВЛ'] = 'БВЛ';
-	LFGSort_Inst['BWL'] = 'БВЛ';
-	LFGSort_Inst['бвл'] = 'БВЛ';
-	LFGSort_Inst['bwl'] = 'БВЛ';
-	LFGSort_Inst['ЛКТ'] = 'БВЛ';
-	--LFGSort_Inst['лкт'] = 'БВЛ'
-	-- 27. Накс
-	LFGSort_Inst['[Нн]акс'] = 'НАКС';
-	LFGSort_Inst['НАКС'] = 'НАКС';
-	-- 28. Оня
-	LFGSort_Inst['[Оо]никси'] = 'ОНЯ';
-	LFGSort_Inst['ОНЯ'] = 'ОНЯ';
-	LFGSort_Inst['ОНЮ'] = 'ОНЯ';
-	LFGSort_Inst['ОНЯ'] = 'ОНЯ';
-	LFGSort_Inst['ОНИКСИ'] = 'ОНЯ';
+	LFGSort_Inst_ect = L['LFGSort_Inst_ect'];
 	
-	--table.sort(LFGSort_Inst, function(a,b) return a[4] > b[4] or a[4] == b[4] and a[5] > b[5] end)
+	LFGSort_Inst = L['LFGSort_Inst'];
 	
 end
 
@@ -377,7 +210,7 @@ function AddMessage(frame, message, ...)
 	for i,j in pairs(LFGSort_Inst_ect) do
 		if string.find(message, i) then
 			instID = j;
-			LFGSort_Debug_Message('found: '..j..' template '..i);
+			LFGSort_Debug_Message('found: '..L[j]..' template '..i);
 			break;
 		end
 	end
@@ -387,7 +220,7 @@ function AddMessage(frame, message, ...)
 		for k,v in pairs(LFGSort_Inst) do
 			if string.find(message, k) then
 				instID = v;
-				LFGSort_Debug_Message('found: '..v..' template '..k);
+				LFGSort_Debug_Message('found: '..L[v]..' template '..k);
 				break;
 			end
 		end
@@ -411,8 +244,33 @@ function AddMessage(frame, message, ...)
 			end
 		end 
 		
-		message = string.gsub(message, '(.+)([(а-я|А-Я|Ёё|0-9|\.)]\]) ([(а-я|А-Я|Ёё|0-9)])(.+)', '%1%2\['..color..instID..bell..'|r\]%3%4');
-			
+		--message = string.gsub(message, '(.+)([(а-я|А-Я|Ёё|0-9|\.|\w)]\]) ([(\w|а-я|А-Я|Ёё|0-9)])(.+)', '%1%2\['..color..L[instID]..bell..'|r\]%3%4');
+		-- ограничить число замен - последний аргумент - 1;
+		
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[])%s*(%b[])(:.+)','2 - %1\['..color..L[instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message('best test '..string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|%.|%w]%])%s*(%[[%w|а-я|А-Я|Ёё|0-9])(.+)','45 - %1%2\['..color..L[instID]..bell..'\]%3%4'));
+		--LFGSort_Debug_Message('best test '..string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|%.|%w]%])%s*(%[[%w|а-я|А-Я|Ёё|0-9])(.+)'))ж
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[]).-(%b[])(:.+)','2 - %1\['..color..L[instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[])(%b[])(:.+)','3 - %1\['..color..L[instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup] [Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'))
+		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup]<DND>[Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'))
+		--LFGSort_Debug_Message(L[instID]..' - '..instID);
+		--LFGSort_Debug_Message(''..color..L[instID]..bell);
+		--LFGSort_Debug_Message('2nd '..string.gsub(message,'(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message('4nd '..string.gsub(message,'(.*)',''..color..L[instID]..bell..'\]%1'));
+		--LFGSort_Debug_Message('3rd '..string.gsub(message,'(\b[])\s*(\b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'));
+		--print(message);
+		--LFGSort_Debug_Message(string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4'));
+
+		--full_str = '';
+		--new_str = "";
+		--for c in message:gmatch"." do
+		--	full_str = full_str..'['..tostring(c:byte(1))..'] ';
+		--	new_str = new_str..' '..string.char(c:byte(1));
+		--end
+		--print(new_str);
+		
+		message = string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4', 1);
 	end
    	
     return hooks[frame](frame, message, ...);
@@ -509,7 +367,9 @@ function CreateMMB()
 	IMM_LDB = LibStub("LibDataBroker-1.1"):NewDataObject("LFGsort", {
 		type = "data source",
 		text = "LFG sorter",
-		icon = "Interface\\Icons\\inv_misc_horn_03",
+		--icon = "Interface\\Icons\\inv_misc_horn_03",
+		icon = "Interface\\Icons\\Spell_arcane_portalthunderbluff",
+		--icon = "Interface\\AddOns\\LFGSort\\res\\LFGSorter.png",
 		OnClick = function() 
 			LFGSort_Debug_Message(tostring(mmap_pos));
 			CreateSettingsFrame();
@@ -527,7 +387,7 @@ function CreateSettingsFrame()
 	
 	local frame = AceGUI:Create("Frame");
 	frame:SetTitle("LFG sorter");
-	frame:SetStatusText("Настройки LFG sorter");
+	frame:SetStatusText(L["Настройки LFG sorter"]);
 	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
 	frame:SetLayout("Fill");
 
@@ -546,7 +406,7 @@ function CreateSettingsFrame()
 	
 		group = AceGUI:Create("InlineGroup"); --InlineGroup
 		--group.SetTitle(j.name);
-		DEFAULT_CHAT_FRAME:AddMessage(j.name);
+		--DEFAULT_CHAT_FRAME:AddMessage(j.name);
 		group:SetLayout("List")
 		group:SetRelativeWidth(0.33);
 		for m,n in pairs(j.data) do
@@ -557,12 +417,12 @@ function CreateSettingsFrame()
 			v = CustomTable[n];
 		
 			local desc = AceGUI:Create("Label")
-			desc:SetText(''..v[3]..n..'|r');
+			desc:SetText(''..v[3]..L[n]..'|r');
 			desc:SetRelativeWidth(0.20);
 			elem:AddChild(desc)
 			
 			local hideCheck = AceGUI:Create("CheckBox")
-			hideCheck:SetLabel("скрыть");
+			hideCheck:SetLabel(L["скрыть"]);
 			hideCheck:SetValue(CustomTable[n][1] == 1);
 			hideCheck:SetCallback("OnValueChanged", function(value)
 				SetHiding(n);
@@ -571,7 +431,7 @@ function CreateSettingsFrame()
 			elem:AddChild(hideCheck)
 			
 			local soundCheck = AceGUI:Create("CheckBox");
-			soundCheck:SetLabel("звук");
+			soundCheck:SetLabel(L["звук"]);
 			soundCheck:SetValue(CustomTable[n][2] == 1);
 			soundCheck:SetCallback("OnValueChanged", function(value)
 				SetSound(n);
@@ -590,10 +450,10 @@ end
 function SetSound(inst, ...)
 		
 	if CustomTable[inst][2] == 0 then
-		LFGSort_Debug_Message(CustomTable[inst][3]..inst.."|r - Звук включен");
+		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук включен"]);
 		CustomTable[inst][2] = 1;
 	else
-		LFGSort_Debug_Message(CustomTable[inst][3]..inst.."|r - Звук выключен");
+		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук выключен"]);
 		CustomTable[inst][2] = 0;
 	end
 end
@@ -602,10 +462,10 @@ function SetHiding(inst, ...)
 	
 	if CustomTable[inst][1] == 0 then
 		CustomTable[inst][1] = 1;
-		LFGSort_Debug_Message(CustomTable[inst][3]..inst.."|r - будут показаны в чате");
+		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут показаны в чате"]);
 	else
 		CustomTable[inst][1] = 0;
-		LFGSort_Debug_Message(CustomTable[inst][3]..inst.."|r - будут скрыты из чата");
+		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут скрыты из чата"]);
 	end
 end
 
