@@ -204,23 +204,28 @@ function GetInstTable()
 end
 
 function AddMessage(frame, message, ...)
+	r,g,b,MID, sticky = ...;
 	
 	instID = '';
+	if MID == info.id then
+		return hooks[frame](frame, message, ...);
+	end
 	
+	--LFGSort_Debug_Message('MID '..MID);
 	for i,j in pairs(LFGSort_Inst_ect) do
 		if string.find(message, i) then
 			instID = j;
-			LFGSort_Debug_Message('found: '..L[j]..' template '..i);
+			--LFGSort_Debug_Message('found: '..L[j]..' template '..i);
 			break;
 		end
 	end
-	
+	--LFGSort_Debug_Message('ok');
 	if instID == '' then
-		LFGSort_Debug_Message('looking more');
+		--LFGSort_Debug_Message('looking more');
 		for k,v in pairs(LFGSort_Inst) do
 			if string.find(message, k) then
 				instID = v;
-				LFGSort_Debug_Message('found: '..L[v]..' template '..k);
+				--LFGSort_Debug_Message('found: '..L[v]..' template '..k);
 				break;
 			end
 		end
