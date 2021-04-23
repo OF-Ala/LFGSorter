@@ -61,6 +61,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst_ect['Буст'] = 'АФК';
 	LFGSort_Inst_ect['буст'] = 'АФК';
 	LFGSort_Inst_ect['boost'] = 'АФК';
+	LFGSort_Inst_ect['BOOST'] = 'АФК';
 	LFGSort_Inst_ect['g%-ран'] = 'АФК';
 	LFGSort_Inst_ect['g ран'] = 'АФК';
 	LFGSort_Inst_ect['g/ран'] = 'АФК';
@@ -116,6 +117,7 @@ LFGSort_Inst_ect = {};
 	-- 8. НП пучина
 	LFGSort_Inst['НП'] = 'НП';
 	LFGSort_Inst['[Пп]учин'] = 'НП';
+	LFGSort_Inst['ПУЧИН'] = 'НП';
 	-- 9. Ульдаман
 	LFGSort_Inst['[уУ]льда'] = 'УЛЬДА';
 	-- 10. Курганы И
@@ -140,12 +142,14 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst['ДМ'] = 'ДМ';
 	-- 16. Гномер
 	LFGSort_Inst['[гГ]номер'] = 'ГНОМ';
+	LFGSort_Inst['ГНОМЕР'] = 'ГНОМ';
 	LFGSort_Inst['[гГ]номре'] = 'ГНОМ';
 	-- 17. Страт
 	LFGSort_Inst['[сС]трат'] = 'СТРАТ';
 	LFGSort_Inst['СТРАТ'] = 'СТРАТ';
 	-- 18. Шоло
 	LFGSort_Inst['ШОЛО'] = 'ШОЛО';
+	LFGSort_Inst['НЕКРОС'] = 'ШОЛО';
 	LFGSort_Inst['шоло'] = 'ШОЛО';
 	LFGSort_Inst['[шШ]оло'] = 'ШОЛО';
 	LFGSort_Inst['[Нн]екро'] = 'ШОЛО';
@@ -166,16 +170,24 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst['ГУРУБ[^Аа]'] = 'ЗГ';
 	-- 23. АК20
 	LFGSort_Inst['АК%s*20^г'] = 'АК20';
+	LFGSort_Inst['АКУ20'] = 'АК20';
+	LFGSort_Inst['АК20'] = 'АК20';
+	LFGSort_Inst['АКУ 20'] = 'АК20';
+	LFGSort_Inst['АК 20'] = 'АК20';
 	LFGSort_Inst['AQ%s*20^г'] = 'АК20';
 	LFGSort_Inst['[аА]к.*20^г'] = 'АК20';
 	LFGSort_Inst['[кК]ираж%s*20^г'] = 'АК40';
 	-- 24. АК40
+	LFGSort_Inst['АК40'] = 'АК40';
+	LFGSort_Inst['АКУ40'] = 'АК40';
+	LFGSort_Inst['АКУ 40'] = 'АК40';
+	LFGSort_Inst['АК 40'] = 'АК40';
 	LFGSort_Inst['АК.*40^г'] = 'АК40';
 	LFGSort_Inst['[Аа]к%s*40^г'] = 'АК40';
 	LFGSort_Inst['[кК]ираж%s*40^г'] = 'АК40';
 	-- 25. ОП
-	LFGSort_Inst['МС'] = 'ОН';
-	LFGSort_Inst['MC'] = 'ОН';
+	LFGSort_Inst['МС^К'] = 'ОН';
+	LFGSort_Inst['MC^К'] = 'ОН';
 	LFGSort_Inst['[mM]olten [Cc]ore'] = 'ОН';
 	LFGSort_Inst['[нН]едра'] = 'ОН';
 	-- 26. БВЛ

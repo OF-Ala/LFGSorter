@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 1.0.4";
+local version = "LFGSorter 1.0.6";
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
 local addon = LibStub("AceAddon-3.0"):NewAddon("LFGSorter", "AceConsole-3.0");
@@ -275,8 +275,11 @@ function AddMessage(frame, message, ...)
 		--end
 		--print(new_str);
 		
-		message = string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4', 1);
-	end
+		--message = string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4', 1);
+		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[instID]..bell..'|r]%3%4', 1);
+		--'(%b[])(.-)(%b[])(.-)','%1%2['..'TEST'..']%3%4')
+
+		end
    	
     return hooks[frame](frame, message, ...);
 end

@@ -129,7 +129,8 @@ LFGSort_Inst_ect = {};
 
 	-- 17. Страт
 	LFGSort_Inst['[Ss]trat'] = 'СТРАТ';
-	LFGSort_Inst['СТРАТ'] = 'СТРАТ';
+	LFGSort_Inst['STRAT'] = 'СТРАТ';
+	LFGSort_Inst[' ST L'] = 'СТРАТ';
 	-- 18. Шоло
 	LFGSort_Inst['SCHOLO'] = 'ШОЛО';
 	LFGSort_Inst['SHOLO'] = 'ШОЛО';
