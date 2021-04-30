@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 1.0.6";
+local version = "LFGSorter 1.0.7";
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
 local addon = LibStub("AceAddon-3.0"):NewAddon("LFGSorter", "AceConsole-3.0");
@@ -14,6 +14,7 @@ local lastCall = 0;
 local icon = LibStub("LibDBIcon-1.0");
 local IMM_LDB = nil;
 local l_debug = false;
+local activeChannels = {};
 
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
@@ -27,10 +28,18 @@ function LFGSort_OnEvent(self, event, ...)
 	if (event == "VARIABLES_LOADED") then
 	
 		if (LFGSortFirstUse ~= version) then
-			print(L["LFG sorter loading default"]);
+			LFGSort_Message(L["LFG sorter loading default"]);
 			LFGNum = 4;
 		    LFGSortFirstUse = version;
 			
+			LFG_channels = {
+			true,
+			true,
+			true,
+			true,
+			false,
+			false
+			}
 			
 			--LFG_sorter_opt = LibStub("AceDB-3.0"):New("LFG_sorter_opt", { profile = { minimap = { hide = false, }, }, })
 			mmap_pos = {
@@ -48,7 +57,25 @@ function LFGSort_OnEvent(self, event, ...)
 				},
 			})	
 		end
-					
+		
+		if LFG_channels == nil then
+			LFG_channels = {
+			true,
+			true,
+			true,
+			true,
+			false,
+			false
+			}
+		end
+		
+		for i,j in pairs(LFG_channels) do
+			if j == true then
+				activeChannels[ChatTypeInfo["CHANNEL"..i].id] = true;
+				LFGSort_Debug_Message('searching in: '..i..' channel, id: '..ChatTypeInfo["CHANNEL"..i].id);
+			end
+		end
+		
 		messageReceived = 0;
 		SlashCmdList["LFGSortCOMMAND"] = LFGSortSlash;
 		SLASH_LFGSortCOMMAND1 = "/lfgsorter"; 
@@ -146,9 +173,9 @@ function SettingsTable()
 	'ХРАМ',
 	'ГЧГ',
 	'ДМ',
+	'ЛБРС',
 	'СТРАТ',
 	'ШОЛО',
-	'ЛБРС',
 	'УБРС'
 	}}
 	
@@ -157,39 +184,41 @@ function SettingsTable()
 end
 
 function NewCustomTable()
+	-- http://www.ac-web.org/forums/showthread.php?50732-Tutorial-How-to-have-colors-on-your-menu-(LUA)
 	-- inst abbr + hide + sound + color
 	newTable = {};
-	newTable['АФК'] = {0, 0, '|cb3b1aa60'};
-	newTable['БАФФ'] = {0, 0, '|cffff6060'};
+	newTable['АФК'] = {0, 0, '|cFFA9A9A9'}; -- Darkgray"|cFFA9A9A9" ++
+	newTable['БАФФ'] = {0, 0, '|cFFDEB887'}; -- Burlywood"|cFFDEB887" 
 	
-	newTable['МАО'] = {0, 0, '|c218f2cf1'};
-	newTable['МАРА'] = {0, 0, '|c6d65c9f1'};
-	newTable['КТК'] = {0, 0, '|cbc20e3f1'};
-	newTable['ЛИ'] = {0, 0, '|ce320cff1'};
-	newTable['ГЧГ'] = {0, 0, '|c782d17f1'};
-	newTable['ЗФ'] = {0, 0, '|c457a0ff1'};
-	newTable['НП'] = {0, 0, '|c02754bf1'};
-	newTable['УЛЬДА'] = {0, 0, '|c02754bf1'};
-	newTable['КИ'] = {0, 0, '|cbde861f1'};
-	newTable['ПС'] = {0, 0, '|c61e8c0f1'};
-	newTable['ХРАМ'] = {0, 0, '|c61e8d8f1'};
-	newTable['МК'] = {0, 0, '|ce861b2f1'};
-	newTable['ТЮ'] = {0, 0, '|cbd61e8f1'};
-	newTable['ГНОМ'] = {0, 0, '|c617fe8f1'};
-	newTable['ДМ'] = {0, 0, '|c617fe8f1'};
-	newTable['СТРАТ'] = {0, 0, '|ca913cffb'};
-	newTable['ШОЛО'] = {0, 0, '|c1396cffb'};
-	newTable['ОП'] = {0, 0, '|c780a11fb'};
-	newTable['ЛБРС'] = {0, 0, '|c1aa4ad0d'};
-	newTable['УБРС'] = {0, 0, '|cffDA70D6'};
+	newTable['ОП'] = {0, 0, '|cFF483D8B'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
+	newTable['МК'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
+	newTable['ПС'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
+	newTable['КТК'] = {0, 0, '|cFF0000CD'};--mediumblue"|cFF0000CD"//-- mediumseagreen "|cFF3CB371" ++  --LIGHTBLUE"|cFFADD8E6"
+	newTable['НП'] = {0, 0, '|cFF9370DB'};--mediumpurple"|cFF9370DB"//-- darkolivegreen "|cFF556B2F ++ --LIGHTSEAGREEN  "|cFF20B2AA"
+	newTable['ТЮ'] = {0, 0, '|cFFBA55D3'};--mediumorchid"|cFFBA55D3"//--darkgreen"|cFF006400" ++ --MEDIUMSPRINGGREEN "|cFF00FA9A"
+	newTable['ГНОМ'] = {0, 0, '|cFF1E90FF'};--DODGERBLUE  "|cFF1E90FF"//--limegreen"|cFF32CD32" ++ --AQUAMARINE
+	newTable['ЛИ'] = {0, 0, '|cFF4682B4'};----steelblue"|cFF4682B4"//-- darkkhaki"|cFFBDB76B" ++--LIGHTSKYBLUE"|cFF87CEFA"
+	newTable['МАО'] = {0, 0, '|cFFADD8E6'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
+	newTable['КИ'] = {0, 0, '|cFF00FFFF'};--cyan"|cFF00FFFF"//-- darkorange"|cFFFF8C00" ++ --STEELBLUE"|cFF4682B4"
 	
-	newTable['ЗГ'] = {0, 0, '|c8eb81cf7'};
-	newTable['АК20'] = {0, 0, '|ccf5813fb'};
-	newTable['ОНЯ'] = {0, 0, '|cffFFC125'};
-	newTable['ОН'] = {0, 0, '|c780a11fb'};
-	newTable['АК40'] = {0, 0, '|cffFF6EB4'};
-	newTable['БВЛ'] = {0, 0, '|cffFF4500'};
-	newTable['НАКС'] = {0, 0, '|cffFFC125'};
+	newTable['МАРА'] = {0, 0, '|cFF00CED1'};--DARKTURQUOISE"|cFF00CED1 //--tomato"|cFFFF6347" ++ --SLATEBLUE"|cFF6A5ACD"
+	newTable['ЗФ'] = {0, 0, '|cFF98FB98'};--PALEGREEN"|cFF98FB98" //--chocolate"|cFFD2691E" ++ --DARKSLATEBLUE  "|cFF483D8B"
+	newTable['УЛЬДА'] = {0, 0, '|cFF3CB371'};--mediumseagreen "|cFF3CB371" //--sienna"|cFFA0522D" ++ --CORNFLOWERBLUE "|cFF6495ED"
+	newTable['ХРАМ'] = {0, 0, '|cFF556B2F'};--darkolivegreen "|cFF556B2F //--mediumorchid"|cFFBA55D3" ++ --ROYALBLUE"|cFF4169E1"
+	newTable['ГЧГ'] = {0, 0, '|cFF32CD32'};--limegreen"|cFF32CD32" //--mediumpurple"|cFF9370DB" ++--ROYALBLUE"|cFF4169E1"
+	newTable['ЛБРС'] = {0, 0, '|cFFBDB76B'};--darkkhaki"|cFFBDB76B"//-- slateblue"|cFF6A5ACD" ++--MEDIUMBLUE  "|cFF0000CD"	
+	newTable['СТРАТ'] = {0, 0, '|cFFFF7F50'};-- coral"|cFFFF7F50"//--lightblue"|cFFADD8E6"++ --MEDIUMPURPLE"|cFF9370DB"
+	newTable['ШОЛО'] = {0, 0, '|cFFFF8C00'};--darkorange"|cFFFF8C00"//--darkslateblue"|cFF483D8B" ++ mediumblue"|cFF0000CD"++ --DARKORCHID  "|cFF9932CC"!!!!
+	newTable['ДМ'] = {0, 0, '|cFFD2691E'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
+	newTable['УБРС'] = {0, 0, '|cFFFF6347'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
+	
+	newTable['ЗГ'] = {0, 0, '|cFF9ACD32'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
+	newTable['АК20'] = {0, 0, '|cFFFF6060'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
+	newTable['ОНЯ'] = {0, 0, '|cFFFF4500'}; -- Orangered"|cFFFF4500" ++
+	newTable['ОН'] = {0, 0, '|cFFDC143C'}; -- Crimson  "|cFFDC143C"++
+	newTable['АК40'] = {0, 0, '|cFF800080'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
+	newTable['БВЛ'] = {0, 0, '|cFF8B0000'}; -- darkred  "|cFF8B0000"++
+	newTable['НАКС'] = {0, 0, '|cFFDAA520'}; -- Goldenrod"|cFFDAA520"++
 		
 	return newTable;
 
@@ -206,36 +235,52 @@ end
 function AddMessage(frame, message, ...)
 	r,g,b,MID, sticky = ...;
 	
-	instID = '';
+	local lfg_instID = '';
+
 	if MID == info.id then
 		return hooks[frame](frame, message, ...);
 	end
+	if MID == info.id or MID == nil or not activeChannels[MID] == true then
+		LFGSort_Debug_Message('not searching in: '..tostring(MID)..' channel '..message);
+		return hooks[frame](frame, message, ...);	
+	end
 	
-	--LFGSort_Debug_Message('MID '..MID);
+	--LFGSort_Debug_Message('MID '..tostring(MID)..' :'..message);
+	
 	for i,j in pairs(LFGSort_Inst_ect) do
 		if string.find(message, i) then
-			instID = j;
-			--LFGSort_Debug_Message('found: '..L[j]..' template '..i);
+			lfg_instID = j;
+			LFGSort_Debug_Message('found: '..L[j]..' template '..i);
 			break;
 		end
 	end
 	--LFGSort_Debug_Message('ok');
-	if instID == '' then
-		--LFGSort_Debug_Message('looking more');
-		for k,v in pairs(LFGSort_Inst) do
-			if string.find(message, k) then
-				instID = v;
-				--LFGSort_Debug_Message('found: '..L[v]..' template '..k);
+	if lfg_instID == '' then
+		--LFGSort_De
+		LFGSort_Debug_Message('looking more');
+		for x,y in pairs(LFGSort_Inst) do
+			if string.find(message..'.', x) then
+				lfg_instID = y;
 				break;
 			end
 		end
 	end
-	
-	if instID ~= '' then
-		data = CustomTable[instID]
-		hide = data[1]
-		sound = data[2]
-		color = data[3]
+
+	if lfg_instID ~= '' then
+
+		--lfg_data = CustomTable[lfg_instID]
+
+		lfg_data = CustomTable[lfg_instID]
+
+		if lfg_data == nil then
+			LFGSort_Message('no data in custom table for '..a..'('..lfg_instID..')');
+			--LFGSort_Message(' data type '..type(lfg_data2)..'('..lfg_data2[1]..')'..'('..lfg_data2[2]..')'..'('..lfg_data2[3]..')');
+			return hooks[frame](frame, message, ...);
+		end
+			
+		hide = lfg_data[1]
+		sound = lfg_data[2]
+		color = lfg_data[3]
 		bell = '';
 		if sound == 1 then
 			currTime = time();
@@ -248,24 +293,24 @@ function AddMessage(frame, message, ...)
 				lastCall = currTime;
 			end
 		end 
-		
-		--message = string.gsub(message, '(.+)([(а-я|А-Я|Ёё|0-9|\.|\w)]\]) ([(\w|а-я|А-Я|Ёё|0-9)])(.+)', '%1%2\['..color..L[instID]..bell..'|r\]%3%4');
+
+		--message = string.gsub(message, '(.+)([(а-я|А-Я|Ёё|0-9|\.|\w)]\]) ([(\w|а-я|А-Я|Ёё|0-9)])(.+)', '%1%2\['..color..L[lfg_instID]..bell..'|r\]%3%4');
 		-- ограничить число замен - последний аргумент - 1;
 		
-		--LFGSort_Debug_Message(string.gsub(message,'(%b[])%s*(%b[])(:.+)','2 - %1\['..color..L[instID]..bell..'\]%2%3'));
-		--LFGSort_Debug_Message('best test '..string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|%.|%w]%])%s*(%[[%w|а-я|А-Я|Ёё|0-9])(.+)','45 - %1%2\['..color..L[instID]..bell..'\]%3%4'));
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[])%s*(%b[])(:.+)','2 - %1\['..color..L[lfg_instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message('best test '..string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|%.|%w]%])%s*(%[[%w|а-я|А-Я|Ёё|0-9])(.+)','45 - %1%2\['..color..L[lfg_instID]..bell..'\]%3%4'));
 		--LFGSort_Debug_Message('best test '..string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|%.|%w]%])%s*(%[[%w|а-я|А-Я|Ёё|0-9])(.+)'))ж
-		--LFGSort_Debug_Message(string.gsub(message,'(%b[]).-(%b[])(:.+)','2 - %1\['..color..L[instID]..bell..'\]%2%3'));
-		--LFGSort_Debug_Message(string.gsub(message,'(%b[])(%b[])(:.+)','3 - %1\['..color..L[instID]..bell..'\]%2%3'));
-		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup] [Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'))
-		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup]<DND>[Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'))
-		--LFGSort_Debug_Message(L[instID]..' - '..instID);
-		--LFGSort_Debug_Message(''..color..L[instID]..bell);
-		--LFGSort_Debug_Message('2nd '..string.gsub(message,'(%b[]).*(%b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'));
-		--LFGSort_Debug_Message('4nd '..string.gsub(message,'(.*)',''..color..L[instID]..bell..'\]%1'));
-		--LFGSort_Debug_Message('3rd '..string.gsub(message,'(\b[])\s*(\b[])(:.+)','%1\['..color..L[instID]..bell..'\]%2%3'));
-		--print(message);
-		--LFGSort_Debug_Message(string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4'));
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[]).-(%b[])(:.+)','2 - %1\['..color..L[lfg_instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message(string.gsub(message,'(%b[])(%b[])(:.+)','3 - %1\['..color..L[lfg_instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup] [Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[lfg_instID]..bell..'\]%2%3'))
+		--LFGSort_Debug_Message(string.gsub('[4. LookingForGroup]<DND>[Ssol]:wanna go ZG', '(%b[]).*(%b[])(:.+)','%1\['..color..L[lfg_instID]..bell..'\]%2%3'))
+		--LFGSort_Debug_Message(L[lfg_instID]..' - '..lfg_instID);
+		--LFGSort_Debug_Message(''..color..L[lfg_instID]..bell);
+		--LFGSort_Debug_Message('2nd '..string.gsub(message,'(%b[]).*(%b[])(:.+)','%1\['..color..L[lfg_instID]..bell..'\]%2%3'));
+		--LFGSort_Debug_Message('4nd '..string.gsub(message,'(.*)',''..color..L[lfg_instID]..bell..'\]%1'));
+		--LFGSort_Debug_Message('3rd '..string.gsub(message,'(\b[])\s*(\b[])(:.+)','%1\['..color..L[lfg_instID]..bell..'\]%2%3'));
+
+		--LFGSort_Debug_Message(string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[lfg_instID]..bell..'|r\]\[%3%4'));
 
 		--full_str = '';
 		--new_str = "";
@@ -275,10 +320,11 @@ function AddMessage(frame, message, ...)
 		--end
 		--print(new_str);
 		
-		--message = string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[instID]..bell..'|r\]\[%3%4', 1);
-		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[instID]..bell..'|r]%3%4', 1);
+		--message = string.gsub(message,'(.+)([а-я|А-Я|Ёё|0-9|\.|\w]|h)(|c.*|r)(.*)','%1%2'..color..L[lfg_instID]..bell..'|r\]\[%3%4', 1);
+		--message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[lfg_instID]..bell..'|r]%3%4', 1);
+		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[lfg_instID]..bell..'|r]%3%4', 1);
 		--'(%b[])(.-)(%b[])(.-)','%1%2['..'TEST'..']%3%4')
-
+		
 		end
    	
     return hooks[frame](frame, message, ...);
@@ -313,6 +359,7 @@ function LFGSortSlash(msg)
 		end		
 		
 	elseif (command == 'settings') then
+		CreateSettingsFrame();
 			for k, v in pairs(CustomTable) do
 				hide = v[1]
 				sound = v[2]
@@ -320,6 +367,15 @@ function LFGSortSlash(msg)
 				DEFAULT_CHAT_FRAME:AddMessage('inst : '..color..k..'|r sound: '..sound..' hide '..hide);
 			end
 	elseif (command == 'test') then
+		
+		for k,v in pairs(LFGSort_Inst_ect) do
+			DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
+			if string.find(''..comand_arg, k) then
+				color = CustomTable[v][3]
+				DEFAULT_CHAT_FRAME:AddMessage('найдено : '..color..v)
+				
+			end
+		end
 		for k,v in pairs(LFGSort_Inst) do
 			DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
 			if string.find(''..comand_arg, k) then
@@ -339,7 +395,9 @@ function LFGSortSlash(msg)
 		end
 	elseif (command == 'reset') then
 		CustomTable = NewCustomTable();
-		DEFAULT_CHAT_FRAME:AddMessage('Настройки сброшены: ');
+		DEFAULT_CHAT_FRAME:AddMessage('Настройки сброшены');
+	elseif (command == 'colors') then	
+		testColors()
 	elseif (command == 'debug') then
 		if l_debug == false then
 			l_debug = true;
@@ -365,7 +423,7 @@ end
 
 function LFGSort_Help()
 	LFGSort_Message("Use /LFGSort test <string> - для проверки поиска"); 
-	LFGSort_Message("    /LFGSort settings - для показа текущих настроек");
+	LFGSort_Message("    /LFGSort settings - для открытия окна настроек");
 	LFGSort_Message("    /LFGSort sound <аббр. подземелья> - для включения выключения звука при появлении сообщения");
 	LFGSort_Message("    /LFGSort hide <аббр. подземелья> - для исключения таких строк из чата");
 	LFGSort_Message("    /LFGSort reset - для сброса настроек");
@@ -394,6 +452,8 @@ end
 function CreateSettingsFrame()
 	
 	local frame = AceGUI:Create("Frame");
+	local buttonAdded = false;
+	
 	frame:SetTitle("LFG sorter");
 	frame:SetStatusText(L["Настройки LFG sorter"]);
 	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
@@ -401,14 +461,19 @@ function CreateSettingsFrame()
 
 	scrollcontainer = AceGUI:Create("SimpleGroup"); -- "InlineGroup" is also good
 	scrollcontainer:SetFullWidth(true);
-	scrollcontainer:SetFullHeight(true); -- probably?
+	scrollcontainer:SetFullHeight(true); 
 	scrollcontainer:SetLayout("Fill") ;-- important!
 
 	frame:AddChild(scrollcontainer);
 	
 	scroll = AceGUI:Create("ScrollFrame")
-	scroll:SetLayout("Flow") -- probably?
+	scroll:SetLayout("Flow") 
 	scrollcontainer:AddChild(scroll)
+	
+	topFrame = AceGUI:Create("InlineGroup");
+	topFrame:SetLayout("Flow")
+	topFrame:SetFullWidth(true);
+	--topFrame:SetRelativeHeight(0.70);
 	
 	for i, j in pairs(LFG_Settings_Table) do
 	
@@ -417,6 +482,7 @@ function CreateSettingsFrame()
 		--DEFAULT_CHAT_FRAME:AddMessage(j.name);
 		group:SetLayout("List")
 		group:SetRelativeWidth(0.33);
+			
 		for m,n in pairs(j.data) do
 			
 			elem = AceGUI:Create("SimpleGroup"); 
@@ -451,8 +517,52 @@ function CreateSettingsFrame()
 			
 		end
 		
-		scroll:AddChild(group);
+		if buttonAdded == false then
+			local btn = AceGUI:Create("Button")
+			btn:SetRelativeWidth(1)
+			btn:SetText(L["Reset"])
+			btn:SetCallback("OnClick", function() 
+				AceGUI:Release(frame)
+				CustomTable = NewCustomTable();
+				CreateSettingsFrame();
+				end)
+			group:AddChild(btn);
+			buttonAdded = true;
+		end
+		
+		topFrame:AddChild(group);
 	end
+	
+	scroll:AddChild(topFrame);
+	
+	bottomFrame = AceGUI:Create("InlineGroup");
+	bottomFrame:SetLayout("Flow")
+	bottomFrame:SetFullWidth(true);
+	
+	LFGSort_Debug_Message(' channels settings ');
+	for i,j in pairs(LFG_channels) do
+		LFGSort_Debug_Message(i..' - '..tostring(j))
+		local chan = AceGUI:Create("CheckBox")
+			chan:SetLabel(L['channel '..i]);
+			chan:SetValue(j);
+			chan:SetCallback("OnValueChanged", function(value)
+				SetChannel(i);
+			end);
+			chan:SetRelativeWidth(0.15);
+			bottomFrame:AddChild(chan)
+	
+	end
+	
+	scroll:AddChild(bottomFrame);
+	
+end
+
+function SetChannel(chan, show, ...)
+		
+	LFG_channels[chan] = not LFG_channels[chan];
+	activeChannels[ChatTypeInfo["CHANNEL"..chan].id] = not activeChannels[ChatTypeInfo["CHANNEL"..chan].id];
+	LFGSort_Debug_Message(L['Сообщения в ']..L['channel '..chan].." - "..L[" обрабатываются аддоном - "]..tostring(LFG_channels[chan]));
+
 end
 
 function SetSound(inst, ...)
@@ -477,6 +587,49 @@ function SetHiding(inst, ...)
 	end
 end
 
+function testColors()
+
+DEFAULT_CHAT_FRAME:AddMessage('|cff888888GREY|cffffffffWHITE|cffbbbbbbSUBWHITE|cffff00ffMAGENTA');
+  DEFAULT_CHAT_FRAME:AddMessage('|cffffff00YELLOW|cff00ffffCYAN|cffff6060LIGHTRED|cff00ccffLIGHTBLUE');
+  DEFAULT_CHAT_FRAME:AddMessage('|cff0000ffBLUE|cff00ff00GREEN|cffff0000RED|cffffcc00GOLD');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFF0F8FFALICEBLUE|cFFFAEBD7ANTIQUEWHITE|cFF00FFFFAQUA|cFF7FFFD4AQUAMARINE');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFFF0FFFFAZURE|cFFF5F5DCBEIGE|cFFFFE4C4BISQUE|cFF000000BLACK');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFFFFEBCDBLANCHEDALMOND|cFF0000FFBLUE|cFF8A2BE2BLUEVIOLET|cFFA52A2ABROWN');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFDEB887BURLYWOOD|cFF5F9EA0CADETBLUE|cFF7FFF00CHARTREUSE|cFFD2691ECHOCOLATE');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFFFF7F50CORAL|cFF6495EDCORNFLOWERBLUE|cFFFFF8DCCORNSILK|cFFDC143CCRIMSON');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFF00FFFFCYAN|cFF00008BDARKBLUE|cFF008B8BDARKCYAN|cFFB8860BDARKGOLDENROD');
+ DEFAULT_CHAT_FRAME:AddMessage('|cFFA9A9A9DARKGRAY|cFF006400DARKGREEN|cFFBDB76BDARKKHAKI|cFF8B008BDARKMAGENTA');
+ DEFAULT_CHAT_FRAME:AddMessage('|cFF556B2FDARKOLIVEGREEN|cFFFF8C00DARKORANGE|cFF9932CCDARKORCHID|cFF8B0000DARKRED');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFFE9967ADARKSALMON|cFF8FBC8BDARKSEAGREEN|cFF483D8BDARKSLATEBLUE|cFF2F4F4FDARKSLATEGRAY');
+ DEFAULT_CHAT_FRAME:AddMessage('|cFF00CED1DARKTURQUOISE|cFF9400D3DARKVIOLET|cFFFF1493DEEPPINK|cFF00BFFFDEEPSKYBLUE');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFF696969DIMGRAY|cFF1E90FFDODGERBLUE|cFFB22222FIREBRICK|cFFFFFAF0FLORALWHITE');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF228B22FORESTGREEN|cFFFF00FFFUCHSIA|cFFDCDCDCGAINSBORO|cFFF8F8FFGHOSTWHITE');
+DEFAULT_CHAT_FRAME:AddMessage(  '|cFFFFD700GOLD|cFFDAA520GOLDENROD|cFF808080GRAY|cFF008000GREEN');
+ DEFAULT_CHAT_FRAME:AddMessage('|cFFADFF2FGREENYELLOW|cFFF0FFF0HONEYDEW|cFFFF69B4HOTPINK|cFFCD5C5CINDIANRED');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF4B0082INDIGO|cFFFFFFF0IVORY|cFFF0E68CKHAKI|cFFE6E6FALAVENDER');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFFFFF0F5LAVENDERBLUSH|cFF7CFC00LAWNGREEN|cFFFFFACDLEMONCHIFFON|cFFADD8E6LIGHTBLUE');
+DEFAULT_CHAT_FRAME:AddMessage(  '|cFFF08080LIGHTCORAL|cFFE0FFFFLIGHTCYAN|cFFD3D3D3LIGHTGRAY|cFF90EE90LIGHTGREEN');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFFFB6C1LIGHTPINK|cFFFF6060LIGHTRED|cFFFFA07ALIGHTSALMON|cFF20B2AALIGHTSEAGREEN');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF87CEFALIGHTSEAGREEN|cFF778899LIGHTSLATEGRAY|cFFB0C4DELIGHTSTEELBLUE|cFFFFFFE0LIGHTYELLOW');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFF00FF00LIME|cFF32CD32LIMEGREENcFFFAF0E6LINEN|cFFFF00FFMAGENTA');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF800000MAROON|cFF66CDAAMEDIUMAQUAMARINE|cFF0000CDMEDIUMBLUE|cFFBA55D3MEDIUMORCHID');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF9370DBMEDIUMPURPLE|cFF3CB371MEDIUMSEAGREEN|cFF7B68EEMEDIUMSLATEBLUE|cFF00FA9AMEDIUMSPRINGGREEN');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF48D1CCMEDIUMTURQUOISE|cFFC71585MEDIUMVIOLETRED|cFF191970MIDNIGHTBLUE|cFFF5FFFAMINTCREAM');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFFFE4E1MISTYROSE|cFFFFE4B5MOCCASIN|cFFFFDEADNAVAJOWHITE|cFF000080NAVY');
+ DEFAULT_CHAT_FRAME:AddMessage( '|cFFFDF5E6OLDLACE|cFF808000OLIVE|cFF6B8E23OLIVEDRAB|cFFFFA500ORANGE');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFFF4500ORANGERED|cFFDA70D6ORCHID|cFFEEE8AAPALEGOLDENROD|cFF98FB98PALEGREEN');
+DEFAULT_CHAT_FRAME:AddMessage(  '|cFFAFEEEEPALETURQUOISE|cFFDB7093PALEVIOLETRED|cFFFFEFD5PAPAYAWHIP|cFFFFDAB9PEACHPUFF');
+DEFAULT_CHAT_FRAME:AddMessage(  '|cFFCD853FPERU|cFFFFC0CBPINK|cFFDDA0DDPLUM|cFFB0E0E6POWDERBLUE');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF800080PURPLE|cFFFF0000RED|cFFBC8F8FROSYBROWN|cFF4169E1ROYALBLUE');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFF8B4513SADDLEBROWN|cFFFA8072SALMON|cFFF4A460SANDYBROWN|cFF2E8B57SEAGREEN');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFFFFF5EESEASHELL|cFFA0522DSIENNA|cFFC0C0C0SILVER|cFF87CEEBSKYBLUE');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF6A5ACDSLATEBLUE|cFF708090SLATEGRAY|cFFFFFAFASNOW|cFF00FF7FSPRINGGREEN');
+DEFAULT_CHAT_FRAME:AddMessage('|cFF4682B4STEELBLUE|cFFD2B48CTAN|cFF008080TEAL|cFFD8BFD8THISTLE');
+DEFAULT_CHAT_FRAME:AddMessage('|cFFFF6347TOMATO|c00FFFFFFTRANSPARENT|cFF40E0D0TURQUOISE|cFFEE82EEVIOLET');
+ DEFAULT_CHAT_FRAME:AddMessage('|cFFF5DEB3WHEAT|cFFFFFFFFWHITE|cFFF5F5F5WHITESMOKE|cFFFFFF00YELLOW');
+DEFAULT_CHAT_FRAME:AddMessage( '|cFF9ACD32YELLOWGREEN');
+
+end
 --local IconMiniMap = CreateMMB();
 --local SettingsFrame = CreateSettingsFrame();
 

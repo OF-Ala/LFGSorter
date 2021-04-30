@@ -7,7 +7,7 @@
 ## Notes: 
 ## OptionalDeps: AceGUI-3.0,LibDataBroker-1.1
 ## RequiredDeps: 
-## SavedVariablesPerCharacter: LFGSortFirstUse, LFG_sorter_settings, CustomTable, mmap_pos, LFG_sorter_opt
-## Version: 1.13
+## SavedVariablesPerCharacter: LFGSortFirstUse, LFG_sorter_settings, CustomTable, mmap_pos, LFG_sorter_opt, LFG_channels
+## Version: 1.0.7
 
 LFGSort.xml

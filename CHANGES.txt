@@ -1,0 +1,3 @@
+Added channel selection - you can choose wich channels would be proceeded.
+Instance coloros were changed to match lvl required
+
