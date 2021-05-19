@@ -1,3 +1,10 @@
-Added channel selection - you can choose wich channels would be proceeded.
-Instance coloros were changed to match lvl required
+lightweight tag 4dbcbffef7bee8b7aaec009e8a00e2511d5bbe37 1.0.6
+Author:	OF-Ala <OF.Ala@yandex.ru>
+Date:	Fri Apr 23 22:13:57 2021 +0300
+
+commit 4dbcbffef7bee8b7aaec009e8a00e2511d5bbe37
+Author: OF-Ala <OF.Ala@yandex.ru>
+Date:   Fri Apr 23 22:13:57 2021 +0300
+
+    1.0.6
 

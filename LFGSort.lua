@@ -18,10 +18,12 @@ local activeChannels = {};
 
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
-LFGSort_Inst = {};
+
+LFGSort_Insts = {};
 LFGSort_Inst_ect = {};
 
 local LFG_Settings_Table = {};
+local LFG_Settings_Pages = {};
 
 function LFGSort_OnEvent(self, event, ...)
 	
@@ -86,7 +88,7 @@ function LFGSort_OnEvent(self, event, ...)
 
 		for index = 1, NUM_CHAT_WINDOWS do
 			local chatFrame = _G["ChatFrame" .. index]
-			LFGSort_Message(chatFrame)
+			--LFGSort_Message(chatFrame)
 			if chatFrame ~= _G.COMBATLOG then
 				hooks[chatFrame] = chatFrame.AddMessage
 				chatFrame.AddMessage = AddMessage
@@ -109,12 +111,14 @@ function filterAddonChatMsg(self, event, msg, author, ...)
 			end
 		end
 		if instID == '' then
-			for k,v in pairs(LFGSort_Inst) do
-				if string.find(msg, k) then
-					--LFGSort_Debug_Message('filtering msg: '..instID);
-					instID = v;
+			for n,m in pairs(LFGSort_Insts) do
+				for k,v in pairs(m) do
+					if string.find(msg, k) then
+						--LFGSort_Debug_Message('filtering msg: '..instID);
+						instID = v;
 
-					break;
+						break;
+					end
 				end
 			end
 		end
@@ -140,9 +144,16 @@ end
 
 function SettingsTable()
 	-- inst abbr + hide + sound + color
+
+	LFG_Settings_Pages = {
+	{1,3,{value = 1, text = "Classic", disabled = false} },
+	{4,5,{value = 2, text = "BC insts", disabled = false} },
+	{6,8,{value = 3, text = "BC heroics & raids", disabled = false} }
+	};
+	
 	LFG_Settings_Table = {};
-	LFG_Settings_Table[1] = {name = L['Raids & other'], data = 
-	{'АФК', 
+	LFG_Settings_Table[1] = {name = L['Raids & other'], data = {
+	'АФК', 
 	'БАФФ',
 	'ЗГ',
 	'АК20',
@@ -150,8 +161,9 @@ function SettingsTable()
 	'ОН',
 	'АК40',
 	'БВЛ',
-	'НАКС'}
-	};
+	'НАКС'
+	},
+	total_check = 3};
 	
 	LFG_Settings_Table[2] = {name = L['5 ppl 1'], data = {
 	'ОП',
@@ -164,7 +176,8 @@ function SettingsTable()
 	'ЛИ',	
 	'МАО',
 	'КИ'
-	}}
+	},
+	total_check = 1}
 	
 	LFG_Settings_Table[3] = {name = L['5 ppl 2'], data = {
 	'МАРА',
@@ -177,9 +190,70 @@ function SettingsTable()
 	'СТРАТ',
 	'ШОЛО',
 	'УБРС'
-	}}
+	},
+	total_check = 2}
+
+	LFG_Settings_Table[4] = {name = L['5 ppl bk'], data = {
+	'БАСТ',
+	'КК',
+	'УЗИ',
+	'ТОПЬ',
+	'ГМ',
+	'АУКГ',
+	'ПВ1',
+	'СЗ'
+	},
+	total_check = 4}	
 	
+	LFG_Settings_Table[5] = {name = L['5 ppl bk2'], data = {
+	'ПП',
+	'ТЛ',
+	'РЗ',
+	'МЕХ',
+	'БОТ',
+	'ЧТ',
+	'АРКА',
+	'ТМ'
+	}
+	,
+	total_check = 0}
 	
+	LFG_Settings_Table[6] = {name = L['hero bk'], data = {
+	'Г-БАСТ',
+	'Г-КК',
+	'Г-УЗИ',
+	'Г-ТОПЬ',
+	'Г-ГМ',
+	'Г-АУКГ',
+	'Г-ПВ1',
+	'Г-СЗ'
+	},
+	total_check = 5}	
+	
+	LFG_Settings_Table[7] = {name = L['hero bk2'], data = {
+	'Г-ПП',
+	'Г-ТЛ',
+	'Г-РЗ',
+	'Г-МЕХ',
+	'Г-БОТ',
+	'Г-ЧТ',
+	'Г-АРКА',
+	'Г-ТМ'
+	},
+	total_check = 0}
+	
+	LFG_Settings_Table[8] = {name = L['raid bk'], data = {
+	'КАРА',
+	'ГРУУЛ',
+	'МАГТ',
+	'ЗА',
+	'ЗС',
+	'ТК',
+	'ХИДЖ',
+	'ХРАМ',
+	'ПСК'
+	},
+	total_check = 6}	
 
 end
 
@@ -190,6 +264,7 @@ function NewCustomTable()
 	newTable['АФК'] = {0, 0, '|cFFA9A9A9'}; -- Darkgray"|cFFA9A9A9" ++
 	newTable['БАФФ'] = {0, 0, '|cFFDEB887'}; -- Burlywood"|cFFDEB887" 
 	
+	newTable['Inst1'] = {1, 0, '|cFF483D8B'}; -- классик лоу лвл инст
 	newTable['ОП'] = {0, 0, '|cFF483D8B'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
 	newTable['МК'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
 	newTable['ПС'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
@@ -201,6 +276,7 @@ function NewCustomTable()
 	newTable['МАО'] = {0, 0, '|cFFADD8E6'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
 	newTable['КИ'] = {0, 0, '|cFF00FFFF'};--cyan"|cFF00FFFF"//-- darkorange"|cFFFF8C00" ++ --STEELBLUE"|cFF4682B4"
 	
+	newTable['Inst2'] = {1, 0, '|cFF483D8B'}; -- классик хай лвл инст
 	newTable['МАРА'] = {0, 0, '|cFF00CED1'};--DARKTURQUOISE"|cFF00CED1 //--tomato"|cFFFF6347" ++ --SLATEBLUE"|cFF6A5ACD"
 	newTable['ЗФ'] = {0, 0, '|cFF98FB98'};--PALEGREEN"|cFF98FB98" //--chocolate"|cFFD2691E" ++ --DARKSLATEBLUE  "|cFF483D8B"
 	newTable['УЛЬДА'] = {0, 0, '|cFF3CB371'};--mediumseagreen "|cFF3CB371" //--sienna"|cFFA0522D" ++ --CORNFLOWERBLUE "|cFF6495ED"
@@ -212,6 +288,7 @@ function NewCustomTable()
 	newTable['ДМ'] = {0, 0, '|cFFD2691E'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
 	newTable['УБРС'] = {0, 0, '|cFFFF6347'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
 	
+	newTable['Inst3'] = {1, 0, '|cFF483D8B'}; -- классик рейды
 	newTable['ЗГ'] = {0, 0, '|cFF9ACD32'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
 	newTable['АК20'] = {0, 0, '|cFFFF6060'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
 	newTable['ОНЯ'] = {0, 0, '|cFFFF4500'}; -- Orangered"|cFFFF4500" ++
@@ -219,7 +296,55 @@ function NewCustomTable()
 	newTable['АК40'] = {0, 0, '|cFF800080'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
 	newTable['БВЛ'] = {0, 0, '|cFF8B0000'}; -- darkred  "|cFF8B0000"++
 	newTable['НАКС'] = {0, 0, '|cFFDAA520'}; -- Goldenrod"|cFFDAA520"++
-		
+	
+	-- tbc
+	newTable['Inst4'] = {1, 0, '|cFF008080'}; -- БК инст--TEAL  "|cFF008080"
+	newTable['БАСТ'] = {0, 0, '|cFF008080'}; -- бастионы адского пламени--TEAL  "|cFF008080"
+	newTable['КК'] = {0, 0, '|cFF008080'}; -- кузня крови--TEAL  "|cFF008080"
+	newTable['УЗИ'] = {0, 0, '|cFF008080'}; -- узилище--TEAL  "|cFF008080"
+	newTable['ТОПЬ'] = {0, 0, '|cFF008080'}; -- нижнетопь
+	newTable['ГМ'] = {0, 0, '|cFF008080'}; -- гробницы маны
+	newTable['АУКГ'] = {0, 0, '|cFF008080'}; -- аукенайские гробницы
+	newTable['ПВ1'] = {0, 0, '|cFF008080'}; -- предгорья хилсбрада
+	newTable['СЗ'] = {0, 0, '|cFF008080'}; -- сеттекские залы
+	newTable['ПП'] = {0, 0, '|cFF008080'}; -- паровое подземелье
+	newTable['ТЛ'] = {0, 0, '|cFF008080'}; -- темный лабиринт
+	newTable['РЗ'] = {0, 0, '|cFF008080'}; -- разрушенные залы
+	newTable['МЕХ'] = {0, 0, '|cFF008080'}; -- механар
+	newTable['БОТ'] = {0, 0, '|cFF008080'}; -- ботаника
+	newTable['ЧТ'] = {0, 0, '|cFF008080'}; -- Черные топи
+	newTable['АРКА'] = {0, 0, '|cFF008080'}; -- акратрац
+	newTable['ТМ'] = {0, 0, '|cFF008080'}; -- террасса магистров
+
+	newTable['Inst5'] = {1, 0, '|cFF483D8B'}; -- БК г-инст
+	newTable['Г-БАСТ'] = {0, 0, '|cFF008080'}; -- бастионы адского пламени
+	newTable['Г-КК'] = {0, 0, '|cFF008080'}; -- кузня крови
+	newTable['Г-УЗИ'] = {0, 0, '|cFF008080'}; -- узилище
+	newTable['Г-ТОПЬ'] = {0, 0, '|cFF008080'}; -- нижнетопь
+	newTable['Г-ГМ'] = {0, 0, '|cFF008080'}; -- гробницы маны
+	newTable['Г-АУКГ'] = {0, 0, '|cFF008080'}; -- аукенайские гробницы
+	newTable['Г-ПВ1'] = {0, 0, '|cFF008080'}; -- предгорья хилсбрада
+	newTable['Г-СЗ'] = {0, 0, '|cFF008080'}; -- сеттекские залы
+	newTable['Г-ПП'] = {0, 0, '|cFF008080'}; -- паровое подземелье
+	newTable['Г-ТЛ'] = {0, 0, '|cFF008080'}; -- темный лабиринт
+	newTable['Г-РЗ'] = {0, 0, '|cFF008080'}; -- разрушенные залы
+	newTable['Г-МЕХ'] = {0, 0, '|cFF008080'}; -- механар
+	newTable['Г-БОТ'] = {0, 0, '|cFF008080'}; -- ботаника
+	newTable['Г-ЧТ'] = {0, 0, '|cFF008080'}; -- Черные топи
+	newTable['Г-АРКА'] = {0, 0, '|cFF008080'}; -- акратрац
+	newTable['Г-ТМ'] = {0, 0, '|cFF008080'}; -- террасса магистров
+
+	newTable['Inst6'] = {1, 0, '|cFF483D8B'}; -- БК рейд
+	newTable['КАРА'] = {0, 0, '|cFF008080'}; -- каражан
+	newTable['ГРУУЛ'] = {0, 0, '|cFF008080'}; -- Груул
+	newTable['МАГТ'] = {0, 0, '|cFF008080'}; -- Магтеридон
+	newTable['ЗА'] = {0, 0, '|cFF008080'}; -- зул аман
+	newTable['ЗС'] = {0, 0, '|cFF008080'}; -- змеиное святилище
+	newTable['ТК'] = {0, 0, '|cFF008080'}; -- око бурь
+	newTable['ХИДЖ'] = {0, 0, '|cFF008080'}; -- Вершина Хиджала 
+	newTable['ХРАМ'] = {0, 0, '|cFF008080'}; -- Черный Храм 
+	newTable['ПСК'] = {0, 0, '|cFF008080'}; --Плато Солнечного Колодца 
+	
 	return newTable;
 
 end
@@ -228,7 +353,14 @@ function GetInstTable()
 
 	LFGSort_Inst_ect = L['LFGSort_Inst_ect'];
 	
-	LFGSort_Inst = L['LFGSort_Inst'];
+	LFGSort_Insts = {}
+	LFGSort_Insts[1] = L['LFGSort_Inst1']
+	LFGSort_Insts[2] = L['LFGSort_Inst2']	
+	LFGSort_Insts[3] = L['LFGSort_Inst3']	
+	LFGSort_Insts[4] = L['LFGSort_Inst4']	
+	LFGSort_Insts[5] = L['LFGSort_Inst5']
+	LFGSort_Insts[6] = L['LFGSort_Inst6']
+	
 	
 end
 
@@ -258,22 +390,26 @@ function AddMessage(frame, message, ...)
 	if lfg_instID == '' then
 		--LFGSort_De
 		LFGSort_Debug_Message('looking more');
-		for x,y in pairs(LFGSort_Inst) do
-			if string.find(message..'.', x) then
-				lfg_instID = y;
-				break;
+
+		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
+
+			if CustomTable['Inst'..l][1] == 1 then
+				for x,y in pairs(LFGSort_Inst) do
+					if string.find(message..'.', x) then
+						lfg_instID = y;
+						break;
+					end
+				end
 			end
 		end
 	end
 
 	if lfg_instID ~= '' then
 
-		--lfg_data = CustomTable[lfg_instID]
-
 		lfg_data = CustomTable[lfg_instID]
 
 		if lfg_data == nil then
-			LFGSort_Message('no data in custom table for '..a..'('..lfg_instID..')');
+			LFGSort_debug_Message('no data in custom table for '..a..'('..lfg_instID..')');
 			--LFGSort_Message(' data type '..type(lfg_data2)..'('..lfg_data2[1]..')'..'('..lfg_data2[2]..')'..'('..lfg_data2[3]..')');
 			return hooks[frame](frame, message, ...);
 		end
@@ -324,8 +460,9 @@ function AddMessage(frame, message, ...)
 		--message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[lfg_instID]..bell..'|r]%3%4', 1);
 		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[lfg_instID]..bell..'|r]%3%4', 1);
 		--'(%b[])(.-)(%b[])(.-)','%1%2['..'TEST'..']%3%4')
-		
-		end
+	
+
+	end
    	
     return hooks[frame](frame, message, ...);
 end
@@ -376,21 +513,25 @@ function LFGSortSlash(msg)
 				
 			end
 		end
-		for k,v in pairs(LFGSort_Inst) do
-			DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
-			if string.find(''..comand_arg, k) then
-				color = CustomTable[v][3]
-				DEFAULT_CHAT_FRAME:AddMessage('найдено : '..color..v)
-				
+		for l,m in pairs(LFGSort_Insts) do
+			for k,v in pairs(m) do
+				DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
+				if string.find(''..comand_arg, k) then
+					color = CustomTable[v][3]
+					DEFAULT_CHAT_FRAME:AddMessage('найдено : '..color..v)
+					
+				end
 			end
 		end
 	elseif (command == 'testfirst') then
-		for k,v in pairs(LFGSort_Inst) do
-			DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
-			if string.find(''..comand_arg, k) then
-				color = CustomTable[v][3]
-				DEFAULT_CHAT_FRAME:AddMessage('найдено : '..color..v)
-				break;
+		for l,m in pairs(LFGSort_Insts) do
+			for k,v in pairs(m) do
+				DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
+				if string.find(''..comand_arg, k) then
+					color = CustomTable[v][3]
+					DEFAULT_CHAT_FRAME:AddMessage('найдено : '..color..v)
+					break;
+				end
 			end
 		end
 	elseif (command == 'reset') then
@@ -452,39 +593,99 @@ end
 function CreateSettingsFrame()
 	
 	local frame = AceGUI:Create("Frame");
-	local buttonAdded = false;
+	--local buttonAdded = false;
 	
 	frame:SetTitle("LFG sorter");
 	frame:SetStatusText(L["Настройки LFG sorter"]);
 	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
-	frame:SetLayout("Fill");
+	frame:SetLayout("List");
+	frame:SetHeight(585)
+		
+	Tabs = AceGUI:Create("TabGroup");
+	
+	Tab_list = {}
+	for l,m in pairs(LFG_Settings_Pages) do
+		Tab_list[l] = m[3];
+	end
+	Tabs:SetLayout("Flow")
+	Tabs:SetTabs(Tab_list);
+	Tabs:SetFullWidth(true)
+	
+	Tabs:SetCallback('OnGroupSelected', fill_page)
+	Tabs:SelectTab(1)
+	frame:AddChild(Tabs);
+	
 
-	scrollcontainer = AceGUI:Create("SimpleGroup"); -- "InlineGroup" is also good
-	scrollcontainer:SetFullWidth(true);
-	scrollcontainer:SetFullHeight(true); 
-	scrollcontainer:SetLayout("Fill") ;-- important!
+	local btn = AceGUI:Create("Button")
+	btn:SetRelativeWidth(1)
+	btn:SetText(L["Reset"])
+	btn:SetCallback("OnClick", function() 
+		AceGUI:Release(frame)
+		CustomTable = NewCustomTable();
+		CreateSettingsFrame();
+		end)
+	--group:AddChild(btn);
+	
+	frame:AddChild(btn);
 
-	frame:AddChild(scrollcontainer);
+	bottomFrame = AceGUI:Create("InlineGroup");
+	bottomFrame:SetLayout("Flow")
+	bottomFrame:SetFullWidth(true);
 	
-	scroll = AceGUI:Create("ScrollFrame")
-	scroll:SetLayout("Flow") 
-	scrollcontainer:AddChild(scroll)
+	LFGSort_Debug_Message(' channels settings ');
+	for i,j in pairs(LFG_channels) do
+		LFGSort_Debug_Message(i..' - '..tostring(j))
+		local chan = AceGUI:Create("CheckBox")
+			chan:SetLabel(L['channel '..i]);
+			chan:SetValue(j);
+			chan:SetCallback("OnValueChanged", function(value)
+				SetChannel(i);
+			end);
+			chan:SetRelativeWidth(0.15);
+			bottomFrame:AddChild(chan)
 	
-	topFrame = AceGUI:Create("InlineGroup");
-	topFrame:SetLayout("Flow")
-	topFrame:SetFullWidth(true);
-	--topFrame:SetRelativeHeight(0.70);
+	end
 	
-	for i, j in pairs(LFG_Settings_Table) do
+	frame:AddChild(bottomFrame);
+	Tabs:SetFullHeight(true);
+	frame:SetFullHeight(true);
+end
+
+function fill_page(parent_group, event, page_number)
 	
+	parent_group:ReleaseChildren()
+
+	local page_settings = LFG_Settings_Pages[page_number] 
+			
+	for i = page_settings[1],page_settings[2] do
+
+		j = LFG_Settings_Table[i]
 		group = AceGUI:Create("InlineGroup"); --InlineGroup
 		--group.SetTitle(j.name);
-		--DEFAULT_CHAT_FRAME:AddMessage(j.name);
 		group:SetLayout("List")
 		group:SetRelativeWidth(0.33);
+	
+		if j.total_check > 0 then 
+
+			capture = AceGUI:Create("InlineGroup"); 
+			capture:SetLayout("Flow")
 			
+			total_check = AceGUI:Create("CheckBox")
+			total_check:SetLabel(L['Inst'..j.total_check]);
+			total_check:SetValue(CustomTable['Inst'..j.total_check][1] == 1);
+			total_check:SetCallback("OnValueChanged", function(value)
+				local a = LFG_Settings_Table[i].total_check;
+				SetHiding('Inst'..a);
+			end);
+			
+			total_check:SetRelativeWidth(1);
+			capture:AddChild(total_check)
+			capture:SetRelativeWidth(1);
+			group:AddChild(capture);
+		end
+		
 		for m,n in pairs(j.data) do
-			
+
 			elem = AceGUI:Create("SimpleGroup"); 
 			elem:SetLayout("Flow")
 			--k = n;
@@ -516,44 +717,99 @@ function CreateSettingsFrame()
 			group:AddChild(elem);
 			
 		end
-		
-		if buttonAdded == false then
-			local btn = AceGUI:Create("Button")
-			btn:SetRelativeWidth(1)
-			btn:SetText(L["Reset"])
-			btn:SetCallback("OnClick", function() 
-				AceGUI:Release(frame)
-				CustomTable = NewCustomTable();
-				CreateSettingsFrame();
-				end)
-			group:AddChild(btn);
-			buttonAdded = true;
-		end
-		
-		topFrame:AddChild(group);
+		parent_group:AddChild(group);
 	end
+	parent_group:SetFullHeight(true);
+end
+
+function fill_page_works(parent_group, event, page_number)
+	
+	parent_group:ReleaseChildren()
+
+	local page_settings = LFG_Settings_Pages[page_number] 
+			
+	scrollcontainer = AceGUI:Create("SimpleGroup"); -- "InlineGroup" is also good
+	scrollcontainer:SetFullWidth(true);
+	scrollcontainer:SetFullHeight(true); 
+	scrollcontainer:SetLayout("Fill");-- important! --Fill
+
+	parent_group:AddChild(scrollcontainer);
+	
+	scroll = AceGUI:Create("ScrollFrame") -- old ScrollFrame/SimpleGroup
+	scroll:SetLayout("Flow") 
+	scrollcontainer:AddChild(scroll)
+	
+	topFrame = AceGUI:Create("InlineGroup");
+	topFrame:SetLayout("Flow")
+	topFrame:SetFullWidth(true);
 	
 	scroll:AddChild(topFrame);
 	
-	bottomFrame = AceGUI:Create("InlineGroup");
-	bottomFrame:SetLayout("Flow")
-	bottomFrame:SetFullWidth(true);
-	
-	LFGSort_Debug_Message(' channels settings ');
-	for i,j in pairs(LFG_channels) do
-		LFGSort_Debug_Message(i..' - '..tostring(j))
-		local chan = AceGUI:Create("CheckBox")
-			chan:SetLabel(L['channel '..i]);
-			chan:SetValue(j);
-			chan:SetCallback("OnValueChanged", function(value)
-				SetChannel(i);
+	for i = page_settings[1],page_settings[2] do
+
+		j = LFG_Settings_Table[i]
+		group = AceGUI:Create("InlineGroup"); --InlineGroup
+		--group.SetTitle(j.name);
+		--DEFAULT_CHAT_FRAME:AddMessage(j.name);
+		group:SetLayout("List")
+		group:SetRelativeWidth(0.33);
+
+		if j.total_check > 0 then 
+
+			capture = AceGUI:Create("InlineGroup"); 
+			capture:SetLayout("Flow")
+			
+			total_check = AceGUI:Create("CheckBox")
+			total_check:SetLabel(L['Inst'..j.total_check]);
+			total_check:SetValue(CustomTable['Inst'..j.total_check][1] == 1);
+			total_check:SetCallback("OnValueChanged", function(value)
+				local a = LFG_Settings_Table[i].total_check;
+				SetHiding('Inst'..a);
 			end);
-			chan:SetRelativeWidth(0.15);
-			bottomFrame:AddChild(chan)
-	
+			
+			total_check:SetRelativeWidth(1);
+			capture:AddChild(total_check)
+			capture:SetRelativeWidth(1);
+			group:AddChild(capture);
+		end
+		
+		for m,n in pairs(j.data) do
+
+			elem = AceGUI:Create("SimpleGroup"); 
+			elem:SetLayout("Flow")
+			--k = n;
+			v = CustomTable[n];
+		
+			local desc = AceGUI:Create("Label")
+			desc:SetText(''..v[3]..L[n]..'|r');
+			desc:SetRelativeWidth(0.20);
+			elem:AddChild(desc)
+			
+			local hideCheck = AceGUI:Create("CheckBox")
+			hideCheck:SetLabel(L["скрыть"]);
+			hideCheck:SetValue(CustomTable[n][1] == 1);
+			hideCheck:SetCallback("OnValueChanged", function(value)
+				SetHiding(n);
+			end);
+			hideCheck:SetRelativeWidth(0.25);
+			elem:AddChild(hideCheck)
+			
+			local soundCheck = AceGUI:Create("CheckBox");
+			soundCheck:SetLabel(L["звук"]);
+			soundCheck:SetValue(CustomTable[n][2] == 1);
+			soundCheck:SetCallback("OnValueChanged", function(value)
+				SetSound(n);
+			end);
+			soundCheck:SetRelativeWidth(0.25);
+			elem:AddChild(soundCheck);	
+		
+			group:AddChild(elem);
+			
+		end
+		topFrame:AddChild(group);
 	end
 	
-	scroll:AddChild(bottomFrame);
+	topFrame:SetFullHeight(true);
 	
 end
 
