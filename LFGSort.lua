@@ -1,8 +1,8 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 1.0.7";
-local clear_saves = false;
+local version = "LFGSorter 2.0.3";
+local clear_saves = true;
 local AceGUI = LibStub("AceGUI-3.0");
 local addon = LibStub("AceAddon-3.0"):NewAddon("LFGSorter", "AceConsole-3.0");
 --local AceDB = LibStub("AceDB-3.0")
