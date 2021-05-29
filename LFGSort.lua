@@ -1,8 +1,9 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.3";
-local clear_saves = true;
+local version = "LFGSorter 2.0.5";
+local classic = false;
+local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
 local addon = LibStub("AceAddon-3.0"):NewAddon("LFGSorter", "AceConsole-3.0");
 --local AceDB = LibStub("AceDB-3.0")
@@ -21,6 +22,19 @@ LFGSortEnabled = 0;
 
 LFGSort_Insts = {};
 LFGSort_Inst_ect = {};
+
+bc_release = { year  = 2021,
+             month = 06,
+             day   = 02,
+             hour  = 01,
+             min   = 0,
+             sec   = 0
+           }
+
+if GetServerTime() < time(bc_release) then
+	version = 'LFGSorter 2.0.4'
+	classic = true
+end
 
 local LFG_Settings_Table = {};
 local LFG_Settings_Pages = {};
@@ -129,13 +143,14 @@ function filterAddonChatMsg(self, event, msg, author, ...)
 			--LFGSort_Debug_Message('filtering msg: '..instID);
 			v = CustomTable[instID];
 		
-			if v[1] == 1 then
+			if v~= nil and v[1] == 1 then
 				LFGSort_Debug_Message('filtering msg: '..instID..' yes');
 				return true;
 			else
 				--LFGSort_Debug_Message('filtering msg: '..instID..' no filtr');
 				return false, msg, author, ...;
 			end
+			
 		end
     end
 	
@@ -145,11 +160,19 @@ end
 function SettingsTable()
 	-- inst abbr + hide + sound + color
 
-	LFG_Settings_Pages = {
-	{1,3,{value = 1, text = "Classic", disabled = false} },
-	{4,5,{value = 2, text = "BC insts", disabled = false} },
-	{6,8,{value = 3, text = "BC heroics & raids", disabled = false} }
-	};
+	if classic == false then
+		LFG_Settings_Pages = {
+		{4,5,{value = 1, text = "BC insts", disabled = false} },
+		{6,8,{value = 2, text = "BC heroics & raids", disabled = false} },
+		{1,3,{value = 3, text = "Classic", disabled = false} }
+		};
+	else
+		LFG_Settings_Pages = {
+		{1,3,{value = 1, text = "Classic", disabled = false} },
+		{4,5,{value = 2, text = "BC insts", disabled = false} },
+		{6,8,{value = 3, text = "BC heroics & raids", disabled = false} }
+		};
+	end
 	
 	LFG_Settings_Table = {};
 	LFG_Settings_Table[1] = {name = L['Raids & other'], data = {
@@ -203,7 +226,7 @@ function SettingsTable()
 	'ПВ1',
 	'СЗ'
 	},
-	total_check = 4}	
+	total_check = 6}	
 	
 	LFG_Settings_Table[5] = {name = L['5 ppl bk2'], data = {
 	'ПП',
@@ -228,7 +251,7 @@ function SettingsTable()
 	'Г-ПВ1',
 	'Г-СЗ'
 	},
-	total_check = 5}	
+	total_check = 0}	
 	
 	LFG_Settings_Table[7] = {name = L['hero bk2'], data = {
 	'Г-ПП',
@@ -238,7 +261,8 @@ function SettingsTable()
 	'Г-БОТ',
 	'Г-ЧТ',
 	'Г-АРКА',
-	'Г-ТМ'
+	'Г-ТМ',
+	'ГЕР'
 	},
 	total_check = 0}
 	
@@ -247,17 +271,121 @@ function SettingsTable()
 	'ГРУУЛ',
 	'МАГТ',
 	'ЗА',
-	'ЗС',
+	'ССК',
 	'ТК',
 	'ХИДЖ',
-	'ХРАМ',
-	'ПСК'
+	'БТ',
+	'ПЛАТО'
 	},
-	total_check = 6}	
+	total_check = 4}	
 
 end
 
 function NewCustomTable()
+
+	-- http://www.ac-web.org/forums/showthread.php?50732-Tutorial-How-to-have-colors-on-your-menu-(LUA)
+	-- inst abbr + hide + sound + color
+	if classic == true then
+		return NewCustomTableClassic();
+	end
+	
+	newTable = {};
+	newTable['АФК'] = {0, 0, '|cFFA9A9A9'}; -- Darkgray"|cFFA9A9A9" ++
+	newTable['БАФФ'] = {0, 0, '|cFFDEB887'}; -- Burlywood"|cFFDEB887" 
+	
+	-- старое ОП
+	newTable['Inst1'] = {1, 0, '|cFF483D8B'}; -- классик лоу лвл инст
+	newTable['ОП'] = {0, 0, '|cFF483D8B'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
+	newTable['МК'] = {0, 0, '|cFF483D8B'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
+	newTable['ПС'] = {0, 0, '|cFF483D8B'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
+	newTable['КТК'] = {0, 0, '|cFF483D8B'};--mediumblue"|cFF0000CD"//-- mediumseagreen "|cFF3CB371" ++  --LIGHTBLUE"|cFFADD8E6"
+	newTable['НП'] = {0, 0, '|cFF483D8B'};--mediumpurple"|cFF9370DB"//-- darkolivegreen "|cFF556B2F ++ --LIGHTSEAGREEN  "|cFF20B2AA"
+	newTable['ТЮ'] = {0, 0, '|cFF483D8B'};--mediumorchid"|cFFBA55D3"//--darkgreen"|cFF006400" ++ --MEDIUMSPRINGGREEN "|cFF00FA9A"
+	newTable['ГНОМ'] = {0, 0, '|cFF483D8B'};--DODGERBLUE  "|cFF1E90FF"//--limegreen"|cFF32CD32" ++ --AQUAMARINE
+	newTable['ЛИ'] = {0, 0, '|cFF483D8B'};----steelblue"|cFF4682B4"//-- darkkhaki"|cFFBDB76B" ++--LIGHTSKYBLUE"|cFF87CEFA"
+	newTable['МАО'] = {0, 0, '|cFF483D8B'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
+	-- старое МК
+	newTable['КИ'] = {0, 0, '|cFF6A5ACD'};--cyan"|cFF00FFFF"//-- darkorange"|cFFFF8C00" ++ --STEELBLUE"|cFF4682B4"	
+	newTable['Inst2'] = {1, 0, '|cFF483D8B'}; -- классик хай лвл инст
+	newTable['МАРА'] = {0, 0, '|cFF6A5ACD'};--DARKTURQUOISE"|cFF00CED1 //--tomato"|cFFFF6347" ++ --SLATEBLUE"|cFF6A5ACD"
+	newTable['ЗФ'] = {0, 0, '|cFF6A5ACD'};--PALEGREEN"|cFF98FB98" //--chocolate"|cFFD2691E" ++ --DARKSLATEBLUE  "|cFF483D8B"
+	newTable['УЛЬДА'] = {0, 0, '|cFF6A5ACD'};--mediumseagreen "|cFF3CB371" //--sienna"|cFFA0522D" ++ --CORNFLOWERBLUE "|cFF6495ED"
+	newTable['ХРАМ'] = {0, 0, '|cFF6A5ACD'};--darkolivegreen "|cFF556B2F //--mediumorchid"|cFFBA55D3" ++ --ROYALBLUE"|cFF4169E1"
+	-- старая тюрьма
+	newTable['ГЧГ'] = {0, 0, '|cFFBA55D3'};--limegreen"|cFF32CD32" //--mediumpurple"|cFF9370DB" ++--ROYALBLUE"|cFF4169E1"
+	newTable['ЛБРС'] = {0, 0, '|cFFBA55D3'};--darkkhaki"|cFFBDB76B"//-- slateblue"|cFF6A5ACD" ++--MEDIUMBLUE  "|cFF0000CD"	
+	newTable['СТРАТ'] = {0, 0, '|cFFBA55D3'};-- coral"|cFFFF7F50"//--lightblue"|cFFADD8E6"++ --MEDIUMPURPLE"|cFF9370DB"
+	newTable['ШОЛО'] = {0, 0, '|cFFBA55D3'};--darkorange"|cFFFF8C00"//--darkslateblue"|cFF483D8B" ++ mediumblue"|cFF0000CD"++ --DARKORCHID  "|cFF9932CC"!!!!
+	newTable['ДМ'] = {0, 0, '|cFFBA55D3'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
+	newTable['УБРС'] = {0, 0, '|cFFBA55D3'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
+	-- старый КТК
+	newTable['Inst3'] = {1, 0, '|cFF0000CD'}; -- классик рейды
+	newTable['ЗГ'] = {0, 0, '|cFF0000CD'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
+	newTable['АК20'] = {0, 0, '|cFF0000CD'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
+	newTable['ОНЯ'] = {0, 0, '|cFF0000CD'}; -- Orangered"|cFFFF4500" ++
+	newTable['ОН'] = {0, 0, '|cFF0000CD'}; -- Crimson  "|cFFDC143C"++
+	newTable['АК40'] = {0, 0, '|cFF0000CD'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
+	newTable['БВЛ'] = {0, 0, '|cFF0000CD'}; -- darkred  "|cFF8B0000"++
+	newTable['НАКС'] = {0, 0, '|cFF0000CD'}; -- Goldenrod"|cFFDAA520"++
+	
+	-- tbc
+	-- старый мао --lightblue"|cFFADD8E6"
+	newTable['Inst4'] = {1, 0, '|cFFADD8E6'}; -- БК инст--"
+	newTable['БАСТ'] = {0, 0, '|cFFADD8E6'}; -- бастионы адского пламени
+	newTable['КК'] = {0, 0, '|cFFADD8E6'}; -- кузня крови-
+	newTable['УЗИ'] = {0, 0, '|cFFADD8E6'}; -- узилище--
+	newTable['ТОПЬ'] = {0, 0, '|cFFADD8E6'}; -- нижнетопь
+	newTable['ГМ'] = {0, 0, '|cFFADD8E6'}; -- гробницы маны
+	newTable['АУКГ'] = {0, 0, '|cFFADD8E6'}; -- аукенайские гробницы
+	newTable['ПВ1'] = {0, 0, '|cFFADD8E6'}; -- предгорья хилсбрада
+	newTable['СЗ'] = {0, 0, '|cFFADD8E6'}; -- сеттекские залы
+	-- старая мара --DARKTURQUOISE"|cFF00CED1
+	newTable['ПП'] = {0, 0, '|cFF00CED1'}; -- паровое подземелье
+	newTable['ТЛ'] = {0, 0, '|cFF00CED1'}; -- темный лабиринт
+	newTable['РЗ'] = {0, 0, '|cFF00CED1'}; -- разрушенные залы
+	newTable['МЕХ'] = {0, 0, '|cFF00CED1'}; -- механар
+	newTable['БОТ'] = {0, 0, '|cFF00CED1'}; -- ботаника
+	newTable['ЧТ'] = {0, 0, '|cFF00CED1'}; -- Черные топи
+	newTable['АРКА'] = {0, 0, '|cFF00CED1'}; -- акратрац
+	newTable['ТМ'] = {0, 0, '|cFF00CED1'}; -- террасса магистров
+
+	--Старый ГЧГ --limegreen"|cFF32CD32"
+	newTable['Inst5'] = {1, 0, '|cFF32CD32'}; -- БК г-инст
+	newTable['ГЕР'] = {0, 0, '|cFF32CD32'}; -- БК героик любой 
+	newTable['Г-БАСТ'] = {0, 0, '|cFF32CD32'}; -- бастионы адского пламени
+	newTable['Г-КК'] = {0, 0, '|cFF32CD32'}; -- кузня крови
+	newTable['Г-УЗИ'] = {0, 0, '|cFF32CD32'}; -- узилище
+	newTable['Г-ТОПЬ'] = {0, 0, '|cFF32CD32'}; -- нижнетопь
+	newTable['Г-ГМ'] = {0, 0, '|cFF32CD32'}; -- гробницы маны
+	newTable['Г-АУКГ'] = {0, 0, '|cFF32CD32'}; -- аукенайские гробницы
+	newTable['Г-ПВ1'] = {0, 0, '|cFF32CD32'}; -- предгорья хилсбрада
+	newTable['Г-СЗ'] = {0, 0, '|cFF32CD32'}; -- сеттекские залы
+	newTable['Г-ПП'] = {0, 0, '|cFF32CD32'}; -- паровое подземелье
+	newTable['Г-ТЛ'] = {0, 0, '|cFF32CD32'}; -- темный лабиринт
+	newTable['Г-РЗ'] = {0, 0, '|cFF32CD32'}; -- разрушенные залы
+	newTable['Г-МЕХ'] = {0, 0, '|cFF32CD32'}; -- механар
+	newTable['Г-БОТ'] = {0, 0, '|cFF32CD32'}; -- ботаника
+	newTable['Г-ЧТ'] = {0, 0, '|cFF32CD32'}; -- Черные топи
+	newTable['Г-АРКА'] = {0, 0, '|cFF32CD32'}; -- акратрац
+	newTable['Г-ТМ'] = {0, 0, '|cFF32CD32'}; -- террасса магистров
+
+	-- 
+	newTable['Inst6'] = {1, 0, '|cFF483D8B'}; -- БК рейд
+	newTable['КАРА'] = {0, 0, '|cFFD2691E'}; -- каражан -- старый ДМ --chocolate"|cFFD2691E" 
+	newTable['ГРУУЛ'] = {0, 0, '|cFFBDB76B'}; -- Груул -- старый лбрс --darkkhaki"|cFFBDB76B"
+	newTable['МАГТ'] = {0, 0, '|cFFFF6347'}; -- Магтеридон -- старое УБРС tomato"|cFFFF6347"
+	newTable['ЗА'] = {0, 0, '|cFFC71585'}; -- зул аман -- старое АК20 --Mediumvioletred"|cFFC71585"
+	newTable['ССК'] = {0, 0, '|cFFFF4500'}; -- змеиное святилище - старая ОНЯ -- Orangered"|cFFFF4500"
+	newTable['ТК'] = {0, 0, '|cFFDC143C'}; -- око бурь -- старое ОН -  Crimson  "|cFFDC143C"
+	newTable['ХИДЖ'] = {0, 0, '|cFF800080'}; -- Вершина Хиджала -- старый АК 40 -- purple "|cFF800080"
+	newTable['БТ'] = {0, 0, '|cFF8B0000'}; -- Черный Храм - старый бвл --darkred  "|cFF8B0000"
+	newTable['ПЛАТО'] = {0, 0, '|cFFDAA520'}; --Плато Солнечного Колодца -- накс Goldenrod"|cFFDAA520
+	
+	return newTable;
+
+end
+
+function NewCustomTableClassic()
 	-- http://www.ac-web.org/forums/showthread.php?50732-Tutorial-How-to-have-colors-on-your-menu-(LUA)
 	-- inst abbr + hide + sound + color
 	newTable = {};
@@ -317,6 +445,7 @@ function NewCustomTable()
 	newTable['ТМ'] = {0, 0, '|cFF008080'}; -- террасса магистров
 
 	newTable['Inst5'] = {1, 0, '|cFF483D8B'}; -- БК г-инст
+	newTable['ГЕР'] = {0, 0, '|cFF32CD32'}; -- БК героик любой
 	newTable['Г-БАСТ'] = {0, 0, '|cFF008080'}; -- бастионы адского пламени
 	newTable['Г-КК'] = {0, 0, '|cFF008080'}; -- кузня крови
 	newTable['Г-УЗИ'] = {0, 0, '|cFF008080'}; -- узилище
@@ -339,11 +468,11 @@ function NewCustomTable()
 	newTable['ГРУУЛ'] = {0, 0, '|cFF008080'}; -- Груул
 	newTable['МАГТ'] = {0, 0, '|cFF008080'}; -- Магтеридон
 	newTable['ЗА'] = {0, 0, '|cFF008080'}; -- зул аман
-	newTable['ЗС'] = {0, 0, '|cFF008080'}; -- змеиное святилище
+	newTable['ССК'] = {0, 0, '|cFF008080'}; -- змеиное святилище
 	newTable['ТК'] = {0, 0, '|cFF008080'}; -- око бурь
 	newTable['ХИДЖ'] = {0, 0, '|cFF008080'}; -- Вершина Хиджала 
-	newTable['ХРАМ'] = {0, 0, '|cFF008080'}; -- Черный Храм 
-	newTable['ПСК'] = {0, 0, '|cFF008080'}; --Плато Солнечного Колодца 
+	newTable['БТ'] = {0, 0, '|cFF008080'}; -- Черный Храм 
+	newTable['ПЛАТО'] = {0, 0, '|cFF008080'}; --Плато Солнечного Колодца 
 	
 	return newTable;
 
@@ -392,24 +521,43 @@ function AddMessage(frame, message, ...)
 		LFGSort_Debug_Message('looking more');
 
 		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
-
+			
 			if CustomTable['Inst'..l][1] == 1 then
+				LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
 				for x,y in pairs(LFGSort_Inst) do
 					if string.find(message..'.', x) then
-						lfg_instID = y;
-						break;
+						if lfg_instID == 'ГЕР' then
+							lfg_instID = 'Г-'..y
+							LFGSort_Debug_Message('found - Г-'..y..' with '..x);
+							break;
+						else
+							lfg_instID = y;
+							LFGSort_Debug_Message('found - '..y..' with '..x);
+							break;
+						end
 					end
 				end
+			else
+				LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
+			end
+			if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
+				LFGSort_Debug_Message('stop looking');
+				break;
+			else
+				LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
 			end
 		end
 	end
-
+	
+	if lfg_instID == 'ГЕР' and CustomTable['Inst6'][1] == 0 then
+		lfg_instID = ''
+	end
 	if lfg_instID ~= '' then
 
 		lfg_data = CustomTable[lfg_instID]
-
+		
 		if lfg_data == nil then
-			LFGSort_debug_Message('no data in custom table for '..a..'('..lfg_instID..')');
+			LFGSort_Debug_Message('no data in custom table for ('..lfg_instID..')');
 			--LFGSort_Message(' data type '..type(lfg_data2)..'('..lfg_data2[1]..')'..'('..lfg_data2[2]..')'..'('..lfg_data2[3]..')');
 			return hooks[frame](frame, message, ...);
 		end
@@ -421,7 +569,7 @@ function AddMessage(frame, message, ...)
 		if sound == 1 then
 			currTime = time();
 			diff = currTime - lastCall;
-			bell = '|cffff0000♫';
+			bell = '|r|cffff0000♫';
 
 			if diff > 5 then
 				PlaySound(678, "Master");
@@ -632,9 +780,9 @@ function CreateSettingsFrame()
 	bottomFrame:SetLayout("Flow")
 	bottomFrame:SetFullWidth(true);
 	
-	LFGSort_Debug_Message(' channels settings ');
+	--LFGSort_Debug_Message(' channels settings ');
 	for i,j in pairs(LFG_channels) do
-		LFGSort_Debug_Message(i..' - '..tostring(j))
+		--LFGSort_Debug_Message(i..' - '..tostring(j))
 		local chan = AceGUI:Create("CheckBox")
 			chan:SetLabel(L['channel '..i]);
 			chan:SetValue(j);
@@ -690,8 +838,9 @@ function fill_page(parent_group, event, page_number)
 			elem:SetLayout("Flow")
 			--k = n;
 			v = CustomTable[n];
-		
+			
 			local desc = AceGUI:Create("Label")
+			
 			desc:SetText(''..v[3]..L[n]..'|r');
 			desc:SetRelativeWidth(0.20);
 			elem:AddChild(desc)
