@@ -323,78 +323,66 @@ LFGSort_Inst_ect = {};
 	
 	
 	LFGSort_Inst6['БАСТ'] = 'БАСТ'; -- бастионы адского пламени
-	LFGSort_Inst6['[rR]amp[^%a]'] = 'БАСТ';
-	LFGSort_Inst6['[^%a][rR]amp'] = 'БАСТ';
-	LFGSort_Inst6['HR'] = 'БАСТ';
+	LFGSort_Inst6['[^%a]HR[^%a]'] = 'БАСТ';
 	
 	LFGSort_Inst6['[^%a]BF[^%a]'] = 'КК';
 	LFGSort_Inst6['[^%a]bf[^%a]'] = 'КК';
-	LFGSort_Inst6['[Bb]lood [fF]ur'] = 'КК';
-	LFGSort_Inst6['КК'] = 'КК'; -- кузня крови
+	LFGSort_Inst6['[^А-ЯЁ%a]КК[^А-ЯЁ%a]'] = 'КК'; -- кузня крови
+	LFGSort_Inst6['[Кк]узн[яю]'] = 'КК'; -- кузня крови
 	
 	LFGSort_Inst6['УЗИ'] = 'УЗИ'; -- узилище
 	LFGSort_Inst6['[Уу]зили'] = 'УЗИ';
-	LFGSort_Inst6['[Ss]lave [Pp]ens'] = 'УЗИ';
-	LFGSort_Inst6['[^%a]SP[^%a]'] = 'УЗИ';
+	LFGSort_Inst6['[^А-ЯЁ%a]СП[^А-ЯЁ%a]'] = 'УЗИ';
 	
 	LFGSort_Inst6['ТОПЬ'] = 'ТОПЬ'; -- нижнетопь
-	LFGSort_Inst6['UB'] = 'ТОПЬ'; -- нижнетопь
-	LFGSort_Inst6['[Uu]nderb'] = 'ТОПЬ'; -- нижнетопь
 	
-	LFGSort_Inst6['ГМ'] = 'ГМ'; -- гробницы маны
-	LFGSort_Inst6['TOMBS'] = 'ГМ'; -- гробницы маны
-	LFGSort_Inst6['mana tombs'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['[^А-ЯЁ%a]ГМ[^А-ЯЁ%a]'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['[Тт]омб'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['[Мм]анато'] = 'ГМ'; -- гробницы маны
 	
-	LFGSort_Inst6['АУКГ'] = 'АУКГ'; -- аукенайские гробницы
-	LFGSort_Inst6['[Cc]rypts'] = 'АУКГ'; -- аукенайские гробницы
-	LFGSort_Inst6['AC'] = 'АУКГ'; -- аукенайские гробницы
-	LFGSort_Inst6['АУКГ'] = 'АУКГ'; -- аукенайские гробницы
+	LFGSort_Inst6['[Аа]укю*[Гг]робн'] = 'АУКГ'; -- аукенайские гробницы
+	LFGSort_Inst6['[^А-ЯЁ%a][Кк]рипт'] = 'АУКГ'; -- аукенайские гробницы
 	
 	LFGSort_Inst6['ПВ1'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['HF'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['[^А-ЯЁ%a]ХФ[^А-ЯЁ%a]'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['COT1'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['CoT1'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['[Hh]ills.*[Ff]oot'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['[Пп]редг.*[Хх]ил'] = 'ПВ1'; -- предгорья хилсбрада
 	
-	LFGSort_Inst6['СЗ'] = 'СЗ'; -- сеттекские залы
-	LFGSort_Inst6['[sS]eth.*[hH]al'] = 'СЗ'; -- сеттекские залы
+	LFGSort_Inst6['[^А-ЯЁ%a]СЗ[^А-ЯЁ%a]'] = 'СЗ'; -- сеттекские залы
+	LFGSort_Inst6['[Сс]ет.*[Зз]ал'] = 'СЗ'; -- сеттекские залы
 	
 	LFGSort_Inst6['ПП'] = 'ПП'; -- паровое подземелье
-	LFGSort_Inst6['SV'] = 'ПП'; -- паровое подземелье
-	LFGSort_Inst6['[Ss]tea.*[Vv]al'] = 'ПП'; -- паровое подземелье
+	LFGSort_Inst6['[Пп]ар.*[Пп]од'] = 'ПП'; -- паровое подземелье
+	LFGSort_Inst6['[Сс]ти.*[Вв]алу'] = 'ПП'; -- паровое подземелье
 	
 	LFGSort_Inst6['ТЛ'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['SL'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['[sS]had.*[Ll]ab'] = 'ТЛ'; -- темный лабиринт
+	LFGSort_Inst6['ШЛ'] = 'ТЛ'; -- темный лабиринт
+	LFGSort_Inst6['[Тт]емн.*[Лл]аб'] = 'ТЛ'; -- темный лабиринт
 	
 	LFGSort_Inst6['РЗ'] = 'РЗ'; -- разрушенные залы
-	LFGSort_Inst6['[Рр]азрушенные [зЗ]алы'] = 'РЗ'; -- SHATTERED HALLS
-	LFGSort_Inst6['[^%a]SH[^%a]'] = 'РЗ'; 
-	LFGSort_Inst6['[^%a]sh[^%a]'] = 'РЗ';
-	LFGSort_Inst6['SHATTERED HALLS'] = 'РЗ';
-	LFGSort_Inst6['[^%a][Ss]hat.* [^%a][Hh]al'] = 'РЗ';
+	LFGSort_Inst6['[Рр]азруш.*[зЗ]ал'] = 'РЗ'; -- SHATTERED HALLS
+	LFGSort_Inst6['[^А-ЯЁ%a]ШХ[^А-ЯЁ%a]'] = 'РЗ'; 
 	
 	LFGSort_Inst6['МЕХ'] = 'МЕХ'; -- механар
 	LFGSort_Inst6['[Мм]еханар'] = 'МЕХ';
-	LFGSort_Inst6['[^%a][Mm]echa'] = 'МЕХ'; -- механар
-	LFGSort_Inst6['[^%a][Mm]ec[^%a]'] = 'МЕХ'; -- механар
+	LFGSort_Inst6['[Мм]еху[^А-ЯЁ%a]'] = 'МЕХ';
 	
 	LFGSort_Inst6['БОТА'] = 'БОТ'; -- ботаника
-	LFGSort_Inst6['[^%a][Bb]ot'] = 'БОТ'; -- ботаника
+	LFGSort_Inst6['[^%a][Бб]отан'] = 'БОТ'; -- ботаника
 	
 	LFGSort_Inst6['ЧТ'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['[^А-ЯЁ%a][Тт]опи'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['BM'] = 'ЧТ'; -- Черные топи
-	LFGSort_Inst6['[Bb]lack [mM]or'] = 'ЧТ'; -- Черные топи
+	LFGSort_Inst6['БМ'] = 'ЧТ'; -- Черные топи
 	
 	LFGSort_Inst6['АРКА'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6['[^А-ЯЁ%a][Аа]рка'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['[^%a][Aa]rca'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['ARCA'] = 'АРКА'; -- акратрац
 	
 	LFGSort_Inst6['ТМ'] = 'ТМ'; -- террасса магистров
-	LFGSort_Inst6['[Tt]errac'] = 'ТМ'; -- террасса магистров
-
+	LFGSort_Inst6['[Тт]ерас'] = 'ТМ'; -- террасса магистров
+	LFGSort_Inst6['[Тт]еррас'] = 'ТМ'; -- террасса магистров
+	
 	LFGSort_Inst5['[Гг]ероик[А-ЯЁ%a]'] = 'ГЕР';
 	LFGSort_Inst5['[^А-ЯЁ%a][Гг]ер[^А-ЯЁ%a]'] = 'ГЕР';
 	LFGSort_Inst5['[^А-ЯЁ%a]Г[^А-ЯЁ%a]'] = 'ГЕР';
@@ -404,24 +392,26 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst5['[^%a]HC[^%a]'] = 'ГЕР';
 	LFGSort_Inst5['[^%a]hc[^%a]'] = 'ГЕР';
 	
-	LFGSort_Inst5['Г-БАСТ'] = 'Г-БАСТ'; -- бастионы адского пламени
-	
 
 --[^А-ЯЁ%a]
 	LFGSort_Inst4['КАРА'] = 'КАРА'; -- каражан
 	LFGSort_Inst4['[^А-ЯЁ%a][Кк]ар[ау][^А-ЯЁ%a]'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['kara'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['Kara'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['KARA'] = 'КАРА'; -- каражан
+
 	
 	LFGSort_Inst4['ГРУУЛ'] = 'ГРУУЛ'; -- Груул
+	LFGSort_Inst4['[Гг]рул'] = 'ГРУУЛ'; -- Груул
+	LFGSort_Inst4['[Гг]руул'] = 'ГРУУЛ'; -- Груул
+	
 	LFGSort_Inst4['МАГТ'] = 'МАГТ'; -- Магтеридон
-	LFGSort_Inst4['ЗА'] = 'ЗА'; -- зул аман
-	LFGSort_Inst4['ССК'] = 'ССК'; -- змеиное святилище
-	LFGSort_Inst4['ТК'] = 'ТК'; -- око бурь
-	LFGSort_Inst4['ХИДЖ'] = 'ХИДЖ'; -- Вершина Хиджала 
-	LFGSort_Inst4['БТ'] = 'БТ'; -- Черный Храм 
-	LFGSort_Inst4['ПЛАТО'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
+	LFGSort_Inst4['[Мм]агги'] = 'МАГТ'; -- Магтеридон
+	LFGSort_Inst4['[Мм]агтер'] = 'МАГТ'; -- Магтеридон
+	
+	--LFGSort_Inst4['ЗА'] = 'ЗА'; -- зул аман
+	--LFGSort_Inst4['ССК'] = 'ССК'; -- змеиное святилище
+	--LFGSort_Inst4['ТК'] = 'ТК'; -- око бурь
+	--LFGSort_Inst4['ХИДЖ'] = 'ХИДЖ'; -- Вершина Хиджала 
+	--LFGSort_Inst4['БТ'] = 'БТ'; -- Черный Храм 
+	--LFGSort_Inst4['ПЛАТО'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
 
 L['LFGSort_Inst_ect'] = LFGSort_Inst_ect;
 L['LFGSort_Inst1'] = LFGSort_Inst1
