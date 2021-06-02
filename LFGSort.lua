@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.5";
+local version = "LFGSorter 2.0.6";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -31,10 +31,10 @@ bc_release = { year  = 2021,
              sec   = 0
            }
 
-if GetServerTime() < time(bc_release) then
-	version = 'LFGSorter 2.0.4'
-	classic = true
-end
+--if GetServerTime() < time(bc_release) then
+--	version = 'LFGSorter 2.0.4'
+--	classic = true
+--end
 
 local LFG_Settings_Table = {};
 local LFG_Settings_Pages = {};
@@ -523,7 +523,7 @@ function AddMessage(frame, message, ...)
 		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
 			
 			if CustomTable['Inst'..l][1] == 1 then
-				LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
+				--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
 				for x,y in pairs(LFGSort_Inst) do
 					if string.find(message..'.', x) then
 						if lfg_instID == 'ГЕР' then
