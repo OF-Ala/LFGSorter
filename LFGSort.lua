@@ -16,6 +16,7 @@ local icon = LibStub("LibDBIcon-1.0");
 local IMM_LDB = nil;
 local l_debug = false;
 local activeChannels = {};
+local soundType
 
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
@@ -85,6 +86,10 @@ function LFGSort_OnEvent(self, event, ...)
 			}
 		end
 		
+		if DingSound == nil then
+			DingSound = 678;
+		end
+		
 		for i,j in pairs(LFG_channels) do
 			if j == true then
 				activeChannels[ChatTypeInfo["CHANNEL"..i].id] = true;
@@ -108,7 +113,7 @@ function LFGSort_OnEvent(self, event, ...)
 				chatFrame.AddMessage = AddMessage
 			end
 		end
-		
+		LFGSetSound(DingSound)
 		CreateMMB();
 	end
 end
@@ -490,7 +495,6 @@ function GetInstTable()
 	LFGSort_Insts[5] = L['LFGSort_Inst5']
 	LFGSort_Insts[6] = L['LFGSort_Inst6']
 	
-	
 end
 
 function AddMessage(frame, message, ...)
@@ -572,7 +576,7 @@ function AddMessage(frame, message, ...)
 			bell = '|r|cffff0000♫';
 
 			if diff > 5 then
-				PlaySound(678, "Master");
+				LFGPlaySound(DingSound, "Master");
 				--PlaySound(808, "Master")
 				lastCall = currTime;
 			end
@@ -747,7 +751,7 @@ function CreateSettingsFrame()
 	frame:SetStatusText(L["Настройки LFG sorter"]);
 	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
 	frame:SetLayout("List");
-	frame:SetHeight(585)
+	frame:SetHeight(620)
 		
 	Tabs = AceGUI:Create("TabGroup");
 	
@@ -794,9 +798,64 @@ function CreateSettingsFrame()
 	
 	end
 	
+	sounds_list = {}
+	sounds_list[678] = "Money ding"
+	sounds_list[12188] = "GUILD_VAULT_OPEN "
+	sounds_list[12867] = "ALARM 2 "
+	sounds_list[5274] = "AUCTION OPEN"
+	sounds_list[8458] = "PVP ENTER QUEUE"
+	sounds_list[18871] = "ALARM 1"
+	sounds_list[8959] = "RAID WARNING"
+	sounds_list[416] = "Murloc Aggro"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Ding.mp3"] = "Ding"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\gunshot.mp3"] = "Gunshot"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\mew.mp3"] = "Mew"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\owl.mp3"] = "Owl"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Rooster.mp3"] = "Rooster"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\train.mp3"] = "Train"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\waterdrop.mp3"] = "Waterdrop"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Woohoo.mp3"] = "Woohoo";
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Xylo.mp3"] = "Xylo";
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\aoogah.mp3"] = "aoogah";
+	
+	local trackDropDown = AceGUI:Create("Dropdown")
+       --trackDropDown:SetFullWidth(true)
+	   trackDropDown:SetList(sounds_list)
+        trackDropDown:SetLabel("Select ding sound")
+        trackDropDown:SetValue(DingSound)
+		trackDropDown:SetCallback("OnValueChanged", function(wig, event_name, value)
+				--LFGSort_Message('new val:'..value);
+				DingSound = value
+				LFGSetSound(value)
+				LFGPlaySound(value, "Master")
+			end)
+        bottomFrame:AddChild(trackDropDown)
+	
+	
 	frame:AddChild(bottomFrame);
+	
 	Tabs:SetFullHeight(true);
 	frame:SetFullHeight(true);
+	_G["LFGFrame_ala"] = frame.frame
+	tinsert(UISpecialFrames, "LFGFrame_ala")
+end
+
+function LFGSetSound(sound)
+
+	if type(sound) == 'number' then
+		soundType = 1
+	else
+		soundType = 2
+	end
+
+end
+
+function LFGPlaySound(sound, stype)
+	if soundType == 1 then
+		PlaySound(sound, stype)
+	else
+		PlaySoundFile(sound, stype)
+	end
 end
 
 function fill_page(parent_group, event, page_number)
