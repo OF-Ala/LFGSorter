@@ -1,6 +1,19 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("LFGSorter", "ruRU")
 
 if L then
+
+L['Select ding sound'] = 'Звук при появлении выбранных инстов';
+
+L['ReloadRequired'] = 'После нажатия интерфейс перезагрузится!'
+L['FrameExists'] = 'Вкладка уже создана!'
+L['AboutNewFrame'] = 'Добавить отдельную вкладку чата (LFGS) для отображения ЛФГ сообщений только в выбранные подземелья'
+L['CreateChatFrame'] = 'Добавить окно чата'
+L['DeleteChatFrame'] = 'Закрыть созданное окно'
+L["LookingForGroup"] = 'ПоискСпутников'
+L["GENERAL"] = 'Общий'
+L["TRADE"] = 'Тоговля'
+
+
 L['Raids & other'] = 'Рейды и пр.';
 L['5 ppl 1'] = 'low lvl инсты';
 L['5 ppl 2'] = 'high lvl инсты';
@@ -36,7 +49,7 @@ L['channel 5'] = 'канал 5';
 L['channel 6'] = 'канал 6';
 
 L['скрыть'] = 'скрыть';
-L['звук'] = 'звук';
+L['звук'] = 'выбран';
 
 L['АФК'] = 'АФК';
 L['БАФФ'] = 'БАФФ';
@@ -278,22 +291,22 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst3['[Гг]уруб'] = 'ЗГ';
 	LFGSort_Inst3['ГУРУБ[^Аа]'] = 'ЗГ';
 	-- 23. АК20
-	LFGSort_Inst3['АК%s*20[^г]'] = 'АК20';
+	LFGSort_Inst3['АК%s*20[^гguГUG]'] = 'АК20';
 	LFGSort_Inst3['АКУ20'] = 'АК20';
 	LFGSort_Inst3['АК20'] = 'АК20';
 	LFGSort_Inst3['АКУ 20'] = 'АК20';
-	LFGSort_Inst3['[^А-ЯЁ%a]АК 20'] = 'АК20';
-	LFGSort_Inst3['AQ%s*20[^г]'] = 'АК20';
-	LFGSort_Inst3['[аА]к.*20[^г]'] = 'АК20';
-	LFGSort_Inst3['[кК]ираж%s*20[^г]'] = 'АК40';
+	LFGSort_Inst3['[^А-ЯЁ%a]АК[^А-ЯЁ%a] 20'] = 'АК20';
+	LFGSort_Inst3['AQ%s*20[^гguГUG]'] = 'АК20';
+	LFGSort_Inst3['ак[^А-ЯЁ%a].*20[^гguГUG]'] = 'АК20';
+	LFGSort_Inst3['[кК]ираж%s*20[^гguГUG]'] = 'АК40';
 	-- 24. АК40
 	LFGSort_Inst3['АК40'] = 'АК40';
 	LFGSort_Inst3['АКУ40'] = 'АК40';
 	LFGSort_Inst3['АКУ 40'] = 'АК40';
 	LFGSort_Inst3['АК 40'] = 'АК40';
-	LFGSort_Inst3['АК.*40^г'] = 'АК40';
-	LFGSort_Inst3['[^А-ЯЁ%a][Аа]к.*40[^г]'] = 'АК40';
-	LFGSort_Inst3['[кК]ираж.*40[^г].*'] = 'АК40';
+	LFGSort_Inst3['АК.*40^гguГUG'] = 'АК40';
+	LFGSort_Inst3['[^А-ЯЁ%a][Аа]к.*40[^гguГUG]'] = 'АК40';
+	LFGSort_Inst3['[кК]ираж.*40[^гguГUG].*'] = 'АК40';
 	-- 25. ОП
 	LFGSort_Inst3['[^А-ЯЁ%a|(по )]МС[^А-ЯЁ>%a]'] = 'ОН';
 	LFGSort_Inst3['[^А-ЯЁ%a]MC[^А-ЯЁ>%a]'] = 'ОН';
@@ -403,8 +416,8 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['[^А-ЯЁа-я%a]Ботан'] = 'БОТ'; -- ботаника
 	
 	LFGSort_Inst6['^А-ЯЁа-я%a%/]ЧТ[^А-ЯЁа-я%a%/]'] = 'ЧТ'; -- Черные топи
-	LFGSort_Inst6['[^А-ЯЁа-я%a]Топи'] = 'ЧТ'; -- Черные топи
-	LFGSort_Inst6['[^А-ЯЁа-я%a]топи'] = 'ЧТ';
+	LFGSort_Inst6['[^А-ЯЁа-я%a]Топи[^А-ЯЁа-я%a]'] = 'ЧТ'; -- Черные топи
+	LFGSort_Inst6['[^А-ЯЁа-я%a]топи[^А-ЯЁа-я%a]'] = 'ЧТ';
 	LFGSort_Inst6['[^А-ЯЁа-я%a]ТОПИ[^А-ЯЁа-я%a]'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['BM'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['БМ ^(хан)'] = 'ЧТ'; -- Черные топи
@@ -413,8 +426,8 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['АРКА'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6['АЛ[Ь]-КА'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6['[Аа]л[ь]-ка'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['[^А-ЯЁа-я%a]арка'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['[^А-ЯЁа-я%a]Арка'] = 'АРКА'; 
+	LFGSort_Inst6['[^А-ЯЁа-я%a]арк[ау]'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6['[^А-ЯЁа-я%a]Арк[ау]'] = 'АРКА'; 
 	
 	LFGSort_Inst6['[^А-ЯЁа-я%a]ТМ[^А-ЯЁа-я%a]'] = 'ТМ'; -- террасса магистров
 	LFGSort_Inst6['[Тт]ерас'] = 'ТМ'; -- террасса магистров
@@ -428,7 +441,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst5['[^А-ЯЁа-я%a]Г[^А-ЯЁа-я%a]'] = 'ГЕР';
 
 	LFGSort_Inst5['[^%a][hH]ero'] = 'ГЕР';
-	LFGSort_Inst5['[^%a%|][Hh][^%a%|]'] = 'ГЕР';
+	LFGSort_Inst5['[^%a%d%|][Hh][^%a%|]'] = 'ГЕР';
 	LFGSort_Inst5['[^%a]HC[^%a]'] = 'ГЕР';
 	LFGSort_Inst5['[^%a]hc[^%a]'] = 'ГЕР';
 	

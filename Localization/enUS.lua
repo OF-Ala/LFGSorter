@@ -1,6 +1,19 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("LFGSorter", "enUS", true)
 
 if L then
+
+L['Select ding sound'] = 'Ding sound for selected instances';
+
+L['ReloadRequired'] = 'User interface will be reloaded!'
+L['FrameExists'] = 'Chat frame aleady exists'
+L['AboutNewFrame'] = 'Adds new chat frame (LFGS) with only selected instaces displayed'
+L['CreateChatFrame'] = 'Add chat frame'
+L['DeleteChatFrame'] = 'Delete added frame'
+
+L["LookingForGroup"] = 'LookingForGroup'
+L["GENERAL"] = 'General'
+L["TRADE"] = 'Trade'
+
 L['Raids & other'] = 'Raids & other';
 L['5 ppl 1'] = 'low lvl inst';
 L['5 ppl 2'] = 'high lvl inst';
@@ -36,7 +49,7 @@ L['channel 5'] = 'channel 5';
 L['channel 6'] = 'channel 6';
 
 L['скрыть'] = 'hide';
-L['звук'] = 'sound';
+L['звук'] = 'selected';
 
 L['АФК'] = 'AFK';
 L['БАФФ'] = 'BUFF';
