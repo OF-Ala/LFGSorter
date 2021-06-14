@@ -108,14 +108,10 @@ function LFGSort_OnEvent(self, event, ...)
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", filterAddonChatMsg);
 
 		-- todo подписывать только те вкладки, в которых есть отслеживаемые каналы?
-		for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+		for index = 1, NUM_CHAT_WINDOWS  do -- NUM_CHAT_WINDOWS
 			local chatFrame = _G["ChatFrame" .. index]
 			--LFGSort_Message(chatFrame)
 			local f_name = GetChatWindowInfo(index)
-			if f_name == "LFGS" then
-				lfgsChatFrame = chatFrame
-				--LFGSort_Message('found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
-			end
 			
 			if chatFrame ~= _G.COMBATLOG then
 				hooks[chatFrame] = chatFrame.AddMessage
@@ -127,6 +123,20 @@ function LFGSort_OnEvent(self, event, ...)
 
 		
 		CreateMMB();
+		
+	elseif (event == "PLAYER_ENTERING_WORLD") then
+	
+		for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+			local chatFrame = _G["ChatFrame" .. index]
+			--LFGSort_Message(chatFrame)
+			local f_name = GetChatWindowInfo(index)
+			if f_name == "LFGS" then
+				lfgsChatFrame = chatFrame
+				--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
+				
+			end
+		end
+		
 	end
 end
 
@@ -568,7 +578,7 @@ function AddMessage(frame, message, ...)
 	templ1 = '(%b[])(.-)(%b[])(.*)';
 	res1, res2, res3, msgText  = string.match(message, templ1)
 	LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText))) -- не удалять швабры
-	if msgText == nil then
+	if msgText == nil or msgText == '' then
 		msgText = message
 		LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText)))-- не удалять швабры
 	end
@@ -810,245 +820,6 @@ function CreateMMB()
 	})	
     icon:Register("LFGsort", IMM_LDB, LFG_sorter_settings.profile.minimap);
 
-end
-
-function CreateSettingsFrame_old()
-	
-	local frame = AceGUI:Create("Frame");
-	--local buttonAdded = false;
-	
-	frame:SetTitle("LFG sorter");
-	frame:SetStatusText(L["Настройки LFG sorter"]);
-	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
-	--frame:SetLayout("List");
-	frame:SetLayout("Fill");
-	frame:SetWidth(1000)
-	frame:SetHeight(550)
-	
-	TopFrame = AceGUI:Create("InlineGroup");
-	TopFrame:SetLayout("Flow") 
-
-	LeftFrame = AceGUI:Create("InlineGroup");
-	LeftFrame:SetLayout("List")
-
-
-	local btn = AceGUI:Create("Button")
-	btn:SetRelativeWidth(1)
-	btn:SetText(L["Reset"])
-	btn:SetCallback("OnClick", function() 
-		AceGUI:Release(frame)
-		CustomTable = NewCustomTable();
-		CreateSettingsFrame();
-		end)
-	--group:AddChild(btn);
-	
-	LeftFrame:AddChild(btn);
-	
-	--LFGSort_Debug_Message(' channels settings ');
-	for i,j in pairs(LFG_channels) do
-		--LFGSort_Debug_Message(i..' - '..tostring(j))
-		local chan = AceGUI:Create("CheckBox")
-			chan:SetLabel(L['channel '..i]);
-			chan:SetValue(j);
-			chan:SetCallback("OnValueChanged", function(value)
-				SetChannel(i);
-			end);
-			chan:SetRelativeWidth(0.6);
-			LeftFrame:AddChild(chan)
-	
-	end
-	
-	sounds_list = {}
-	sounds_list[0] = "No sound"
-	sounds_list[678] = "Money ding"
-	sounds_list[12188] = "GUILD_VAULT_OPEN "
-	sounds_list[12867] = "ALARM 2 "
-	sounds_list[5274] = "AUCTION OPEN"
-	sounds_list[8458] = "PVP ENTER QUEUE"
-	sounds_list[18871] = "ALARM 1"
-	sounds_list[8959] = "RAID WARNING"
-	sounds_list[416] = "Murloc Aggro"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\Ding.mp3"] = "Ding"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\gunshot.mp3"] = "Gunshot"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\mew.mp3"] = "Mew"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\owl.mp3"] = "Owl"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\Rooster.mp3"] = "Rooster"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\train.mp3"] = "Train"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\waterdrop.mp3"] = "Waterdrop"
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\Woohoo.mp3"] = "Woohoo";
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\Xylo.mp3"] = "Xylo";
-	sounds_list["Interface\\AddOns\\LFGSort\\res\\aoogah.mp3"] = "aoogah";
-	
-	local dingSelection = AceGUI:Create("Dropdown")
-
-		dingSelection:SetList(sounds_list)
-        dingSelection:SetLabel(L["Select ding sound"])
-        dingSelection:SetValue(DingSound)
-		dingSelection:SetRelativeWidth(1)
-		dingSelection:SetCallback("OnValueChanged", function(wig, event_name, value)
-
-				DingSound = value
-				LFGSetSound(value)
-				LFGPlaySound(value, "Master")
-			end)
-        LeftFrame:AddChild(dingSelection)
-
-	lfgsChatFrame = nil
-	
-	for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
-		local f_name = GetChatWindowInfo(index)
-		if f_name == "LFGS" then
-			lfgsChatFrame = _G["ChatFrame" .. index]
-		end
-	end	
-	ChatGroup = AceGUI:Create("InlineGroup"); --InlineGroup
-		ChatGroup:SetLayout("List")	
-		ChatGroup:SetRelativeWidth(1)
-	
-	local chatDesc1 = AceGUI:Create("Label")
-	chatDesc1:SetText(L['AboutNewFrame']);
-	chatDesc1:SetRelativeWidth(1)
-	ChatGroup:AddChild(chatDesc1)
-	
-		
-	local btn_chat = AceGUI:Create("Button")
-	btn_chat:SetRelativeWidth(1)
-	btn_chat:SetText(L["CreateChatFrame"])
-	btn_chat:SetCallback("OnClick", function()
-			if lfgsChatFrame == nil then
-		
-				lfgsChatFrame = FCF_OpenNewWindow("LFGS", true)
-				ChatFrame_AddChannel(lfgsChatFrame, L['GENERAL'])
-				ChatFrame_AddChannel(lfgsChatFrame, L['TRADE'])
-				ChatFrame_AddChannel(lfgsChatFrame, L['LookingForGroup'])
-				
-				FCF_SetLocked( lfgsChatFrame, nil );
-				lfgsChatFrame:ClearAllPoints()
-				FCF_UnDockFrame( lfgsChatFrame );
-				lfgsChatFrame:SetPoint("BOTTOMLEFT", _G["ChatFrame" .. 1], "TOPLEFT");
-
-				lfgsChatFrame:SetUserPlaced( true );	
-				
-				ReloadUI()
-
-			end
-		end)
-	
-	ChatGroup:AddChild(btn_chat);
-	
-	local btn_chat_del = AceGUI:Create("Button")
-	btn_chat_del:SetText(L["DeleteChatFrame"])
-	btn_chat_del:SetRelativeWidth(1)
-	btn_chat_del:SetCallback("OnClick", function()
-				ChatFrame_RemoveAllChannels(lfgsChatFrame);	
-				FCF_Close(lfgsChatFrame);
-				lfgsChatFrame = nil	
-		end)
-	
-	ChatGroup:AddChild(btn_chat_del);
-		
-	local chatDesc2 = AceGUI:Create("Label")
-	if lfgsChatFrame == nil then
-		chatDesc2:SetText(L['ReloadRequired']);
-	else
-		chatDesc2:SetText(L['FrameExists']);
-	end
-	chatDesc2:SetRelativeWidth(1)
-	ChatGroup:AddChild(chatDesc2)
-	
-	
-	LeftFrame:AddChild(ChatGroup);
-	RightFrame = AceGUI:Create("InlineGroup");	
-	RightFrame:SetLayout("Fill")
-	Tabs = AceGUI:Create("TabGroup");
-	
-	Tab_list = {}
-	for l,m in pairs(LFG_Settings_Pages) do
-		Tab_list[l] = m[3];
-	end
-	Tabs:SetLayout("Flow")
-	Tabs:SetTabs(Tab_list);
-	--Tabs:SetFullHeight(true);
-	--Tabs:SetFullWidth(true)
-	
-	Tabs:SetCallback('OnGroupSelected', fill_page)
-	Tabs:SelectTab(1)
-		
-	--Tabs:SetFullHeight(true);
-
-	--frame:SetFullHeight(true);
-	--TopFrame:SetFullHeight(true);
-	--LeftFrame:SetFullHeight(true);
-	--RightFrame:SetFullHeight(true);
-
-	
-	RightFrame:AddChild(Tabs);
-	
-	LeftFrame:SetRelativeWidth(0.22)
-	RightFrame:SetRelativeWidth(0.78)
-	
-	TopFrame:AddChild(LeftFrame);
-	TopFrame:AddChild(RightFrame);
-	
-	frame:AddChild(TopFrame);
-	
-	_G["LFGFrame_ala"] = frame.frame
-	tinsert(UISpecialFrames, "LFGFrame_ala")
-end
-
-function CreateSettingsFrame_noting()
-	
-	local frame = AceGUI:Create("Frame");
-	--local buttonAdded = false;
-	
-	frame:SetTitle("LFG sorter");
-	frame:SetStatusText(L["Настройки LFG sorter"]);
-	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
-	frame:SetLayout("Fill");
-	frame:SetWidth(850)
-	--frame:SetHeight(550)
-	frame:SetFullHeight(true);
-	
-	MainFrame = AceGUI:Create("SimpleGroup");
-	MainFrame:SetLayout("Flow") 
-
-	LeftFrame = AceGUI:Create("SimpleGroup");
-	LeftFrame:SetLayout("List")
-	LeftFrame:SetRelativeWidth(0.15);
-	
-	RightFrame = AceGUI:Create("SimpleGroup");
-	RightFrame:SetLayout("Flow")
-	RightFrame:SetRelativeWidth(0.80);
-	MainFrame:SetFullWidth(true);
-	MainFrame:AddChild(LeftFrame)
-	MainFrame:AddChild(RightFrame)
-	
-	fillLeftGrp(LeftFrame)
-	
-	Tabs = AceGUI:Create("TabGroup");
-	
-	Tab_list = {}
-	for l,m in pairs(LFG_Settings_Pages) do
-		Tab_list[l] = m[3];
-	end
-	Tabs:SetLayout("Flow")
-	Tabs:SetTabs(Tab_list);
-	--Tabs:SetFullHeight(true);
-	Tabs:SetFullWidth(true)
-	
-	--Tabs:ClearAllPoints()
-	--Tabs:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT");
-	--Tabs:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT");
-	--RightFrame:ClearAllPoints()
-	--RightFrame:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT");
-	--RightFrame:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT");
-	
-	Tabs:SetCallback('OnGroupSelected', fill_page)
-	Tabs:SelectTab(1)
-	RightFrame:AddChild(Tabs)
-	frame:AddChild(MainFrame)
-	_G["LFGFrame_ala"] = frame.frame
-	tinsert(UISpecialFrames, "LFGFrame_ala")
 end
 
 function CreateSettingsFrame()
@@ -1483,5 +1254,244 @@ end
 --local IconMiniMap = CreateMMB();
 --local SettingsFrame = CreateSettingsFrame();
 
+
+function CreateSettingsFrame_old()
+	
+	local frame = AceGUI:Create("Frame");
+	--local buttonAdded = false;
+	
+	frame:SetTitle("LFG sorter");
+	frame:SetStatusText(L["Настройки LFG sorter"]);
+	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
+	--frame:SetLayout("List");
+	frame:SetLayout("Fill");
+	frame:SetWidth(1000)
+	frame:SetHeight(550)
+	
+	TopFrame = AceGUI:Create("InlineGroup");
+	TopFrame:SetLayout("Flow") 
+
+	LeftFrame = AceGUI:Create("InlineGroup");
+	LeftFrame:SetLayout("List")
+
+
+	local btn = AceGUI:Create("Button")
+	btn:SetRelativeWidth(1)
+	btn:SetText(L["Reset"])
+	btn:SetCallback("OnClick", function() 
+		AceGUI:Release(frame)
+		CustomTable = NewCustomTable();
+		CreateSettingsFrame();
+		end)
+	--group:AddChild(btn);
+	
+	LeftFrame:AddChild(btn);
+	
+	--LFGSort_Debug_Message(' channels settings ');
+	for i,j in pairs(LFG_channels) do
+		--LFGSort_Debug_Message(i..' - '..tostring(j))
+		local chan = AceGUI:Create("CheckBox")
+			chan:SetLabel(L['channel '..i]);
+			chan:SetValue(j);
+			chan:SetCallback("OnValueChanged", function(value)
+				SetChannel(i);
+			end);
+			chan:SetRelativeWidth(0.6);
+			LeftFrame:AddChild(chan)
+	
+	end
+	
+	sounds_list = {}
+	sounds_list[0] = "No sound"
+	sounds_list[678] = "Money ding"
+	sounds_list[12188] = "GUILD_VAULT_OPEN "
+	sounds_list[12867] = "ALARM 2 "
+	sounds_list[5274] = "AUCTION OPEN"
+	sounds_list[8458] = "PVP ENTER QUEUE"
+	sounds_list[18871] = "ALARM 1"
+	sounds_list[8959] = "RAID WARNING"
+	sounds_list[416] = "Murloc Aggro"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Ding.mp3"] = "Ding"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\gunshot.mp3"] = "Gunshot"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\mew.mp3"] = "Mew"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\owl.mp3"] = "Owl"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Rooster.mp3"] = "Rooster"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\train.mp3"] = "Train"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\waterdrop.mp3"] = "Waterdrop"
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Woohoo.mp3"] = "Woohoo";
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\Xylo.mp3"] = "Xylo";
+	sounds_list["Interface\\AddOns\\LFGSort\\res\\aoogah.mp3"] = "aoogah";
+	
+	local dingSelection = AceGUI:Create("Dropdown")
+
+		dingSelection:SetList(sounds_list)
+        dingSelection:SetLabel(L["Select ding sound"])
+        dingSelection:SetValue(DingSound)
+		dingSelection:SetRelativeWidth(1)
+		dingSelection:SetCallback("OnValueChanged", function(wig, event_name, value)
+
+				DingSound = value
+				LFGSetSound(value)
+				LFGPlaySound(value, "Master")
+			end)
+        LeftFrame:AddChild(dingSelection)
+
+	lfgsChatFrame = nil
+	
+	for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+		local f_name = GetChatWindowInfo(index)
+		if f_name == "LFGS" then
+			lfgsChatFrame = _G["ChatFrame" .. index]
+		end
+	end	
+	ChatGroup = AceGUI:Create("InlineGroup"); --InlineGroup
+		ChatGroup:SetLayout("List")	
+		ChatGroup:SetRelativeWidth(1)
+	
+	local chatDesc1 = AceGUI:Create("Label")
+	chatDesc1:SetText(L['AboutNewFrame']);
+	chatDesc1:SetRelativeWidth(1)
+	ChatGroup:AddChild(chatDesc1)
+	
+		
+	local btn_chat = AceGUI:Create("Button")
+	btn_chat:SetRelativeWidth(1)
+	btn_chat:SetText(L["CreateChatFrame"])
+	btn_chat:SetCallback("OnClick", function()
+			if lfgsChatFrame == nil then
+		
+				lfgsChatFrame = FCF_OpenNewWindow("LFGS", true)
+				ChatFrame_AddChannel(lfgsChatFrame, L['GENERAL'])
+				ChatFrame_AddChannel(lfgsChatFrame, L['TRADE'])
+				ChatFrame_AddChannel(lfgsChatFrame, L['LookingForGroup'])
+				
+				FCF_SetLocked( lfgsChatFrame, nil );
+				lfgsChatFrame:ClearAllPoints()
+				FCF_UnDockFrame( lfgsChatFrame );
+				lfgsChatFrame:SetPoint("BOTTOMLEFT", _G["ChatFrame" .. 1], "TOPLEFT");
+
+				lfgsChatFrame:SetUserPlaced( true );	
+				
+				ReloadUI()
+
+			end
+		end)
+	
+	ChatGroup:AddChild(btn_chat);
+	
+	local btn_chat_del = AceGUI:Create("Button")
+	btn_chat_del:SetText(L["DeleteChatFrame"])
+	btn_chat_del:SetRelativeWidth(1)
+	btn_chat_del:SetCallback("OnClick", function()
+				ChatFrame_RemoveAllChannels(lfgsChatFrame);	
+				FCF_Close(lfgsChatFrame);
+				lfgsChatFrame = nil	
+		end)
+	
+	ChatGroup:AddChild(btn_chat_del);
+		
+	local chatDesc2 = AceGUI:Create("Label")
+	if lfgsChatFrame == nil then
+		chatDesc2:SetText(L['ReloadRequired']);
+	else
+		chatDesc2:SetText(L['FrameExists']);
+	end
+	chatDesc2:SetRelativeWidth(1)
+	ChatGroup:AddChild(chatDesc2)
+	
+	
+	LeftFrame:AddChild(ChatGroup);
+	RightFrame = AceGUI:Create("InlineGroup");	
+	RightFrame:SetLayout("Fill")
+	Tabs = AceGUI:Create("TabGroup");
+	
+	Tab_list = {}
+	for l,m in pairs(LFG_Settings_Pages) do
+		Tab_list[l] = m[3];
+	end
+	Tabs:SetLayout("Flow")
+	Tabs:SetTabs(Tab_list);
+	--Tabs:SetFullHeight(true);
+	--Tabs:SetFullWidth(true)
+	
+	Tabs:SetCallback('OnGroupSelected', fill_page)
+	Tabs:SelectTab(1)
+		
+	--Tabs:SetFullHeight(true);
+
+	--frame:SetFullHeight(true);
+	--TopFrame:SetFullHeight(true);
+	--LeftFrame:SetFullHeight(true);
+	--RightFrame:SetFullHeight(true);
+
+	
+	RightFrame:AddChild(Tabs);
+	
+	LeftFrame:SetRelativeWidth(0.22)
+	RightFrame:SetRelativeWidth(0.78)
+	
+	TopFrame:AddChild(LeftFrame);
+	TopFrame:AddChild(RightFrame);
+	
+	frame:AddChild(TopFrame);
+	
+	_G["LFGFrame_ala"] = frame.frame
+	tinsert(UISpecialFrames, "LFGFrame_ala")
+end
+
+function CreateSettingsFrame_noting()
+	
+	local frame = AceGUI:Create("Frame");
+	--local buttonAdded = false;
+	
+	frame:SetTitle("LFG sorter");
+	frame:SetStatusText(L["Настройки LFG sorter"]);
+	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
+	frame:SetLayout("Fill");
+	frame:SetWidth(850)
+	--frame:SetHeight(550)
+	frame:SetFullHeight(true);
+	
+	MainFrame = AceGUI:Create("SimpleGroup");
+	MainFrame:SetLayout("Flow") 
+
+	LeftFrame = AceGUI:Create("SimpleGroup");
+	LeftFrame:SetLayout("List")
+	LeftFrame:SetRelativeWidth(0.15);
+	
+	RightFrame = AceGUI:Create("SimpleGroup");
+	RightFrame:SetLayout("Flow")
+	RightFrame:SetRelativeWidth(0.80);
+	MainFrame:SetFullWidth(true);
+	MainFrame:AddChild(LeftFrame)
+	MainFrame:AddChild(RightFrame)
+	
+	fillLeftGrp(LeftFrame)
+	
+	Tabs = AceGUI:Create("TabGroup");
+	
+	Tab_list = {}
+	for l,m in pairs(LFG_Settings_Pages) do
+		Tab_list[l] = m[3];
+	end
+	Tabs:SetLayout("Flow")
+	Tabs:SetTabs(Tab_list);
+	--Tabs:SetFullHeight(true);
+	Tabs:SetFullWidth(true)
+	
+	--Tabs:ClearAllPoints()
+	--Tabs:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT");
+	--Tabs:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT");
+	--RightFrame:ClearAllPoints()
+	--RightFrame:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT");
+	--RightFrame:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT");
+	
+	Tabs:SetCallback('OnGroupSelected', fill_page)
+	Tabs:SelectTab(1)
+	RightFrame:AddChild(Tabs)
+	frame:AddChild(MainFrame)
+	_G["LFGFrame_ala"] = frame.frame
+	tinsert(UISpecialFrames, "LFGFrame_ala")
+end
 
 
