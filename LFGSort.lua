@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.6";
+local version = "LFGSorter 2.0.8";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -47,7 +47,7 @@ function LFGSort_OnEvent(self, event, ...)
 	if (event == "VARIABLES_LOADED") then
 	
 		if (LFGSortFirstUse ~= version) then
-			LFGSort_Message(L["LFG sorter loading default"]);
+			LFGSort_Message(L["LFG sorter updated"]);
 			LFGNum = 4;
 		    LFGSortFirstUse = version;
 			
@@ -61,11 +61,19 @@ function LFGSort_OnEvent(self, event, ...)
 			}
 			
 			--LFG_sorter_opt = LibStub("AceDB-3.0"):New("LFG_sorter_opt", { profile = { minimap = { hide = false, }, }, })
-			mmap_pos = {
-				["minimapPos"] = 206.3376812873,
-				["hide"] = false,
-			};
-			CustomTable = NewCustomTable();
+			if mmap_pos == nil then
+				mmap_pos = {
+					["minimapPos"] = 206.3376812873,
+					["hide"] = false,
+				};
+			end
+			
+			if CustomTable == nil then
+				CustomTable = NewCustomTable();
+			else
+			--CustomTable = NewCustomTable();
+				UpdateCustomTable();
+			end
 			
 			LFG_sorter_settings = LibStub("AceDB-3.0"):New("LFG_sorter", {
 				profile = {
@@ -142,59 +150,24 @@ end
 
 function filterAddonChatMsg(chat_frame, event, msg, author, ...)
 	if (event == "CHAT_MSG_CHANNEL") then
-		lfg_instID = '';
 		
-		for i,j in pairs(LFGSort_Inst_ect) do
-			if string.find(msg, i) then
-				lfg_instID = j;
-				LFGSort_Debug_Message('found: '..L[j]..' template '..i);
-				break;
-			end
+		lfg_instID = IdentifyInst(msg)
+		if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
+			--LFGSort_Message('found : '..lfg_instID..' ')
 		end
-		--LFGSort_Debug_Message('ok');
-		if lfg_instID == '' then
-			--LFGSort_De
-			LFGSort_Debug_Message('looking more');
-
-			for l,LFGSort_Inst in pairs(LFGSort_Insts) do
-				
-				if CustomTable['Inst'..l][1] == 1 then
-					--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
-					for x,y in pairs(LFGSort_Inst) do
-						if string.find(msg..'.', x) then
-							if lfg_instID == 'ГЕР' then
-								lfg_instID = 'Г-'..y
-								LFGSort_Debug_Message('found - Г-'..y..' with '..x);
-								break;
-							else
-								lfg_instID = y;
-								LFGSort_Debug_Message('found - '..y..' with '..x);
-								break;
-							end
-						end
-					end
-				else
-					LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
-				end
-				if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
-					LFGSort_Debug_Message('stop looking');
-					break;
-				else
-					LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
-				end
-			end
-		end
-		
 		if chat_frame == lfgsChatFrame then
+			--LFGSort_Message('found: '..lfg_instID..' in lfgs tab');
 			if lfg_instID == '' then
 				
 				return true;
 			else
 				v = CustomTable[lfg_instID];
 			
-				if v~= nil and v[2] == 1 then		
+				if v~= nil and v[2] == 1 then
+					--LFGSort_Message('showing msg in lfgs tab');
 					return false, msg, author, ...;
-				else			
+				else
+					--LFGSort_Message('ignoring because data: '..tostring(v)..' show: '..tostring(v[2]));
 					return true;
 				end
 				
@@ -205,14 +178,18 @@ function filterAddonChatMsg(chat_frame, event, msg, author, ...)
 				
 				return false, msg, author, ...;
 			else
-				--LFGSort_Debug_Message('filtering msg: '..lfg_instID);
+				--LFGSort_Message('filtering msg: '..lfg_instID);
 				v = CustomTable[lfg_instID];
 			
 				if v~= nil and v[1] == 1 then
-					LFGSort_Debug_Message('filtering msg: '..lfg_instID..' yes');
+					if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
+						--LFGSort_Message('filtering msg: '..lfg_instID..' yes'..msg);
+					end
 					return true;
 				else
-					--LFGSort_Debug_Message('filtering msg: '..lfg_instID..' no filtr');
+					if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
+						--LFGSort_Message('filtering msg: '..lfg_instID..' no filtr'..msg);
+					end
 					return false, msg, author, ...;
 				end
 				
@@ -230,7 +207,8 @@ function SettingsTable()
 		LFG_Settings_Pages = {
 		{4,5,{value = 1, text = "BC insts", disabled = false} },
 		{6,8,{value = 2, text = "BC heroics & raids", disabled = false} },
-		{1,3,{value = 3, text = "Classic", disabled = false} }
+		{9,9,{value = 3, text = "PvP", disabled = false} },
+		{1,3,{value = 4, text = "Classic", disabled = false} }
 		};
 	else
 		LFG_Settings_Pages = {
@@ -343,8 +321,27 @@ function SettingsTable()
 	'БТ',
 	'ПЛАТО'
 	},
-	total_check = 4}	
+	total_check = 4}
 
+	LFG_Settings_Table[9] = {name = L['arena'], data = {
+	'2x2',
+	'3x3',
+	'5x5'
+	},
+	total_check = 0}
+
+end
+
+function UpdateCustomTable()
+
+	oldTable = CustomTable;
+	CustomTable = NewCustomTable();
+	
+	for k, v in pairs(oldTable) do
+		CustomTable[k][1] = v[1]
+		CustomTable[k][2] = v[2]
+	end
+	
 end
 
 function NewCustomTable()
@@ -447,98 +444,10 @@ function NewCustomTable()
 	newTable['БТ'] = {0, 0, '|cFF8B0000'}; -- Черный Храм - старый бвл --darkred  "|cFF8B0000"
 	newTable['ПЛАТО'] = {0, 0, '|cFFDAA520'}; --Плато Солнечного Колодца -- накс Goldenrod"|cFFDAA520
 	
-	return newTable;
-
-end
-
-function NewCustomTableClassic()
-	-- http://www.ac-web.org/forums/showthread.php?50732-Tutorial-How-to-have-colors-on-your-menu-(LUA)
-	-- inst abbr + hide + sound + color
-	newTable = {};
-	newTable['АФК'] = {0, 0, '|cFFA9A9A9'}; -- Darkgray"|cFFA9A9A9" ++
-	newTable['БАФФ'] = {0, 0, '|cFFDEB887'}; -- Burlywood"|cFFDEB887" 
-	
-	newTable['Inst1'] = {1, 0, '|cFF483D8B'}; -- классик лоу лвл инст
-	newTable['ОП'] = {0, 0, '|cFF483D8B'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
-	newTable['МК'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
-	newTable['ПС'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
-	newTable['КТК'] = {0, 0, '|cFF0000CD'};--mediumblue"|cFF0000CD"//-- mediumseagreen "|cFF3CB371" ++  --LIGHTBLUE"|cFFADD8E6"
-	newTable['НП'] = {0, 0, '|cFF9370DB'};--mediumpurple"|cFF9370DB"//-- darkolivegreen "|cFF556B2F ++ --LIGHTSEAGREEN  "|cFF20B2AA"
-	newTable['ТЮ'] = {0, 0, '|cFFBA55D3'};--mediumorchid"|cFFBA55D3"//--darkgreen"|cFF006400" ++ --MEDIUMSPRINGGREEN "|cFF00FA9A"
-	newTable['ГНОМ'] = {0, 0, '|cFF1E90FF'};--DODGERBLUE  "|cFF1E90FF"//--limegreen"|cFF32CD32" ++ --AQUAMARINE
-	newTable['ЛИ'] = {0, 0, '|cFF4682B4'};----steelblue"|cFF4682B4"//-- darkkhaki"|cFFBDB76B" ++--LIGHTSKYBLUE"|cFF87CEFA"
-	newTable['МАО'] = {0, 0, '|cFFADD8E6'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
-	newTable['КИ'] = {0, 0, '|cFF00FFFF'};--cyan"|cFF00FFFF"//-- darkorange"|cFFFF8C00" ++ --STEELBLUE"|cFF4682B4"
-	
-	newTable['Inst2'] = {1, 0, '|cFF483D8B'}; -- классик хай лвл инст
-	newTable['МАРА'] = {0, 0, '|cFF00CED1'};--DARKTURQUOISE"|cFF00CED1 //--tomato"|cFFFF6347" ++ --SLATEBLUE"|cFF6A5ACD"
-	newTable['ЗФ'] = {0, 0, '|cFF98FB98'};--PALEGREEN"|cFF98FB98" //--chocolate"|cFFD2691E" ++ --DARKSLATEBLUE  "|cFF483D8B"
-	newTable['УЛЬДА'] = {0, 0, '|cFF3CB371'};--mediumseagreen "|cFF3CB371" //--sienna"|cFFA0522D" ++ --CORNFLOWERBLUE "|cFF6495ED"
-	newTable['ХРАМ'] = {0, 0, '|cFF556B2F'};--darkolivegreen "|cFF556B2F //--mediumorchid"|cFFBA55D3" ++ --ROYALBLUE"|cFF4169E1"
-	newTable['ГЧГ'] = {0, 0, '|cFF32CD32'};--limegreen"|cFF32CD32" //--mediumpurple"|cFF9370DB" ++--ROYALBLUE"|cFF4169E1"
-	newTable['ЛБРС'] = {0, 0, '|cFFBDB76B'};--darkkhaki"|cFFBDB76B"//-- slateblue"|cFF6A5ACD" ++--MEDIUMBLUE  "|cFF0000CD"	
-	newTable['СТРАТ'] = {0, 0, '|cFFFF7F50'};-- coral"|cFFFF7F50"//--lightblue"|cFFADD8E6"++ --MEDIUMPURPLE"|cFF9370DB"
-	newTable['ШОЛО'] = {0, 0, '|cFFFF8C00'};--darkorange"|cFFFF8C00"//--darkslateblue"|cFF483D8B" ++ mediumblue"|cFF0000CD"++ --DARKORCHID  "|cFF9932CC"!!!!
-	newTable['ДМ'] = {0, 0, '|cFFD2691E'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
-	newTable['УБРС'] = {0, 0, '|cFFFF6347'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
-	
-	newTable['Inst3'] = {1, 0, '|cFF483D8B'}; -- классик рейды
-	newTable['ЗГ'] = {0, 0, '|cFF9ACD32'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
-	newTable['АК20'] = {0, 0, '|cFFFF6060'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
-	newTable['ОНЯ'] = {0, 0, '|cFFFF4500'}; -- Orangered"|cFFFF4500" ++
-	newTable['ОН'] = {0, 0, '|cFFDC143C'}; -- Crimson  "|cFFDC143C"++
-	newTable['АК40'] = {0, 0, '|cFF800080'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
-	newTable['БВЛ'] = {0, 0, '|cFF8B0000'}; -- darkred  "|cFF8B0000"++
-	newTable['НАКС'] = {0, 0, '|cFFDAA520'}; -- Goldenrod"|cFFDAA520"++
-	
-	-- tbc
-	newTable['Inst4'] = {1, 0, '|cFF008080'}; -- БК инст--TEAL  "|cFF008080"
-	newTable['БАСТ'] = {0, 0, '|cFF008080'}; -- бастионы адского пламени--TEAL  "|cFF008080"
-	newTable['КК'] = {0, 0, '|cFF008080'}; -- кузня крови--TEAL  "|cFF008080"
-	newTable['УЗИ'] = {0, 0, '|cFF008080'}; -- узилище--TEAL  "|cFF008080"
-	newTable['ТОПЬ'] = {0, 0, '|cFF008080'}; -- нижнетопь
-	newTable['ГМ'] = {0, 0, '|cFF008080'}; -- гробницы маны
-	newTable['АУКГ'] = {0, 0, '|cFF008080'}; -- аукенайские гробницы
-	newTable['ПВ1'] = {0, 0, '|cFF008080'}; -- предгорья хилсбрада
-	newTable['СЗ'] = {0, 0, '|cFF008080'}; -- сеттекские залы
-	newTable['ПП'] = {0, 0, '|cFF008080'}; -- паровое подземелье
-	newTable['ТЛ'] = {0, 0, '|cFF008080'}; -- темный лабиринт
-	newTable['РЗ'] = {0, 0, '|cFF008080'}; -- разрушенные залы
-	newTable['МЕХ'] = {0, 0, '|cFF008080'}; -- механар
-	newTable['БОТ'] = {0, 0, '|cFF008080'}; -- ботаника
-	newTable['ЧТ'] = {0, 0, '|cFF008080'}; -- Черные топи
-	newTable['АРКА'] = {0, 0, '|cFF008080'}; -- акратрац
-	newTable['ТМ'] = {0, 0, '|cFF008080'}; -- террасса магистров
-
-	newTable['Inst5'] = {1, 0, '|cFF483D8B'}; -- БК г-инст
-	newTable['ГЕР'] = {0, 0, '|cFF32CD32'}; -- БК героик любой
-	newTable['Г-БАСТ'] = {0, 0, '|cFF008080'}; -- бастионы адского пламени
-	newTable['Г-КК'] = {0, 0, '|cFF008080'}; -- кузня крови
-	newTable['Г-УЗИ'] = {0, 0, '|cFF008080'}; -- узилище
-	newTable['Г-ТОПЬ'] = {0, 0, '|cFF008080'}; -- нижнетопь
-	newTable['Г-ГМ'] = {0, 0, '|cFF008080'}; -- гробницы маны
-	newTable['Г-АУКГ'] = {0, 0, '|cFF008080'}; -- аукенайские гробницы
-	newTable['Г-ПВ1'] = {0, 0, '|cFF008080'}; -- предгорья хилсбрада
-	newTable['Г-СЗ'] = {0, 0, '|cFF008080'}; -- сеттекские залы
-	newTable['Г-ПП'] = {0, 0, '|cFF008080'}; -- паровое подземелье
-	newTable['Г-ТЛ'] = {0, 0, '|cFF008080'}; -- темный лабиринт
-	newTable['Г-РЗ'] = {0, 0, '|cFF008080'}; -- разрушенные залы
-	newTable['Г-МЕХ'] = {0, 0, '|cFF008080'}; -- механар
-	newTable['Г-БОТ'] = {0, 0, '|cFF008080'}; -- ботаника
-	newTable['Г-ЧТ'] = {0, 0, '|cFF008080'}; -- Черные топи
-	newTable['Г-АРКА'] = {0, 0, '|cFF008080'}; -- акратрац
-	newTable['Г-ТМ'] = {0, 0, '|cFF008080'}; -- террасса магистров
-
-	newTable['Inst6'] = {1, 0, '|cFF483D8B'}; -- БК рейд
-	newTable['КАРА'] = {0, 0, '|cFF008080'}; -- каражан
-	newTable['ГРУУЛ'] = {0, 0, '|cFF008080'}; -- Груул
-	newTable['МАГТ'] = {0, 0, '|cFF008080'}; -- Магтеридон
-	newTable['ЗА'] = {0, 0, '|cFF008080'}; -- зул аман
-	newTable['ССК'] = {0, 0, '|cFF008080'}; -- змеиное святилище
-	newTable['ТК'] = {0, 0, '|cFF008080'}; -- око бурь
-	newTable['ХИДЖ'] = {0, 0, '|cFF008080'}; -- Вершина Хиджала 
-	newTable['БТ'] = {0, 0, '|cFF008080'}; -- Черный Храм 
-	newTable['ПЛАТО'] = {0, 0, '|cFF008080'}; --Плато Солнечного Колодца 
+	newTable['Inst7'] = {1, 0, '|cFF008080'}; -- БК рейд
+	newTable['2x2'] = {0, 0, '|cFF008080'}; --  
+	newTable['3x3'] = {0, 0, '|cFF008080'}; --  
+	newTable['5x5'] = {0, 0, '|cFF008080'}; -- 
 	
 	return newTable;
 
@@ -555,6 +464,7 @@ function GetInstTable()
 	LFGSort_Insts[4] = L['LFGSort_Inst4']	
 	LFGSort_Insts[5] = L['LFGSort_Inst5']
 	LFGSort_Insts[6] = L['LFGSort_Inst6']
+	LFGSort_Insts[7] = L['LFGSort_Inst7']
 	
 end
 
@@ -575,58 +485,73 @@ function AddMessage(frame, message, ...)
 	
 	--LFGSort_Debug_Message('MID '..tostring(MID)..' :'..message);
 	
+	-- templ1 = '(%b[])(.-)(%b[])(.*)';
+	-- res1, res2, res3, msgText  = string.match(message, templ1)
+	-- LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText))) -- не удалять швабры
+	-- if msgText == nil or msgText == '' then
+		-- msgText = message
+		-- LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText)))-- не удалять швабры
+	-- end
+	
+	
+	-- msgText = ClearMessage(msgText)
+	
+	-- for i,j in pairs(LFGSort_Inst_ect) do
+		-- if string.find(msgText, i) then
+			-- lfg_instID = j;
+			-- LFGSort_Debug_Message('found: '..L[j]..' template '..i);
+			-- break;
+		-- end
+	-- end
+	-- --LFGSort_Debug_Message('ok');
+	-- if lfg_instID == '' then
+		-- --LFGSort_De
+		-- LFGSort_Debug_Message('looking more');
+
+		-- for l,LFGSort_Inst in pairs(LFGSort_Insts) do
+			
+			-- if CustomTable['Inst'..l][1] == 1 then
+				-- --LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
+				-- for x,y in pairs(LFGSort_Inst) do
+					-- if string.find(msgText..'.', x) then
+						-- if lfg_instID == 'ГЕР' then
+							-- lfg_instID = 'Г-'..y
+							-- LFGSort_Debug_Message('found - Г-'..y..' with '..x);
+							-- break;
+						-- else
+							-- lfg_instID = y;
+							-- LFGSort_Debug_Message('found - '..y..' with '..x);
+							-- break;
+						-- end
+					-- end
+				-- end
+			-- else
+				-- LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
+			-- end
+			-- if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
+				-- LFGSort_Debug_Message('stop looking');
+				-- break;
+			-- else
+				-- LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
+			-- end
+		-- end
+	-- end
+	    
+	-- if lfg_instID == 'ГЕР' and CustomTable['Inst6'][1] == 0 then
+		-- lfg_instID = ''
+	-- end
+	
+	lfg_instID = ''
 	templ1 = '(%b[])(.-)(%b[])(.*)';
 	res1, res2, res3, msgText  = string.match(message, templ1)
-	LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText))) -- не удалять швабры
+		
 	if msgText == nil or msgText == '' then
 		msgText = message
-		LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText)))-- не удалять швабры
+	
 	end
 	
-	for i,j in pairs(LFGSort_Inst_ect) do
-		if string.find(msgText, i) then
-			lfg_instID = j;
-			LFGSort_Debug_Message('found: '..L[j]..' template '..i);
-			break;
-		end
-	end
-	--LFGSort_Debug_Message('ok');
-	if lfg_instID == '' then
-		--LFGSort_De
-		LFGSort_Debug_Message('looking more');
-
-		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
-			
-			if CustomTable['Inst'..l][1] == 1 then
-				--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
-				for x,y in pairs(LFGSort_Inst) do
-					if string.find(msgText..'.', x) then
-						if lfg_instID == 'ГЕР' then
-							lfg_instID = 'Г-'..y
-							LFGSort_Debug_Message('found - Г-'..y..' with '..x);
-							break;
-						else
-							lfg_instID = y;
-							LFGSort_Debug_Message('found - '..y..' with '..x);
-							break;
-						end
-					end
-				end
-			else
-				LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
-			end
-			if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
-				LFGSort_Debug_Message('stop looking');
-				break;
-			else
-				LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
-			end
-		end
-	end
-	    
-	if lfg_instID == 'ГЕР' and CustomTable['Inst6'][1] == 0 then
-		lfg_instID = ''
-	end
+	lfg_instID = IdentifyInst(msgText)
+	
 	if lfg_instID ~= '' then
 
 		lfg_data = CustomTable[lfg_instID]
@@ -696,6 +621,134 @@ function AddMessage(frame, message, ...)
    	--if not isLFGS or showInLFGS then
 		return hooks[frame](frame, message, ...);
 	--end
+end
+
+function IdentifyInst(msgString)
+
+	
+	lfg_instID = ''
+	--probs = (string.find(msgString, 'ПАРОВОЕ') ~= nil) or (string.find(msgString, 'Паровое') ~= nil);
+	
+	--if probs then
+	--	LFGSort_Message('here: '..msgString);
+	--	LFGSort_Message('after: '.. tostring(msgText));
+	--	l_debug = true;
+	--end
+
+	
+	msgText = ClearMessage(msgString)
+	
+	for i,j in pairs(LFGSort_Inst_ect) do
+		if string.find(msgText, i) then
+			lfg_instID = j;
+			LFGSort_Debug_Message('found: '..L[j]..' template '..i);
+			break;
+		end
+	end
+	--LFGSort_Debug_Message('ok');
+	if lfg_instID == '' then
+		--LFGSort_De
+		LFGSort_Debug_Message('looking more');
+
+		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
+			
+			if CustomTable['Inst'..l][1] == 1 then
+				--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
+				for x,y in pairs(LFGSort_Inst) do
+					if string.find(msgText..'.', x) then
+						if lfg_instID == 'ГЕР' then
+							lfg_instID = 'Г-'..y
+							LFGSort_Debug_Message('found - Г-'..y..' with '..x);
+							break;
+						else
+							lfg_instID = y;
+							LFGSort_Debug_Message('found - '..y..' with '..x);
+							break;
+						end
+					end
+				end
+			else
+				LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
+			end
+			if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
+				LFGSort_Debug_Message('stop looking');
+				break;
+			else
+				LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
+			end
+		end
+	end
+	    
+	if lfg_instID == 'ГЕР' and CustomTable['Inst6'][1] == 0 then
+		lfg_instID = ''
+	end
+	
+	if probs then
+
+		l_debug = false;
+	end
+	
+	return lfg_instID
+
+end
+
+function ClearMessage(message)
+
+	templ1 = '([{}<>%s%-%/])([%z\1-\127\194-\244][\128-\191]*)([{}<>%s%-%/])';
+	
+	msgText = message
+	
+	SubTable = {}
+	SubTableCleared = {}
+	count = 1
+	strStart = 0
+	strEnd = 0
+	for i = 1, 100 do
+		a,b = string.find(message, templ1, b)
+		if a == 0 or a == nil then
+			break;
+		end
+		if a > strEnd and strEnd ~= 0 then
+			if strEnd - strStart > 6 then
+				word = string.sub(message, strStart + 1, strEnd - 1)
+				SubTable[count] = word
+				wordCleared = string.gsub(word,'[%s%-%/]','')
+				SubTableCleared[count] = wordCleared
+				count = count + 1
+				strStart = a
+				strEnd = b
+			else
+				strStart = 0
+				strEnd = 0
+			end
+		elseif strStart == 0 then
+			strStart = a
+			strEnd = b
+		else 
+			strEnd = b
+		end
+	end
+
+	message2 = message
+	for k,v in pairs(SubTable) do
+		v2 = string.gsub(v,'%/','%%/')
+		v2 = string.gsub(v2,'%-','%%-')
+		message2 = string.gsub(message2,v2,SubTableCleared[k])
+	end
+
+	if msgText~= message2 and l_debug then
+		PlaySoundFile("Interface\\AddOns\\LFGSort\\res\\Xylo.mp3", 'Master')
+		LFGSort_Message('DIFF 1:'..msgText);
+		LFGSort_Message('DIFF 2:'..message2);
+	end
+	
+	message2 = string.gsub(message2,'[^А-ЯЁа-я%a]Г[^А-ЯЁа-я%a]',' гер ')
+	message2 = string.gsub(message2,'[^А-ЯЁа-я%a][H][^А-ЯЁа-я%a]',' hero ')
+	
+	message2 = string.lower(message2)
+	
+	return message2
+
 end
 
 function LFGSortSlash(msg)
@@ -818,8 +871,8 @@ function CreateMMB()
                 tt:AddLine("|cffffff00Click|r to open the settings window.")
             end,
 	})	
-    icon:Register("LFGsort", IMM_LDB, LFG_sorter_settings.profile.minimap);
-
+    --icon:Register("LFGsort", IMM_LDB, LFG_sorter_settings.profile.minimap);
+	icon:Register("LFGsort", IMM_LDB, mmap_pos);
 end
 
 function CreateSettingsFrame()
@@ -832,6 +885,7 @@ function CreateSettingsFrame()
 	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
 	frame:SetLayout("List"); 
 	frame:SetHeight(690)
+	frame:SetWidth(800)
 		
 	Tabs = AceGUI:Create("TabGroup");
 	
@@ -879,6 +933,7 @@ function CreateSettingsFrame()
 	end
 	
 	sounds_list = {}
+	sounds_list[0] = "No sound"
 	sounds_list[678] = "Money ding"
 	sounds_list[12188] = "GUILD_VAULT_OPEN "
 	sounds_list[12867] = "ALARM 2 "

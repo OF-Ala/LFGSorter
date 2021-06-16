@@ -50,6 +50,12 @@ L['channel 6'] = 'channel 6';
 
 L['скрыть'] = 'hide';
 L['звук'] = 'selected';
+L['выбран'] = 'selected';
+L['arena'] = 'arena';
+
+L['2x2'] = '2x2';
+L['3x3'] = '3x3';
+L['5x5'] = '5x5';
 
 L['АФК'] = 'AFK';
 L['БАФФ'] = 'BUFF';
@@ -135,6 +141,7 @@ LFGSort_Inst3 = {};
 LFGSort_Inst4 = {};
 LFGSort_Inst5 = {};
 LFGSort_Inst6 = {};
+LFGSort_Inst7 = {};
 
 LFGSort_Inst_ect = {};
 
@@ -151,49 +158,49 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst_ect['g/run'] = 'АФК';
 
 	-- 1. Баффы ДМ
-	LFGSort_Inst_ect['buf.*DM'] = 'БАФФ';
-	LFGSort_Inst_ect['DM.*Buf'] = 'БАФФ';
-	LFGSort_Inst_ect['DM.*BUF'] = 'БАФФ';
+	LFGSort_Inst_ect['buf.*dm'] = 'БАФФ';
+	--LFGSort_Inst_ect['DM.*Buf'] = 'БАФФ';
+	--LFGSort_Inst_ect['DM.*BUF'] = 'БАФФ';
 
 	-- 2. МАО
-	LFGSort_Inst1['SM'] = 'МАО';
+	LFGSort_Inst1['[^%a]sm[^%a]'] = 'МАО';
 	LFGSort_Inst1['[^%a]smgy[^%a]'] = 'МАО';
 	LFGSort_Inst1['[^%a]sm[^%a]'] = 'МАО';
 	LFGSort_Inst1['[^%a]smlib[^%a]'] = 'МАО';
 	-- 3. Мародон
 	LFGSort_Inst2['mara'] = 'МАРА';
-	LFGSort_Inst2['MARA'] = 'МАРА';
-	LFGSort_Inst2['[Mm]ara'] = 'МАРА';
+	--LFGSort_Inst2['MARA'] = 'МАРА';
+	--LFGSort_Inst2['[Mm]ara'] = 'МАРА';
 
 	-- 4. КТК
-	LFGSort_Inst1['[Ss]adow [Ff]ang'] = 'КТК';
-	LFGSort_Inst1['SFK'] = 'КТК';
+	--LFGSort_Inst1['[Ss]adow [Ff]ang'] = 'КТК';
+	LFGSort_Inst1['[^%a]sfk[^%a]'] = 'КТК';
 	-- 5. ЛИ
-	LFGSort_Inst1['RFK'] = 'ЛИ'; -- без ИЛИ
+	LFGSort_Inst1['[^%a]rfk[^%a]'] = 'ЛИ'; -- без ИЛИ
 	LFGSort_Inst1['[Kk]raul'] = 'ЛИ';
 	-- 6. ГЧГ
-	LFGSort_Inst2['BRD'] = 'ГЧГ';
+	--LFGSort_Inst2['BRD'] = 'ГЧГ';
 	LFGSort_Inst2['brd'] = 'ГЧГ';
 
 	-- 7. ЗФ
-	LFGSort_Inst2['ZF'] = 'ЗФ';
+	LFGSort_Inst2['[^%a]zf[^%a]'] = 'ЗФ';
 	LFGSort_Inst2['[Ff]arak'] = 'ЗФ';
-	LFGSort_Inst2['FARAK'] = 'ЗФ';
+	--LFGSort_Inst2['FARAK'] = 'ЗФ';
 	LFGSort_Inst2['[Ff]arrak'] = 'ЗФ';
-	LFGSort_Inst2['FARRAK'] = 'ЗФ';
+	--LFGSort_Inst2['FARRAK'] = 'ЗФ';
 	-- 8. НП пучина
-	LFGSort_Inst1['BFD'] = 'НП';
+	LFGSort_Inst1['[^%a]bfd[^%a]'] = 'НП';
 	LFGSort_Inst1['[Bb]lack [Ff]athom [Dd]eeps'] = 'НП';
 	LFGSort_Inst1['[Bb]lackfathom'] = 'НП';
 	-- 9. Ульдаман
 	LFGSort_Inst2['[uU]lda'] = 'УЛЬДА';
-	LFGSort_Inst2['ULDA'] = 'УЛЬДА';
+	--LFGSort_Inst2['ULDA'] = 'УЛЬДА';
 	-- 10. Курганы И
 	LFGSort_Inst1['[^%a]downs[^%a]'] = 'КИ';
-	LFGSort_Inst1['RFD'] = 'КИ'; -- КУРГАНЫ
+	LFGSort_Inst1['[^%a]rfd[^%a]'] = 'КИ'; -- КУРГАНЫ
 
 	-- 11. Пещеры стенаний
-	LFGSort_Inst1['[^%a]WC[^%a]'] = 'ПС';
+	LFGSort_Inst1['[^%a]wc[^%a]'] = 'ПС';
 	-- 12. Храм
 	LFGSort_Inst2['[Tt]emple'] = 'ХРАМ';
 	LFGSort_Inst2['[Aa]tal'] = 'ХРАМ';
@@ -201,145 +208,147 @@ LFGSort_Inst_ect = {};
 	-- 13. Мертвые копи
 	LFGSort_Inst1['[Dd]eadmines'] = 'МК';
 	LFGSort_Inst1['[Mm]ines'] = 'МК';
-	LFGSort_Inst1['DMs'] = 'МК';
-	LFGSort_Inst1['DEADMINES'] = 'МК';
+	LFGSort_Inst1['[^%a]dms'] = 'МК';
+	--LFGSort_Inst1['DEADMINES'] = 'МК';
 	-- 14. Тюрьма
-	LFGSort_Inst1['[^%a]ST[^%a]'] = 'ТЮ';
-	LFGSort_Inst1['Stocade'] = 'ТЮ';
-	LFGSort_Inst1['Stocad'] = 'ТЮ';
+	LFGSort_Inst1['[^%a]st[^%a]'] = 'ТЮ';
+	--LFGSort_Inst1['stocade'] = 'ТЮ';
+	LFGSort_Inst1['stocad'] = 'ТЮ';
 	-- 15. Забытый город
-	LFGSort_Inst2['[^%a]DM[^%a]'] = 'ДМ';
+	LFGSort_Inst2['[^%a]dm[^%a]'] = 'ДМ';
 	LFGSort_Inst2['[dD]ire [mM]aul'] = 'ДМ';
 	LFGSort_Inst2['dm [Nn]orth'] = 'ДМ';
 	LFGSort_Inst2['dm [Ee]ast'] = 'ДМ';
 	LFGSort_Inst2['dm [Ww]est'] = 'ДМ';
 	-- 16. Гномер
 	LFGSort_Inst1['[Gg]nomer'] = 'ГНОМ';
-	LFGSort_Inst1['GNOMER'] = 'ГНОМ';
+	--LFGSort_Inst1['GNOMER'] = 'ГНОМ';
 	-- 17. Страт
 	LFGSort_Inst2['[Ss]trat[^%a]'] = 'СТРАТ';
 	LFGSort_Inst2['[Ss]trath'] = 'СТРАТ';
-	LFGSort_Inst2['STRAT[^%a]'] = 'СТРАТ';
-	LFGSort_Inst2['[^%a]ST L'] = 'СТРАТ';
+	--LFGSort_Inst2['STRAT[^%a]'] = 'СТРАТ';
+	LFGSort_Inst2['[^%a]st l '] = 'СТРАТ';
 	-- 18. Шоло
-	LFGSort_Inst2['SCHOLO'] = 'ШОЛО';
-	LFGSort_Inst2['SHOLO'] = 'ШОЛО';
+	--LFGSort_Inst2['SCHOLO'] = 'ШОЛО';
+	--LFGSort_Inst2['SHOLO'] = 'ШОЛО';
 	LFGSort_Inst2['[Ss]cholo'] = 'ШОЛО';
 	-- 19. ОП
-	LFGSort_Inst1['RFC'] = 'ОП';
+	--LFGSort_Inst1['RFC'] = 'ОП';
 	LFGSort_Inst1['[Rr]agefire'] = 'ОП';
 	LFGSort_Inst1['[^%a]rfc[^%a]'] = 'ОП';
 	-- 20. УБРС
-	LFGSort_Inst2['UBRS'] = 'УБРС';
+	--LFGSort_Inst2['UBRS'] = 'УБРС';
 	LFGSort_Inst2['ubrs'] = 'УБРС';
 	LFGSort_Inst2['[^%a][Rr]end[^%a].*[^%a][Rr]un[^%a]'] = 'УБРС';
 	-- 21. ЛБРС
-	LFGSort_Inst2['LBRS'] = 'ЛБРС';
+	--LFGSort_Inst2['LBRS'] = 'ЛБРС';
 	LFGSort_Inst2['lbrs'] = 'ЛБРС';
 
 	-- 22. ЗГ
-	LFGSort_Inst3['[^%a]Zg[^%a]'] = 'ЗГ';
-	LFGSort_Inst3['[^%a]ZG[^%a]'] = 'ЗГ';
+	LFGSort_Inst3['[^%a]zg[^%a]'] = 'ЗГ';
+	--LFGSort_Inst3['[^%a]ZG[^%a]'] = 'ЗГ';
 	LFGSort_Inst3['[Gg]urub'] = 'ЗГ';
-	LFGSort_Inst3['GURUB[^Aa]'] = 'ЗГ';
+	--LFGSort_Inst3['GURUB[^Aa]'] = 'ЗГ';
 	-- 23. АК20
-	LFGSort_Inst3['AQ20'] = 'АК20';
-	LFGSort_Inst3['AQ%s*20^g'] = 'АК20';
+	LFGSort_Inst3['[^%a]aq20'] = 'АК20';
+	LFGSort_Inst3['[^%a]aq%s*20^g'] = 'АК20';
 
 	-- 24. АК40
-	LFGSort_Inst3['AQ.*40^g'] = 'АК40';
-	LFGSort_Inst3['QIRAJ%s*40^g'] = 'АК40';
+	LFGSort_Inst3['[^%a]aq.*40^g'] = 'АК40';
+	--LFGSort_Inst3['QIRAJ%s*40^g'] = 'АК40';
 	LFGSort_Inst3['[Qq]iraj%s*40^g'] = 'АК40';
 	-- 25. ОП
-	LFGSort_Inst3['[^%a]MC[^%a]'] = 'ОН';
+	--LFGSort_Inst3['[^%a]MC[^%a]'] = 'ОН';
 	LFGSort_Inst3['[mM]olten [Cc]ore'] = 'ОН';
 
 	-- 26. БВЛ
 
-	LFGSort_Inst3['BWL'] = 'БВЛ';
+	--LFGSort_Inst3['BWL'] = 'БВЛ';
 	LFGSort_Inst3['bwl'] = 'БВЛ';
 
 	-- 27. Накс
 	LFGSort_Inst3['[Nn]ax'] = 'НАКС';
-	LFGSort_Inst3['NAX'] = 'НАКС';
+	--LFGSort_Inst3['NAX'] = 'НАКС';
 	-- 28. Оня
-	LFGSort_Inst3['[^%a][Oo]ny'] = 'ОНЯ';
-	LFGSort_Inst3['[^%a]ONY'] = 'ОНЯ';
+	LFGSort_Inst3['[^%a][Oo]ny[^%a]'] = 'ОНЯ';
+	--LFGSort_Inst3['[^%a]ONY'] = 'ОНЯ';
 
-	LFGSort_Inst6['[^%a]RAMP'] = 'БАСТ';
+	--LFGSort_Inst6['[^%a]RAMP'] = 'БАСТ';
 	LFGSort_Inst6['[rR]amp[^%a]'] = 'БАСТ';
 	LFGSort_Inst6['[^%a][rR]amp'] = 'БАСТ';
-	LFGSort_Inst6['[^%a]HR[^%a]'] = 'БАСТ';
+	LFGSort_Inst6['[^%a]hr[^%a]'] = 'БАСТ';
 	
-	LFGSort_Inst6['[^%a]BF[^%a]'] = 'КК';
+	--LFGSort_Inst6['[^%a]BF[^%a]'] = 'КК';
 	LFGSort_Inst6['[^%a]bf[^%a]'] = 'КК';
 	LFGSort_Inst6['[Bb]lood [fF]ur'] = 'КК';
-	LFGSort_Inst6['FURNA'] = 'КК';
+	LFGSort_Inst6['furna'] = 'КК';
 	
-	LFGSort_Inst6['[Ss]lave [Pp]ens'] = 'УЗИ';
-	LFGSort_Inst6['[^%a]SP[^%a]'] = 'УЗИ';
+	LFGSort_Inst6['[Ss]lave%s?[Pp]ens'] = 'УЗИ';
+	--LFGSort_Inst6['[^%a]SP[^%a]'] = 'УЗИ';
 	LFGSort_Inst6['[^%a]sp[^%a]'] = 'УЗИ';
-	LFGSort_Inst6['[^%a]PENS[^%a]'] = 'УЗИ';
+	--LFGSort_Inst6['[^%a]PENS[^%a]'] = 'УЗИ';
 	LFGSort_Inst6['[^%a]pens[^%a]'] = 'УЗИ';
 	
-	LFGSort_Inst6['UB'] = 'ТОПЬ'; -- нижнетопь
+	LFGSort_Inst6['[^%a]ub[^%a]'] = 'ТОПЬ'; -- нижнетопь
 	LFGSort_Inst6['[Uu]nderb'] = 'ТОПЬ'; -- нижнетопь
 	
-	LFGSort_Inst6['TOMBS'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['[^%a]mt[^%a]'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['tombs'] = 'ГМ'; -- гробницы маны
 	LFGSort_Inst6['[Mm]ana.?[Tt]om'] = 'ГМ'; -- гробницы маны
-	LFGSort_Inst6['MANA T'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6['mana t'] = 'ГМ'; -- гробницы маны
 	
 	LFGSort_Inst6['[Cc]rypt'] = 'АУКГ'; -- аукенайские гробницы
-	LFGSort_Inst6['AC'] = 'АУКГ'; -- аукенайские гробницы
+	LFGSort_Inst6['[^%a]ac[^%a]'] = 'АУКГ'; -- аукенайские гробницы
 	
-	LFGSort_Inst6['HF'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['COT1'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['CoT1'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['[^%a]hf[^%a]'] = 'ПВ1'; -- предгорья хилсбрада
+	--LFGSort_Inst6['COT1'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['cot1'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Dd]arnho'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Oo]ld.*[Hh]i[l]*sb'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['OLD.*HI[L]*SB'] = 'ПВ1'; -- предгорья хилсбрада
+	--LFGSort_Inst6['OLD.*HI[L]*SB'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Hh]ills.*[Ff]oot'] = 'ПВ1'; -- предгорья хилсбрада
 	
 	LFGSort_Inst6['[sS]e[th]*.*[hH]al'] = 'СЗ'; -- сеттекские залы
 	LFGSort_Inst6['[sS]e[th]*ek'] = 'СЗ';
-	LFGSort_Inst6['SET[TH]*EK'] = 'СЗ';
+	LFGSort_Inst6['seth'] = 'СЗ';
+	--LFGSort_Inst6['SET[TH]*EK'] = 'СЗ';
 	
-	LFGSort_Inst6['SV'] = 'ПП'; -- паровое подземелье
+	LFGSort_Inst6['[^%a]sv[^%a]'] = 'ПП'; -- паровое подземелье
 	LFGSort_Inst6['[Ss]tea.*[Vv]a'] = 'ПП'; -- паровое подземелье
 	
-	LFGSort_Inst6['SL'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['SLABS'] = 'ТЛ'; 
-	LFGSort_Inst6['slabs'] = 'ТЛ';
+	LFGSort_Inst6['[^%a]sl[^%a]'] = 'ТЛ'; -- темный лабиринт
+	--LFGSort_Inst6['SLABS'] = 'ТЛ'; 
+	LFGSort_Inst6['slab'] = 'ТЛ';
 	LFGSort_Inst6['[sS]had.*[Ll]ab'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['SHAD.*LAB'] = 'ТЛ'; -- темный лабиринт
+	--LFGSort_Inst6['SHAD.*LAB'] = 'ТЛ'; -- темный лабиринт
 	
-	LFGSort_Inst6['[^%a]SH[^%a]'] = 'РЗ';
-	LFGSort_Inst6['[^%a]SSH[^%a]'] = 'РЗ';	
+	--LFGSort_Inst6['[^%a]SH[^%a]'] = 'РЗ';
+	LFGSort_Inst6['[^%a]shh[^%a]'] = 'РЗ';	
 	LFGSort_Inst6['[^%a]sh[^%a]'] = 'РЗ';
-	LFGSort_Inst6['SHATTER.*HALLS'] = 'РЗ';
-	LFGSort_Inst6['[Ss]hat.*[Hh]al'] = 'РЗ';
+	--LFGSort_Inst6['SHATTER.*HALLS'] = 'РЗ';
+	LFGSort_Inst6['[Ss]hat.*[Hh]'] = 'РЗ';
 	
 
 	LFGSort_Inst6['[^%a][Mm]echa'] = 'МЕХ'; -- механар
 	LFGSort_Inst6['[^%a][Mm]ec[^%a]'] = 'МЕХ'; -- механар
-	
+	LFGSort_Inst6['[^%a][Mm]ech[^%a]'] = 'МЕХ';
 
 	LFGSort_Inst6['[^%a][Bb]ota'] = 'БОТ'; -- ботаника
 	LFGSort_Inst6['[^%a][Bb]ot[^%a]'] = 'БОТ'; -- ботаника
 	
-	LFGSort_Inst6['BM'] = 'ЧТ'; -- Черные топи
+	LFGSort_Inst6['[^%a]bm[^%a]'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['[Bb]lack [mM]or'] = 'ЧТ'; -- Черные топи
 	
 	LFGSort_Inst6['[^%a][Aa]rca'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['ARCA'] = 'АРКА'; -- акратрац
+	--LFGSort_Inst6['ARCA'] = 'АРКА'; -- акратрац
 	
-	LFGSort_Inst6['MT'] = 'ТМ'; -- террасса магистров
+	--LFGSort_Inst6['MT'] = 'ТМ'; -- террасса магистров
 	LFGSort_Inst6['[Tt]errac'] = 'ТМ'; -- террасса магистров
 
 	LFGSort_Inst5['[^%a][hH]ero'] = 'ГЕР';
 	LFGSort_Inst5['[^%a%|][Hh][^%a%|]'] = 'ГЕР';
-	LFGSort_Inst5['[^%a]HC[^%a]'] = 'ГЕР';
-	LFGSort_Inst5['HERO'] = 'ГЕР';
+	--LFGSort_Inst5['[^%a]hc[^%a]'] = 'ГЕР';
+	--LFGSort_Inst5['HERO'] = 'ГЕР';
 	LFGSort_Inst5['[^%a]hc[^%a]'] = 'ГЕР';
 	
 	
@@ -347,10 +356,10 @@ LFGSort_Inst_ect = {};
 --[^А-ЯЁ%a]
 
 	LFGSort_Inst4['kara'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['Kara'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['KARA'] = 'КАРА'; -- каражан
+	--LFGSort_Inst4['Kara'] = 'КАРА'; -- каражан
+	--LFGSort_Inst4['KARA'] = 'КАРА'; -- каражан
 	
-	LFGSort_Inst4['GRUUL'] = 'ГРУУЛ'; -- Груул
+	--LFGSort_Inst4['GRUUL'] = 'ГРУУЛ'; -- Груул
 	LFGSort_Inst4['[Gg]rull'] = 'ГРУУЛ'; -- Груул
 	
 	LFGSort_Inst4['[Mm]agth'] = 'МАГТ'; -- Магтеридон
@@ -361,6 +370,18 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst4['[^%a]BT[^%a]'] = 'БТ'; -- Черный Храм 
 	--LFGSort_Inst4['[Ss]unwel'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
 
+	LFGSort_Inst7['2x2'] = '2x2'; --
+	LFGSort_Inst7['2c '] = '2x2';
+	LFGSort_Inst7['2 ?v ?2'] = '2x2';
+	
+	LFGSort_Inst7['3x3'] = '3x3'; -- 
+	LFGSort_Inst7['3c '] = '3x3';
+	LFGSort_Inst7['3 ?v ?3'] = '3x3';
+	
+	LFGSort_Inst7['5x5'] = '5x5'; -- 
+	LFGSort_Inst7['5c '] = '5x5';
+	LFGSort_Inst7['5 ?v ?5'] = '5x5';
+	
 L['LFGSort_Inst_ect'] = LFGSort_Inst_ect;
 L['LFGSort_Inst1'] = LFGSort_Inst1
 L['LFGSort_Inst2'] = LFGSort_Inst2
@@ -370,4 +391,5 @@ L['LFGSort_Inst4'] = LFGSort_Inst4
 L['LFGSort_Inst5'] = LFGSort_Inst5
 L['LFGSort_Inst6'] = LFGSort_Inst6
 
+L['LFGSort_Inst7'] = LFGSort_Inst7
 end
