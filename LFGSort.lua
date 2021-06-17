@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.8.3";
+local version = "LFGSorter 2.0.8.4";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -151,7 +151,7 @@ end
 function filterAddonChatMsg(chat_frame, event, msg, author, ...)
 	if (event == "CHAT_MSG_CHANNEL") then
 		
-		lfg_instID = IdentifyInst(msg)
+		lfg_instID = IdentifyInst(' '..msg)
 		if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
 			--LFGSort_Message('found : '..lfg_instID..' ')
 		end
