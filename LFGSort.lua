@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.8.2";
+local version = "LFGSorter 2.0.8.3";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -47,7 +47,7 @@ function LFGSort_OnEvent(self, event, ...)
 	if (event == "VARIABLES_LOADED") then
 	
 		if (LFGSortFirstUse ~= version) then
-			LFGSort_Message(L["LFG sorter updated"]);
+			LFGSort_Message(L["LFG sorter loading default"]);
 			LFGNum = 4;
 		    LFGSortFirstUse = version;
 			
