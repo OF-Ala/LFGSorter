@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.8.4";
+local version = "LFGSorter 2.0.8.5";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -19,6 +19,7 @@ local activeChannels = {};
 local soundType
 local lfgsChatFrame
 local buttonsFrame = nil
+local currentFrameTab = 0
 
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
@@ -72,7 +73,7 @@ function LFGSort_OnEvent(self, event, ...)
 				CustomTable = NewCustomTable();
 			else
 			--CustomTable = NewCustomTable();
-				UpdateCustomTable();
+				UpdateCustomTable(CustomTable);
 			end
 			
 			LFG_sorter_settings = LibStub("AceDB-3.0"):New("LFG_sorter", {
@@ -105,6 +106,14 @@ function LFGSort_OnEvent(self, event, ...)
 				activeChannels[ChatTypeInfo["CHANNEL"..i].id] = true;
 				LFGSort_Debug_Message('searching in: '..i..' channel, id: '..ChatTypeInfo["CHANNEL"..i].id);
 			end
+		end
+		
+		if SavedTables == nil then
+			SavedTables = {}
+		end
+		
+		if CurrentTableName == nil then
+			CurrentTableName = ''
 		end
 		
 		messageReceived = 0;
@@ -332,12 +341,11 @@ function SettingsTable()
 
 end
 
-function UpdateCustomTable()
+function UpdateCustomTable(NewTable)
 
-	oldTable = CustomTable;
 	CustomTable = NewCustomTable();
 	
-	for k, v in pairs(oldTable) do
+	for k, v in pairs(NewTable) do
 		CustomTable[k][1] = v[1]
 		CustomTable[k][2] = v[2]
 	end
@@ -886,7 +894,105 @@ function CreateSettingsFrame()
 	frame:SetLayout("List"); 
 	frame:SetHeight(690)
 	frame:SetWidth(800)
+	
+	---
+	--------------------------------------------------
+
+	settingsFrame = AceGUI:Create("SimpleGroup");
+	settingsFrame:SetLayout("Flow")
+	settingsFrame:SetFullWidth(true);
+	
+	settingsFrameFiller = AceGUI:Create("SimpleGroup");
+	settingsFrameFiller:SetLayout("Flow")
+	--settingsFrame:SetFullWidth(true);
+	--settingsFrameFiller:SetRelativeWidth(0.40)
+	
+	local strFiller = AceGUI:Create("Label")
+	strFiller:SetText('                  ');
+	settingsFrameFiller:AddChild(strFiller);
+	
+	settingsFrame:AddChild(settingsFrameFiller);
 		
+
+	--settingsFrame:SetRelativeWidth(0.50)
+	SettingsList = {}
+	for q,a in pairs(SavedTables) do
+		--LFGSort_Message(' settings '..q);
+		SettingsList[q] = q	
+	end
+	
+	local SettingsDropDown = AceGUI:Create("Dropdown")
+ 	    SettingsDropDown:SetList(SettingsList)
+	    SettingsDropDown:SetRelativeWidth(0.20)
+	    --SettingsDropDown:SetWidth(20)
+        SettingsDropDown:SetLabel(L["SavedProfiles"])
+        SettingsDropDown:SetValue(CurrentTableName)
+		SettingsDropDown:SetCallback("OnValueChanged", function(wig, event_name, value)
+				--LFGSort_Message('new val:'..value);
+				CurrentTableName = value;
+				--LFGSort_Message(' settings name '..value);
+				UpdateCustomTable(SavedTables[value])
+				Tabs:SelectTab(currentFrameTab)
+			end)
+	
+	local NewSettingsName = AceGUI:Create("EditBox")
+		NewSettingsName:SetRelativeWidth(0.20)
+		--NewSettingsName:SetWidth(15)
+        --NewSettingsName:SetText('New settings')
+		NewSettingsName:SetLabel(L['NewSettings'])
+
+        NewSettingsName:SetCallback("OnEnterPressed", function(wig, event_name, new_text)
+		if new_text == '' then
+			return
+		end
+		LFGSort_Message('new text:'..new_text);
+		SavedTables[new_text] = CustomTable
+		SettingsList[new_text] = new_text	
+		
+		SettingsDropDown:SetList(SettingsList)
+		CurrentTableName = new_text
+		LFGSort_Message('CurrentTableName:'..CurrentTableName);
+		SettingsDropDown:SetValue(CurrentTableName)
+		
+		
+			end)
+			
+		settingsFrame:AddChild(NewSettingsName)
+        
+		settingsFrame:AddChild(SettingsDropDown)
+	
+		
+	local btn = AceGUI:Create("Button")
+	btn:SetRelativeWidth(0.10)
+	--btn:SetWidth(10)
+	btn:SetText(L["Save"])
+	btn:SetCallback("OnClick", function() 
+		SaveCustomTable(CurrentTableName)
+		end)
+	
+	settingsFrame:AddChild(btn);
+	
+	local btn = AceGUI:Create("Button")
+	btn:SetRelativeWidth(0.10)
+	--btn:SetWidth(10)
+	btn:SetText(L["Remove"])
+	btn:SetCallback("OnClick", function() 
+			--table.remove(SavedTables, CurrentTableName)
+			--table.remove(SettingsList, CurrentTableName)
+			SavedTables[CurrentTableName] = nil
+			SettingsList[CurrentTableName] = nil
+			SettingsDropDown:SetList(SettingsList)
+			CurrentTableName = ''
+			SettingsDropDown:SetValue('')
+		end)
+	--group:AddChild(btn);
+	
+	settingsFrame:AddChild(btn);
+
+	frame:AddChild(settingsFrame);
+
+	-----------------------------------------------------
+	
 	Tabs = AceGUI:Create("TabGroup");
 	
 	Tab_list = {}
@@ -901,7 +1007,12 @@ function CreateSettingsFrame()
 	Tabs:SelectTab(1)
 	frame:AddChild(Tabs);
 	
-
+------ settings reset
+---------------------------------------
+	middleFrame = AceGUI:Create("SimpleGroup");
+	middleFrame:SetLayout("Flow")
+	middleFrame:SetFullWidth(true);
+	
 	local btn = AceGUI:Create("Button")
 	btn:SetRelativeWidth(1)
 	btn:SetText(L["Reset"])
@@ -912,9 +1023,15 @@ function CreateSettingsFrame()
 		end)
 	--group:AddChild(btn);
 	
-	frame:AddChild(btn);
-
-	bottomFrame = AceGUI:Create("InlineGroup");
+	middleFrame:AddChild(btn);
+	
+	
+	frame:AddChild(middleFrame);
+	
+	
+----------------------------------------
+	--bottomFrame = AceGUI:Create("InlineGroup");
+	bottomFrame = AceGUI:Create("SimpleGroup");
 	bottomFrame:SetLayout("Flow")
 	bottomFrame:SetFullWidth(true);
 	
@@ -983,6 +1100,12 @@ function CreateSettingsFrame()
 	tinsert(UISpecialFrames, "LFGFrame_ala")
 end
 
+function SaveCustomTable(TableName)
+
+	SavedTables[TableName] = CustomTable;
+
+end
+
 
 function fillChatGrp(parent_group)
 		
@@ -999,7 +1122,7 @@ function fillChatGrp(parent_group)
 	chatDesc1:SetRelativeWidth(1)
 	parent_group:AddChild(chatDesc1)
 	
-	buttonsFrame = AceGUI:Create("InlineGroup");
+	buttonsFrame = AceGUI:Create("SimpleGroup");
 	buttonsFrame:SetLayout("Flow")
 	buttonsFrame:SetFullWidth(true)	
 	local btn_chat = AceGUI:Create("Button")
@@ -1072,6 +1195,7 @@ end
 
 function fill_page(parent_group, event, page_number)
 	
+	currentFrameTab = page_number
 	parent_group:ReleaseChildren()
 
 	local page_settings = LFG_Settings_Pages[page_number] 

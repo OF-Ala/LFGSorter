@@ -14,6 +14,12 @@ L["LookingForGroup"] = 'LookingForGroup'
 L["GENERAL"] = 'General'
 L["TRADE"] = 'Trade'
 
+L['New'] = 'add'
+L["Save"] = 'save'
+L["Remove"] = 'del'
+L["NewSettings"] = 'New profile'
+L["SavedProfiles"] = 'Profiles'
+
 L['Raids & other'] = 'Raids & other';
 L['5 ppl 1'] = 'low lvl inst';
 L['5 ppl 2'] = 'high lvl inst';

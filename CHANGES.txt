@@ -1,10 +1,12 @@
-lightweight tag 5c3bfcc60a629d2ba3374dc5cae90ac72127898d 2.0.5
-Author:	GitHub <noreply@github.com>
-Date:	Sat May 29 21:11:45 2021 +0300
+lightweight tag 35d6f3fbe96bbf3a7eaca319523dc5a37c955080 2.0.8.4
+Author:	OF-Ala <OF.Ala@yandex.ru>
+Date:	Thu Jun 17 19:45:23 2021 +0300
 
-commit 2c2facad25863d134aecf8988b7b90deceef9493
+commit 35d6f3fbe96bbf3a7eaca319523dc5a37c955080
 Author: OF-Ala <OF.Ala@yandex.ru>
-Date:   Sat May 29 21:02:21 2021 +0300
+Date:   Thu Jun 17 19:45:23 2021 +0300
 
-    done
+    2.0.8.4
+    
+    minor fixes
 
