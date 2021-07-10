@@ -18,7 +18,7 @@ L['New'] = 'add'
 L["Save"] = 'save'
 L["Remove"] = 'del'
 L["NewSettings"] = 'New profile'
-L["SavedProfiles"] = 'Profiles'
+L["SavedProfiles"] = 'Load profile'
 
 L['Raids & other'] = 'Raids & other';
 L['5 ppl 1'] = 'low lvl inst';

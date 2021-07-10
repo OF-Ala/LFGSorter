@@ -916,23 +916,30 @@ function CreateSettingsFrame()
 
 	--settingsFrame:SetRelativeWidth(0.50)
 	SettingsList = {}
+	local NoSettings = true
 	for q,a in pairs(SavedTables) do
 		--LFGSort_Message(' settings '..q);
 		SettingsList[q] = q	
+		NoSettings = false
 	end
 	
 	local SettingsDropDown = AceGUI:Create("Dropdown")
  	    SettingsDropDown:SetList(SettingsList)
 	    SettingsDropDown:SetRelativeWidth(0.20)
 	    --SettingsDropDown:SetWidth(20)
+		if NoSettings then
+			SettingsDropDown:SetHeight(20)
+		end
         SettingsDropDown:SetLabel(L["SavedProfiles"])
-        SettingsDropDown:SetValue(CurrentTableName)
+        SettingsDropDown:SetText(CurrentTableName)
 		SettingsDropDown:SetCallback("OnValueChanged", function(wig, event_name, value)
 				--LFGSort_Message('new val:'..value);
 				CurrentTableName = value;
 				--LFGSort_Message(' settings name '..value);
 				UpdateCustomTable(SavedTables[value])
 				Tabs:SelectTab(currentFrameTab)
+				wig:SetValue(nil)
+				wig:SetText(value)
 			end)
 	
 	local NewSettingsName = AceGUI:Create("EditBox")
@@ -945,14 +952,14 @@ function CreateSettingsFrame()
 		if new_text == '' then
 			return
 		end
-		LFGSort_Message('new text:'..new_text);
+		--LFGSort_Message('new text:'..new_text);
 		SavedTables[new_text] = CustomTable
 		SettingsList[new_text] = new_text	
 		
 		SettingsDropDown:SetList(SettingsList)
 		CurrentTableName = new_text
-		LFGSort_Message('CurrentTableName:'..CurrentTableName);
-		SettingsDropDown:SetValue(CurrentTableName)
+		--LFGSort_Message('CurrentTableName:'..CurrentTableName);
+		SettingsDropDown:SetText(CurrentTableName)
 		
 		
 			end)
@@ -1105,7 +1112,6 @@ function SaveCustomTable(TableName)
 	SavedTables[TableName] = CustomTable;
 
 end
-
 
 function fillChatGrp(parent_group)
 		

@@ -1,4 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("LFGSorter", "ruRU")
+local old_no_cyr = '[^А-ЯЁа-я%a]'
+local no_cyr = '[^\128-\145\176-\191\208\209]'
 
 if L then
 
@@ -17,7 +19,7 @@ L['New'] = '+'
 L["Save"] = 'сохранить настройку'
 L["Remove"] = 'удалить настройку'
 L["NewSettings"] = 'Новая настройка'
-L["SavedProfiles"] = 'Сохраненные настройки'
+L["SavedProfiles"] = 'Загрузить настройку'
 
 
 L['Raids & other'] = 'Рейды и пр.';
@@ -169,8 +171,8 @@ LFGSort_Inst_ect = {};
 	-- 1. Баффы ДМ
 	--LFGSort_Inst_ect['баф.*[^а-я%a]ДМ[^а-я%a]'] = 'БАФФ';
 	LFGSort_Inst_ect['баф.*[^а-я%a]дм[^а-я%a]'] = 'БАФФ';
-	--LFGSort_Inst_ect['БАФ.*[^а-я%a]ДМ[^А-ЯЁа-яё%a]'] = 'БАФФ';
-	--LFGSort_Inst_ect['БАФ.*[^а-я%a]дм[^А-ЯЁа-я%a]'] = 'БАФФ';
+	--LFGSort_Inst_ect['БАФ.*[^а-я%a]ДМ'..no_cyr..''] = 'БАФФ';
+	--LFGSort_Inst_ect['БАФ.*[^а-я%a]дм'..no_cyr..''] = 'БАФФ';
 	
 	LFGSort_Inst_ect['сердце х'] = 'БАФФ';
 	LFGSort_Inst_ect['.*баф.*серд.*'] = 'БАФФ';
@@ -178,32 +180,32 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst_ect['БАФФ [Сс]ер'] = 'БАФФ';
 	--LFGSort_Inst_ect['БАФФ СЕР'] = 'БАФФ';
 	
-	--LFGSort_Inst_ect['[^А-ЯЁа-яё%a]ДМ[^А-ЯЁа-яё%a].*[Бб]аф'] = 'БАФФ';
-	LFGSort_Inst_ect['[^А-ЯЁа-я%a]дм[^А-ЯЁа-я%a].*баф'] = 'БАФФ';
-	--LFGSort_Inst_ect['[^А-ЯЁа-я%a]дм[^А-ЯЁа-я%a].*БАФ'] = 'БАФФ';
-	--LFGSort_Inst_ect['[^А-ЯЁа-яё%a]ДМ[^А-ЯЁа-яё%a].*БАФ'] = 'БАФФ';
-	--LFGSort_Inst_ect['[^А-ЯЁа-яё%a]Дм[^А-ЯЁа-я%a].*[Бб]аф'] = 'БАФФ';
+	--LFGSort_Inst_ect[''..no_cyr..'ДМ'..no_cyr..'.*[Бб]аф'] = 'БАФФ';
+	LFGSort_Inst_ect[''..no_cyr..'дм'..no_cyr..'.*баф'] = 'БАФФ';
+	--LFGSort_Inst_ect[''..no_cyr..'дм'..no_cyr..'.*БАФ'] = 'БАФФ';
+	--LFGSort_Inst_ect[''..no_cyr..'ДМ'..no_cyr..'.*БАФ'] = 'БАФФ';
+	--LFGSort_Inst_ect[''..no_cyr..'Дм'..no_cyr..'.*[Бб]аф'] = 'БАФФ';
 	
 	-- 1. ОП
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]оп[^А-ЯЁа-яё%a]'] = 'ОП';
+	LFGSort_Inst1[''..no_cyr..'оп'..no_cyr..''] = 'ОП';
 	-- 13. Мертвые копи
-	LFGSort_Inst1['[^А-ЯЁа-я%a]мк[^А-ЯЁа-я%a]'] = 'МК';
-	--LFGSort_Inst1['[^А-ЯЁа-яё%a]МК[^А-ЯЁа-яё%a]'] = 'МК';
+	LFGSort_Inst1[''..no_cyr..'мк'..no_cyr..''] = 'МК';
+	--LFGSort_Inst1[''..no_cyr..'МК'..no_cyr..''] = 'МК';
 	LFGSort_Inst1['копи'] = 'МК';
 	
 	-- 11. Пещеры стенаний
 	LFGSort_Inst1['wc'] = 'ПС';
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]пс[^А-ЯЁа-я%a]'] = 'ПС';
+	LFGSort_Inst1[''..no_cyr..'пс'..no_cyr..''] = 'ПС';
 	LFGSort_Inst1['стенаний'] = 'ПС';
 	--LFGSort_Inst1['СТЕНАНИЙ'] = 'ПС';
 	-- 4. КТК
 	LFGSort_Inst1['т[её]много клыка'] = 'КТК';
 	--LFGSort_Inst1['ТЕМНОГО КЛЫКА'] = 'КТК';
-	--LFGSort_Inst1['[^А-ЯЁа-я%a]КТК[^А-ЯЁа-яё%a]'] = 'КТК';
-	LFGSort_Inst1['[^А-ЯЁа-я%a]ктк'] = 'КТК';
+	--LFGSort_Inst1[''..no_cyr..'КТК'..no_cyr..''] = 'КТК';
+	LFGSort_Inst1[''..no_cyr..'ктк'] = 'КТК';
 	-- 8. НП пучина
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]нп[^А-ЯЁа-яё%a]'] = 'НП';
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]пучин'] = 'НП';
+	LFGSort_Inst1[''..no_cyr..'нп'..no_cyr..''] = 'НП';
+	LFGSort_Inst1[''..no_cyr..'пучин'] = 'НП';
 	--LFGSort_Inst1['ПУЧИН'] = 'НП';
 	-- 14. Тюрьма
 	LFGSort_Inst1['тюрьм'] = 'ТЮ';
@@ -217,21 +219,21 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst1['gnomre'] = 'ГНОМ';
 
 	-- 5. ЛИ
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]ли[^А-ЯЁа-яё%a]'] = 'ЛИ'; -- без ИЛИ
+	LFGSort_Inst1[''..no_cyr..'ли'..no_cyr..''] = 'ЛИ'; -- без ИЛИ
 	LFGSort_Inst1['лабиринт.*иглошк'] = 'ЛИ';
 	
 	-- 2. МАО
 	LFGSort_Inst1['мао'] = 'МАО';
 	--LFGSort_Inst1['МАО'] = 'МАО';
 	LFGSort_Inst1['монастырь'] = 'МАО';
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]см[^А-ЯЁа-яё%a]'] = 'МАО';
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]sm[^А-ЯЁа-яё%a]'] = 'МАО';
+	LFGSort_Inst1[''..no_cyr..'см'..no_cyr..''] = 'МАО';
+	LFGSort_Inst1[''..no_cyr..'sm'..no_cyr..''] = 'МАО';
 	LFGSort_Inst1['кладбищ'] = 'МАО';
 	LFGSort_Inst1['библиотек'] = 'МАО';
 	LFGSort_Inst1['собор'] = 'МАО';
 	
 	-- 10. Курганы И
-	LFGSort_Inst1['[^А-ЯЁа-яё%a]ки[^А-ЯЁа-яё%a]'] = 'КИ';
+	LFGSort_Inst1[''..no_cyr..'ки'..no_cyr..''] = 'КИ';
 	LFGSort_Inst1['курган'] = 'КИ'; -- КУРГАНЫ
 	--LFGSort_Inst1['КУРГАН'] = 'КИ';
 
@@ -245,7 +247,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst2['мару'] = 'МАРА';
 
 	-- 7. ЗФ
-	LFGSort_Inst2['[^А-ЯЁа-я%a]зф[^А-ЯЁа-я%a]'] = 'ЗФ';
+	LFGSort_Inst2[''..no_cyr..'зф'..no_cyr..''] = 'ЗФ';
 	LFGSort_Inst2['фа[р]*ак'] = 'ЗФ';
 	--LFGSort_Inst2['ФАРАК'] = 'ЗФ';
 	--LFGSort_Inst2['[фФ]аррак'] = 'ЗФ';
@@ -260,8 +262,8 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst2['ХРАМ'] = 'ХРАМ';
 	LFGSort_Inst2['тонувш.*храм'] = 'ХРАМ';
 	LFGSort_Inst2['хаккар'] = 'ХРАМ';
-	LFGSort_Inst2['[^А-ЯЁа-я%a]а[т]*ал'] = 'ХРАМ';
-	--LFGSort_Inst2['[^А-ЯЁа-я%a][аА]тал'] = 'ХРАМ';
+	LFGSort_Inst2[''..no_cyr..'а[т]*ал'] = 'ХРАМ';
+	--LFGSort_Inst2[''..no_cyr..'[аА]тал'] = 'ХРАМ';
 
 	
 	-- 6. ГЧГ
@@ -270,6 +272,7 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst2['Гчг'] = 'ГЧГ';
 	--LFGSort_Inst2['БРД'] = 'ГЧГ';
 	--LFGSort_Inst2['BRD'] = 'ГЧГ';
+	LFGSort_Inst2['глубин.* ч[еёо]рн.* гор'] = 'ГЧГ';
 	LFGSort_Inst2['гчг'] = 'ГЧГ';
 	LFGSort_Inst2['брд'] = 'ГЧГ';
 	LFGSort_Inst2['brd'] = 'ГЧГ';
@@ -288,12 +291,12 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst2['НЕКРОС'] = 'ШОЛО';
 	LFGSort_Inst2['шоло'] = 'ШОЛО';
 	--LFGSort_Inst2['[шШ]оло'] = 'ШОЛО';
-	LFGSort_Inst2['некроc'] = 'ШОЛО';
+	LFGSort_Inst2['некрос'] = 'ШОЛО';
 	
 	-- 15. Забытый город
-	--LFGSort_Inst2['[^А-ЯЁа-яё%a]ДМ[^А-ЯЁа-яё%a]'] = 'ДМ';
-	LFGSort_Inst2['[^А-ЯЁа-я%a]дм[^А-ЯЁа-я%a]'] = 'ДМ';
-	LFGSort_Inst2['[^А-ЯЁа-яё%a]трибут'] = 'ДМ';	
+	--LFGSort_Inst2[''..no_cyr..'ДМ'..no_cyr..''] = 'ДМ';
+	LFGSort_Inst2[''..no_cyr..'дм'..no_cyr..''] = 'ДМ';
+	LFGSort_Inst2[''..no_cyr..'трибут'] = 'ДМ';	
 	LFGSort_Inst2['забытый город'] = 'ДМ';
 	
 	-- 20. УБРС
@@ -305,7 +308,7 @@ LFGSort_Inst_ect = {};
 	
 	-- 22. ЗГ
 	--LFGSort_Inst3['Зг%s'] = 'ЗГ';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]зг[^А-ЯЁа-яё%a]'] = 'ЗГ';
+	LFGSort_Inst3[''..no_cyr..'зг'..no_cyr..''] = 'ЗГ';
 	LFGSort_Inst3['гуруб'] = 'ЗГ';
 	--LFGSort_Inst3['ГУРУБ[^Аа]'] = 'ЗГ';
 	
@@ -314,27 +317,27 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst3['АКУ20'] = 'АК20';
 	LFGSort_Inst3['ак20'] = 'АК20';
 	LFGSort_Inst3['аку 20'] = 'АК20';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]ак 20'] = 'АК20';
+	LFGSort_Inst3[''..no_cyr..'ак 20'] = 'АК20';
 	--LFGSort_Inst3['AQ%s*20[^гguГUG]'] = 'АК20';
-	--LFGSort_Inst3['ак[^А-ЯЁа-яё%a].*20[^гgu]'] = 'АК20';
+	--LFGSort_Inst3['ак'..no_cyr..'.*20[^гgu]'] = 'АК20';
 	LFGSort_Inst3['кираж%s*20[^гgu]'] = 'АК40';
 	
 	-- 24. АК40
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]ак40'] = 'АК40';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]аку40'] = 'АК40';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]аку 40'] = 'АК40';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]ак 40'] = 'АК40';
-	LFGSort_Inst3['[^А-ЯЁа-яё%a]ак.*40^гgu'] = 'АК40';
-	--LFGSort_Inst3['[^А-ЯЁа-яё%a]ак.*40[^гguГUG]'] = 'АК40';
+	LFGSort_Inst3[''..no_cyr..'ак40'] = 'АК40';
+	LFGSort_Inst3[''..no_cyr..'аку40'] = 'АК40';
+	LFGSort_Inst3[''..no_cyr..'аку 40'] = 'АК40';
+	LFGSort_Inst3[''..no_cyr..'ак 40'] = 'АК40';
+	LFGSort_Inst3[''..no_cyr..'ак.*40^гgu'] = 'АК40';
+	--LFGSort_Inst3[''..no_cyr..'ак.*40[^гguГUG]'] = 'АК40';
 	LFGSort_Inst3['кираж.*40[^гgu].*'] = 'АК40';
 	
 	-- 25. ОП
 	LFGSort_Inst3['[^А-ЯЁ%a|(по )]мс[^А-ЯЁ>%a]'] = 'ОН';
-	--LFGSort_Inst3['[^А-ЯЁа-яё%a]мс[^А-ЯЁ>%a]'] = 'ОН';
+	--LFGSort_Inst3[''..no_cyr..'мс[^А-ЯЁ>%a]'] = 'ОН';
 	LFGSort_Inst3['molten core'] = 'ОН';
 	LFGSort_Inst3['недра'] = 'ОН';
 	--LFGSort_Inst3['НЕДРА'] = 'ОН';
-	--LFGSort_Inst3['[^А-ЯЁа-яё%a]ОН[^А-ЯЁа-яё%a]'] = 'ОН';
+	--LFGSort_Inst3[''..no_cyr..'ОН'..no_cyr..''] = 'ОН';
 	
 	-- 26. БВЛ
 	--LFGSort_Inst3['БВЛ'] = 'БВЛ';
@@ -359,63 +362,65 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst3['[Oo]nyx%a'] = 'ОНЯ';
 	
 	
-	LFGSort_Inst6['[^А-ЯЁа-яё%a]баст'] = 'БАСТ'; -- бастионы адского пламени
+	LFGSort_Inst6[''..no_cyr..'баст'] = 'БАСТ'; -- бастионы адского пламени
 	LFGSort_Inst6['[^%a]hr[^%a]'] = 'БАСТ';
-	--LFGSort_Inst6['[^А-ЯЁа-яё%a]БАП[^А-ЯЁа-яё%a]'] = 'БАСТ';
+	--LFGSort_Inst6[''..no_cyr..'БАП'..no_cyr..''] = 'БАСТ';
 	LFGSort_Inst6['[^А-Яа-яЁ%a]бап[^А-Яа-яЁ%a]'] = 'БАСТ';
-	LFGSort_Inst6['[^А-ЯЁа-я%a]рамп'] = 'БАСТ';
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]Рамп'] = 'БАСТ';
+	LFGSort_Inst6[''..no_cyr..'рамп'] = 'БАСТ';
+	--LFGSort_Inst6[''..no_cyr..'Рамп'] = 'БАСТ';
 	--LFGSort_Inst6['[Бб]астио'] = 'БАСТ';
 	
 	--LFGSort_Inst6['[^%a]BF[^%a]'] = 'КК';
 	LFGSort_Inst6['[^%a]bf[^%a]'] = 'КК';
 	--LFGSort_Inst6['БФ'] = 'КК';
-	LFGSort_Inst6['[^А-ЯЁа-я%a]бф[^А-ЯЁа-я%a]'] = 'КК';
-	LFGSort_Inst6['[^А-ЯЁа-я%a]кк[^А-ЯЁа-я%a]'] = 'КК'; -- кузня крови
+	LFGSort_Inst6[''..no_cyr..'бф'..no_cyr..''] = 'КК';
+	LFGSort_Inst6[''..no_cyr..'кк'..no_cyr..''] = 'КК'; -- кузня крови
 	LFGSort_Inst6['кузн[яю]'] = 'КК'; -- кузня крови
 	--LFGSort_Inst6['КУЗН[ЯЮ]'] = 'КК'; 
 	
-	LFGSort_Inst6['[^А-ЯЁа-яё%a]узи'] = 'УЗИ'; -- узилище
+	LFGSort_Inst6[''..no_cyr..'узи'] = 'УЗИ'; -- узилище
 	LFGSort_Inst6['узили'] = 'УЗИ';
-	LFGSort_Inst6['[^А-ЯЁа-я%a]сп[^А-ЯЁа-я%a]'] = 'УЗИ';
+	LFGSort_Inst6[''..no_cyr..'сп'..no_cyr..''] = 'УЗИ';
 	
 	--LFGSort_Inst6['ТОПЬ'] = 'ТОПЬ'; -- нижнетопь
 	LFGSort_Inst6['топь'] = 'ТОПЬ'; -- нижнетопь
 	LFGSort_Inst6['нижетоп'] = 'ТОПЬ'; -- нижнетопь
 	
-	LFGSort_Inst6['[^А-ЯЁа-яё%a]ГМ[^А-ЯЁа-я%a]'] = 'ГМ'; -- гробницы маны
-	LFGSort_Inst6['[^А-ЯЁа-яё%a]томб'] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6[''..no_cyr..'ГМ'..no_cyr..''] = 'ГМ'; -- гробницы маны
+	LFGSort_Inst6[''..no_cyr..'томб'] = 'ГМ'; -- гробницы маны
 	LFGSort_Inst6['манато'] = 'ГМ'; -- гробницы маны
 	--LFGSort_Inst6['МАНАТО'] = 'ГМ'; -- гробницы маны
 	LFGSort_Inst6['гробницу'] = 'ГМ';
 	--LFGSort_Inst6['ГРОБНИЦУ'] = 'ГМ';
 	LFGSort_Inst6['(гр)([ао]-)(бни.-)(маны).*'] = 'ГМ';
+	LFGSort_Inst6['(гр)([ао]-)(бни.-)(м'..no_cyr..').*'] = 'ГМ';
 	--LFGSort_Inst6['ГР[АО]-БН.*МАН'] = 'ГМ';
 	
 	LFGSort_Inst6['аукенайск'] = 'АУКГ';
 	--LFGSort_Inst6['АУКЕНАЙСК'] = 'АУКГ';
 	LFGSort_Inst6['[Аа]ук.*[Гг]р[оа]-бн'] = 'АУКГ'; -- аукенайские гробницы
 	--LFGSort_Inst6['АУК.*ГР[АО]-БН'] = 'АУКГ';
-	LFGSort_Inst6['[^А-ЯЁа-я%a]аг[^А-ЯЁа-я%a]'] = 'АУКГ';
+	LFGSort_Inst6[''..no_cyr..'аг'..no_cyr..''] = 'АУКГ';
 	LFGSort_Inst6['[Кк]рипт'] = 'АУКГ'; -- аукенайские гробницы
 	
 	LFGSort_Inst6['пв1'] = 'ПВ1'; -- предгорья хилсбрада
-	LFGSort_Inst6['[^А-ЯЁа-я%a]хф[^А-ЯЁа-я%a]'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6[''..no_cyr..'хф'..no_cyr..''] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['сот'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['cot'] = 'ПВ1'; -- предгорья хилсбрада
 	--LFGSort_Inst6['ПРЕДГ.*ХИЛ'] = 'ПВ1'; -- предгорья хилсбрада
 	--LFGSort_Inst6['ДАРНХОЛ'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['дарнхол'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Пп]редг.*[Хх]ил'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['стар.*хи[л]*с'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Хх]и[л]+сбра'] = 'ПВ1'; -- предгорья хилсбрада
 	--LFGSort_Inst6['ХИ[Л]+СБРАД'] = 'ПВ1'; -- предгорья хилсбрада
 	
-	LFGSort_Inst6['[^А-ЯЁа-яё%a]сз[^А-ЯЁа-яё%a]'] = 'СЗ'; -- сеттекские залы
+	LFGSort_Inst6[''..no_cyr..'сз'..no_cyr..''] = 'СЗ'; -- сеттекские залы
 	--LFGSort_Inst6['[Сс]ет.*[Зз]ал'] = 'СЗ'; -- сеттекские залы
 	LFGSort_Inst6['се[т]+ек'] = 'СЗ'; -- сеттекские залы
 	--LFGSort_Inst6['СЕТ.*ЗАЛ'] = 'СЗ';
 	
-	LFGSort_Inst6['[^А-ЯЁа-я%a]пп[^А-ЯЁа-я%a]'] = 'ПП'; -- паровое подземелье
+	LFGSort_Inst6[''..no_cyr..'пп'..no_cyr..''] = 'ПП'; -- паровое подземелье
 	LFGSort_Inst6['пар.*под'] = 'ПП'; -- паровое подземелье
 	--LFGSort_Inst6['паровое'] = 'ПП';
 	LFGSort_Inst6['пар[ао]-вое'] = 'ПП';
@@ -423,51 +428,52 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['сти.*валу'] = 'ПП'; -- паровое подземелье
 	
 	LFGSort_Inst6['[Шш]адо.*[Лл]аб'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['[^А-ЯЁа-я%a]тл[^А-ЯЁа-я%a]'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['[^А-ЯЁа-я%a]шл[^А-ЯЁа-я%a]'] = 'ТЛ'; -- темный лабиринт
+	LFGSort_Inst6[''..no_cyr..'тл'..no_cyr..''] = 'ТЛ'; -- темный лабиринт
+	LFGSort_Inst6[''..no_cyr..'шл'..no_cyr..''] = 'ТЛ'; -- темный лабиринт
 	LFGSort_Inst6['т[её]-мн.*лаб'] = 'ТЛ'; -- темный лабиринт
-	LFGSort_Inst6['лабиринт[^А-ЯЁа-я%a]'] = 'ТЛ'; -- темный лабиринт
+	LFGSort_Inst6['лабиринт'..no_cyr..''] = 'ТЛ'; -- темный лабиринт
 	--LFGSort_Inst6['Т[ЕЁ]-МН.*ЛАБ'] = 'ТЛ'; -- темный лабиринт
 	
-	LFGSort_Inst6['[^А-ЯЁа-я%a]рз[^А-ЯЁа-я%a]'] = 'РЗ'; -- разрушенные залы
+	LFGSort_Inst6[''..no_cyr..'рз'..no_cyr..''] = 'РЗ'; -- разрушенные залы
 	LFGSort_Inst6['[Рр]азруш.*[зЗ]ал'] = 'РЗ'; -- SHATTERED HALLS
 	--LFGSort_Inst6['РАЗРУ.*ЗАЛ'] = 'РЗ';
 	LFGSort_Inst6['[^А-Яа-яЁ%a]шх[^А-Яа-яЁ%a]'] = 'РЗ'; 
 	
 	LFGSort_Inst6['мех'] = 'МЕХ'; -- механар
 	LFGSort_Inst6['механар'] = 'МЕХ';
-	LFGSort_Inst6['меху[^А-ЯЁа-яё%a]'] = 'МЕХ';
+	LFGSort_Inst6['меху'..no_cyr..''] = 'МЕХ';
 	
-	LFGSort_Inst6['[^А-ЯЁа-я%a]бота'] = 'БОТ'; -- ботаника
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]ботан'] = 'БОТ'; -- ботаника
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]Ботан'] = 'БОТ'; -- ботаника
+	LFGSort_Inst6[''..no_cyr..'бота'] = 'БОТ'; -- ботаника
+	--LFGSort_Inst6[''..no_cyr..'ботан'] = 'БОТ'; -- ботаника
+	--LFGSort_Inst6[''..no_cyr..'Ботан'] = 'БОТ'; -- ботаника
 	
 	LFGSort_Inst6['^А-ЯЁа-я%a%/]чт[^А-ЯЁа-я%a%/]'] = 'ЧТ'; -- Черные топи
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]Топи[^А-ЯЁа-я%a]'] = 'ЧТ'; -- Черные топи
-	LFGSort_Inst6['[^А-ЯЁа-я%a]топи[^А-ЯЁа-я%a]'] = 'ЧТ';
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]ТОПИ[^А-ЯЁа-я%a]'] = 'ЧТ'; -- Черные топи
+	--LFGSort_Inst6[''..no_cyr..'Топи'..no_cyr..''] = 'ЧТ'; -- Черные топи
+	LFGSort_Inst6[''..no_cyr..'топи'..no_cyr..''] = 'ЧТ';
+	--LFGSort_Inst6[''..no_cyr..'ТОПИ'..no_cyr..''] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['BM'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['бм ^(хан)'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['морас'] = 'ЧТ'; -- Черные топи
 	
 	LFGSort_Inst6['арка'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6['[^%a]arca'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6['ал[ь]-ка'] = 'АРКА'; -- акратрац
 	--LFGSort_Inst6['[Аа]л[ь]-ка'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['[^А-ЯЁа-я%a]арк[ау]-'] = 'АРКА'; -- акратрац
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]Арк[ау]'] = 'АРКА'; 
+	LFGSort_Inst6[''..no_cyr..'арк[ау]-'] = 'АРКА'; -- акратрац
+	--LFGSort_Inst6[''..no_cyr..'Арк[ау]'] = 'АРКА'; 
 	
-	--LFGSort_Inst6['[^А-ЯЁа-я%a]ТМ[^А-ЯЁа-я%a]'] = 'ТМ'; -- террасса магистров
+	--LFGSort_Inst6[''..no_cyr..'ТМ'..no_cyr..''] = 'ТМ'; -- террасса магистров
 	LFGSort_Inst6['те[р]*ас'] = 'ТМ'; -- террасса магистров
 	--LFGSort_Inst6['[Тт]еррас'] = 'ТМ'; -- террасса магистров
 	
 	--LFGSort_Inst5['ГЕРОИ[ЧК]'] = 'ГЕР';
 	LFGSort_Inst5['герои[чк]'] = 'ГЕР';
-	LFGSort_Inst5['[^А-ЯЁа-я%a]гер[^А-ЯЁа-я%a]'] = 'ГЕР';
-	LFGSort_Inst5['[^А-ЯЁа-я%a]геры[^А-ЯЁа-я%a]'] = 'ГЕР';
-	LFGSort_Inst5['[^А-ЯЁа-я%a]хм[^А-ЯЁа-я%a]'] = 'ГЕР';
-	--LFGSort_Inst5['[^А-ЯЁа-я%a]гер[^А-ЯЁа-я%a]'] = 'ГЕР';
-	--LFGSort_Inst5['[^А-ЯЁа-я%a]ГЕР[^А-ЯЁа-я%a]'] = 'ГЕР';
-	--LFGSort_Inst5['[^А-ЯЁа-я%a]г[^А-ЯЁа-я%a]'] = 'ГЕР';
+	LFGSort_Inst5[''..no_cyr..'гер'..no_cyr..''] = 'ГЕР';
+	LFGSort_Inst5[''..no_cyr..'геры'..no_cyr..''] = 'ГЕР';
+	LFGSort_Inst5[''..no_cyr..'хм'..no_cyr..''] = 'ГЕР';
+	--LFGSort_Inst5[''..no_cyr..'гер'..no_cyr..''] = 'ГЕР';
+	--LFGSort_Inst5[''..no_cyr..'ГЕР'..no_cyr..''] = 'ГЕР';
+	--LFGSort_Inst5[''..no_cyr..'г'..no_cyr..''] = 'ГЕР';
 
 	LFGSort_Inst5['[^%a]hero'] = 'ГЕР';
 	--LFGSort_Inst5['[^%a%d%|][Hh][^%a%|]'] = 'ГЕР';
@@ -475,10 +481,10 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst5['[^%a]hc[^%a]'] = 'ГЕР';
 	
 
---[^А-ЯЁа-яё%a]
+--'..no_cyr..'
 	--LFGSort_Inst4['КАРА'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['[^А-ЯЁа-я%a]кара[^А-ЯЁа-яё%a]'] = 'КАРА'; -- каражан
-	LFGSort_Inst4['[^А-ЯЁа-я%a]кару[^А-ЯЁа-яё%a]'] = 'КАРА'; -- каражан
+	LFGSort_Inst4[''..no_cyr..'кара'..no_cyr..''] = 'КАРА'; -- каражан
+	LFGSort_Inst4[''..no_cyr..'кару'..no_cyr..''] = 'КАРА'; -- каражан
 	LFGSort_Inst4['караж[а-я]'] = 'КАРА';
 	
 	LFGSort_Inst4['гр[у]+л'] = 'ГРУУЛ'; -- Груул
