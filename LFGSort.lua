@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.8.5";
+local version = "LFGSorter 2.0.8.7";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -458,6 +458,15 @@ function NewCustomTable()
 	newTable['5x5'] = {0, 0, '|cFF008080'}; -- 
 	
 	return newTable;
+
+end
+
+function CustomTable_hide_all()
+
+	for k, v in pairs(CustomTable) do
+		CustomTable[k][1] = 1
+		CustomTable[k][2] = 0
+	end
 
 end
 
@@ -1021,7 +1030,7 @@ function CreateSettingsFrame()
 	middleFrame:SetFullWidth(true);
 	
 	local btn = AceGUI:Create("Button")
-	btn:SetRelativeWidth(1)
+	btn:SetRelativeWidth(0.5)
 	btn:SetText(L["Reset"])
 	btn:SetCallback("OnClick", function() 
 		AceGUI:Release(frame)
@@ -1031,7 +1040,18 @@ function CreateSettingsFrame()
 	--group:AddChild(btn);
 	
 	middleFrame:AddChild(btn);
+		
+	local btn_hide = AceGUI:Create("Button")
+	btn_hide:SetRelativeWidth(0.5)
+	btn_hide:SetText(L["HideAll"])
+	btn_hide:SetCallback("OnClick", function() 
+		AceGUI:Release(frame)
+		CustomTable_hide_all();
+		CreateSettingsFrame();
+		end)
+	--group:AddChild(btn_hide);
 	
+	middleFrame:AddChild(btn_hide);
 	
 	frame:AddChild(middleFrame);
 	

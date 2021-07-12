@@ -37,6 +37,7 @@ L['Inst5'] = 'Detect hero inst';
 L['Inst6'] = 'Detect BC raids';
 
 L['Reset'] = 'Load default settings';
+L['HideAll'] = 'Set all insts hiden';
 L['LFG sorter loading default'] = 'LFG sorter loading default';
 
 L['будут скрыты из чата'] = 'will be hiden';
