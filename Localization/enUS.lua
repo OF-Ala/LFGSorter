@@ -20,6 +20,10 @@ L["Remove"] = 'del'
 L["NewSettings"] = 'New profile'
 L["SavedProfiles"] = 'Load profile'
 
+L["self"] = "User added keywords"
+L['New custom search'] = 'New custom keywords'
+L['User search'] = 'Add your own keywords to search for a group for any occasion. You can add new keywords and delete them when they are not needed. Please note that the search is case-insensitive, based on a complete match of the phrase. \n\n According to \n "alchemy craft"\n messages will also be found:\n"Alchemy craft ANY flask" and "ALCHEMY craft" \n But this message will not be found\n"ALCHEMY |all recipes| craft"'
+
 L['Raids & other'] = 'Raids & other';
 L['5 ppl 1'] = 'low lvl inst';
 L['5 ppl 2'] = 'high lvl inst';

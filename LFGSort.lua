@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.8.7";
+local version = "LFGSorter 2.0.9.1";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -69,6 +69,17 @@ function LFGSort_OnEvent(self, event, ...)
 				};
 			end
 			
+			if UserTable == nil then
+			
+				UserTable = {}
+				num_user_fields = 0
+				
+			end
+			
+			if num_user_fields == nil then
+				num_user_fields = 0
+			end
+		
 			if CustomTable == nil then
 				CustomTable = NewCustomTable();
 			else
@@ -116,6 +127,18 @@ function LFGSort_OnEvent(self, event, ...)
 			CurrentTableName = ''
 		end
 		
+		if UserTable == nil then
+		
+			UserTable = {}
+			num_user_fields = 0
+			
+		end
+		
+		if num_user_fields == nil then
+			num_user_fields = 0
+		end
+		
+		
 		messageReceived = 0;
 		SlashCmdList["LFGSortCOMMAND"] = LFGSortSlash;
 		SLASH_LFGSortCOMMAND1 = "/lfgsorter"; 
@@ -155,12 +178,13 @@ function LFGSort_OnEvent(self, event, ...)
 		end
 		
 	end
+
 end
 
 function filterAddonChatMsg(chat_frame, event, msg, author, ...)
 	if (event == "CHAT_MSG_CHANNEL") then
 		
-		lfg_instID = IdentifyInst(' '..msg)
+		lfg_instID = IdentifyInst(' '..msg, false)
 		if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
 			--LFGSort_Message('found : '..lfg_instID..' ')
 		end
@@ -217,7 +241,8 @@ function SettingsTable()
 		{4,5,{value = 1, text = "BC insts", disabled = false} },
 		{6,8,{value = 2, text = "BC heroics & raids", disabled = false} },
 		{9,9,{value = 3, text = "PvP", disabled = false} },
-		{1,3,{value = 4, text = "Classic", disabled = false} }
+		{10,10,{value = 4, text = "Self", disabled = false} },
+		{1,3,{value = 5, text = "Classic", disabled = false} }
 		};
 	else
 		LFG_Settings_Pages = {
@@ -338,7 +363,16 @@ function SettingsTable()
 	'5x5'
 	},
 	total_check = 0}
+	
+	i = 1
+	self_data = {}
+	for k,v in pairs(UserTable)  do
 
+		self_data[i] = k
+		i = i + 1
+	end
+	LFG_Settings_Table[10] = {name = L['self'], data = self_data, total_check = 0}
+	
 end
 
 function UpdateCustomTable(NewTable)
@@ -457,6 +491,12 @@ function NewCustomTable()
 	newTable['3x3'] = {0, 0, '|cFF008080'}; --  
 	newTable['5x5'] = {0, 0, '|cFF008080'}; -- 
 	
+	for k,v in pairs(UserTable) do
+		
+		newTable[k] = {0, 0, '|cFFFFFACD'} -- cFFFFFACD LEMONCHIFFON
+		
+	end
+	
 	return newTable;
 
 end
@@ -499,65 +539,7 @@ function AddMessage(frame, message, ...)
 		LFGSort_Debug_Message('not searching in: '..tostring(MID)..' channel '..message);
 		return hooks[frame](frame, message, ...);	
 	end
-	
-	--LFGSort_Debug_Message('MID '..tostring(MID)..' :'..message);
-	
-	-- templ1 = '(%b[])(.-)(%b[])(.*)';
-	-- res1, res2, res3, msgText  = string.match(message, templ1)
-	-- LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText))) -- не удалять швабры
-	-- if msgText == nil or msgText == '' then
-		-- msgText = message
-		-- LFGSort_Debug_Message('msgText '..tostring(msgText)..' :'..tostring(type(msgText)))-- не удалять швабры
-	-- end
-	
-	
-	-- msgText = ClearMessage(msgText)
-	
-	-- for i,j in pairs(LFGSort_Inst_ect) do
-		-- if string.find(msgText, i) then
-			-- lfg_instID = j;
-			-- LFGSort_Debug_Message('found: '..L[j]..' template '..i);
-			-- break;
-		-- end
-	-- end
-	-- --LFGSort_Debug_Message('ok');
-	-- if lfg_instID == '' then
-		-- --LFGSort_De
-		-- LFGSort_Debug_Message('looking more');
-
-		-- for l,LFGSort_Inst in pairs(LFGSort_Insts) do
-			
-			-- if CustomTable['Inst'..l][1] == 1 then
-				-- --LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
-				-- for x,y in pairs(LFGSort_Inst) do
-					-- if string.find(msgText..'.', x) then
-						-- if lfg_instID == 'ГЕР' then
-							-- lfg_instID = 'Г-'..y
-							-- LFGSort_Debug_Message('found - Г-'..y..' with '..x);
-							-- break;
-						-- else
-							-- lfg_instID = y;
-							-- LFGSort_Debug_Message('found - '..y..' with '..x);
-							-- break;
-						-- end
-					-- end
-				-- end
-			-- else
-				-- LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
-			-- end
-			-- if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
-				-- LFGSort_Debug_Message('stop looking');
-				-- break;
-			-- else
-				-- LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
-			-- end
-		-- end
-	-- end
-	    
-	-- if lfg_instID == 'ГЕР' and CustomTable['Inst6'][1] == 0 then
-		-- lfg_instID = ''
-	-- end
-	
+		
 	lfg_instID = ''
 	templ1 = '(%b[])(.-)(%b[])(.*)';
 	res1, res2, res3, msgText  = string.match(message, templ1)
@@ -567,7 +549,7 @@ function AddMessage(frame, message, ...)
 	
 	end
 	
-	lfg_instID = IdentifyInst(msgText)
+	lfg_instID = IdentifyInst(' '..msgText,true)
 	
 	if lfg_instID ~= '' then
 
@@ -628,7 +610,12 @@ function AddMessage(frame, message, ...)
 			bell = '';
 		end
 		
-		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..L[lfg_instID]..bell..'|r]%3%4', 1);
+		if string.sub(lfg_instID, 1, 4) == 'self' then
+			inst_name = '#'..string.sub(lfg_instID, 5);
+		else
+			inst_name = L[lfg_instID]
+		end
+		message = string.gsub(message,'(%b[])(.-)(%b[])(.-)','%1%2['..color..inst_name..bell..'|r]%3%4', 1);
 		--'(%b[])(.-)(%b[])(.-)','%1%2['..'TEST'..']%3%4')
 	
 
@@ -640,7 +627,7 @@ function AddMessage(frame, message, ...)
 	--end
 end
 
-function IdentifyInst(msgString)
+function IdentifyInst(msgString, is_adding_message)
 
 	
 	lfg_instID = ''
@@ -654,6 +641,14 @@ function IdentifyInst(msgString)
 
 	
 	msgText = ClearMessage(msgString)
+	
+	for i,j in pairs(UserTable) do
+		if string.find(msgText, j) then
+			lfg_instID = i;
+			LFGSort_Debug_Message('found user str: '..i..' this is messsage adding '..tostring(is_adding_message));
+			break;
+		end
+	end
 	
 	for i,j in pairs(LFGSort_Inst_ect) do
 		if string.find(msgText, i) then
@@ -1220,6 +1215,11 @@ function LFGPlaySound(sound, stype)
 end
 
 function fill_page(parent_group, event, page_number)
+
+	if page_number == 4 then
+		fill_page_user_table(parent_group, event, page_number)
+		return;
+	end
 	
 	currentFrameTab = page_number
 	parent_group:ReleaseChildren()
@@ -1291,6 +1291,111 @@ function fill_page(parent_group, event, page_number)
 	end
 	parent_group:SetFullHeight(true);
 end
+
+function fill_page_user_table(parent_group, event, page_number)
+	
+	currentFrameTab = page_number
+	parent_group:ReleaseChildren()
+
+	local page_settings = LFG_Settings_Pages[page_number] 
+	
+	local NewUserSearch = AceGUI:Create("EditBox")
+		NewUserSearch:SetRelativeWidth(0.70)
+
+		NewUserSearch:SetLabel(L['New custom search'])
+
+        NewUserSearch:SetCallback("OnEnterPressed", function(wig, event_name, new_text)
+			if new_text == '' then
+				return
+			end
+			--LFGSort_Message('new text:'..new_text);
+			num_user_fields = num_user_fields + 1
+			UserTable['self'..num_user_fields] = string.lower(new_text)
+			CustomTable['self'..num_user_fields] = {0, 1, '|cFFFFFACD'}
+			SettingsTable()			
+			fill_page_user_table(parent_group, 'change', page_number)
+			end)
+			
+		parent_group:AddChild(NewUserSearch)
+	
+	for i = page_settings[1],page_settings[2] do
+
+		j = LFG_Settings_Table[i]
+		group = AceGUI:Create("InlineGroup"); --InlineGroup
+		--group.SetTitle(j.name);
+		group:SetLayout("List")
+		group:SetRelativeWidth(0.5);
+
+		no_user_searches = true
+		
+		for m,n in pairs(j.data) do
+			no_user_searches = false
+			elem = AceGUI:Create("SimpleGroup"); 
+			elem:SetLayout("Flow")
+			--k = n;
+			v = CustomTable[n];
+			
+			local desc = AceGUI:Create("Label")
+			
+			
+			inst_name = '#'..string.sub(n, 5);
+			
+			desc:SetText(''..v[3]..'['..inst_name..']'..UserTable[n]..'|r');
+			desc:SetRelativeWidth(0.55);
+			elem:AddChild(desc)
+			
+			-- local hideCheck = AceGUI:Create("CheckBox")
+			-- hideCheck:SetLabel(L["скрыть"]);
+			-- hideCheck:SetValue(CustomTable[n][1] == 1);
+			-- hideCheck:SetCallback("OnValueChanged", function(value)
+				-- SetHiding(n);
+			-- end);
+			-- hideCheck:SetRelativeWidth(0.25);
+			-- elem:AddChild(hideCheck)
+			
+			local soundCheck = AceGUI:Create("CheckBox");
+			soundCheck:SetLabel(L["звук"]);
+			soundCheck:SetValue(CustomTable[n][2] == 1);
+			soundCheck:SetCallback("OnValueChanged", function(value)
+				SetSound(n);
+			end);
+			soundCheck:SetRelativeWidth(0.25);
+			elem:AddChild(soundCheck);	
+		
+			local btn = AceGUI:Create("Button")
+				btn:SetRelativeWidth(0.15)
+				--btn:SetWidth(10)
+				btn:SetText("X")
+				btn:SetCallback("OnClick", function() 
+					UserTable[n] = nil
+					CustomTable[n] = nil
+					SettingsTable()	
+					for t,m in pairs(SavedTables) do
+						m[n] = nil
+					end
+					
+					fill_page_user_table(parent_group, 'change', page_number)
+					end)
+	
+			elem:AddChild(btn);
+		
+			group:AddChild(elem);
+			
+		end
+
+		
+		parent_group:AddChild(group);
+	end
+	--if no_user_searches then
+			local new_desc = AceGUI:Create("Label")
+			
+			new_desc:SetText(L['User search']);
+			new_desc:SetRelativeWidth(0.4);
+			parent_group:AddChild(new_desc)
+		--end
+	parent_group:SetFullHeight(true);
+end
+
 
 function fill_page_works(parent_group, event, page_number)
 	
@@ -1394,10 +1499,10 @@ end
 function SetSound(inst, ...)
 		
 	if CustomTable[inst][2] == 0 then
-		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук включен"]);
+		--LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук включен"]);
 		CustomTable[inst][2] = 1;
 	else
-		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук выключен"]);
+		--LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["Звук выключен"]);
 		CustomTable[inst][2] = 0;
 	end
 end
@@ -1406,10 +1511,10 @@ function SetHiding(inst, ...)
 	
 	if CustomTable[inst][1] == 0 then
 		CustomTable[inst][1] = 1;
-		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут показаны в чате"]);
+		--LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут показаны в чате"]);
 	else
 		CustomTable[inst][1] = 0;
-		LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут скрыты из чата"]);
+		--LFGSort_Debug_Message(CustomTable[inst][3]..L[inst].."|r - "..L["будут скрыты из чата"]);
 	end
 end
 
