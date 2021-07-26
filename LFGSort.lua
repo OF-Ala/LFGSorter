@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.9.1";
+local version = "LFGSorter 2.0.9.2";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -241,7 +241,7 @@ function SettingsTable()
 		{4,5,{value = 1, text = "BC insts", disabled = false} },
 		{6,8,{value = 2, text = "BC heroics & raids", disabled = false} },
 		{9,9,{value = 3, text = "PvP", disabled = false} },
-		{10,10,{value = 4, text = "Self", disabled = false} },
+		{10,10,{value = 4, text = "User search", disabled = false} },
 		{1,3,{value = 5, text = "Classic", disabled = false} }
 		};
 	else

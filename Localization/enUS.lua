@@ -350,7 +350,9 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['[^%a]bm[^%a]'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['[Bb]lack [mM]or'] = 'ЧТ'; -- Черные топи
 	
-	LFGSort_Inst6['[^%a][Aa]rca'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6['[^%a]arca[^%a]'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6['[^%a]arc[^%a]'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6['[^%a]arcat'] = 'АРКА'; -- акратрац
 	--LFGSort_Inst6['ARCA'] = 'АРКА'; -- акратрац
 	
 	--LFGSort_Inst6['MT'] = 'ТМ'; -- террасса магистров
@@ -374,6 +376,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst4['[Gg]rull'] = 'ГРУУЛ'; -- Груул
 	
 	LFGSort_Inst4['[Mm]agth'] = 'МАГТ'; -- Магтеридон
+	LFGSort_Inst4['maggy'] = 'МАГТ'; -- Магтеридон
 	--LFGSort_Inst4['[^%a]ZA[^%a]'] = 'ЗА'; -- зул аман
 	--LFGSort_Inst4['[^%a]SSK[^%a]'] = 'ССК'; -- змеиное святилище
 	--LFGSort_Inst4['[^%a]TK[^%a]'] = 'ТК'; -- око бурь
