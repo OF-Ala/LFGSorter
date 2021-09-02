@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.9.2";
+local version = "LFGSorter 2.0.9.3";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -20,7 +20,7 @@ local soundType
 local lfgsChatFrame
 local buttonsFrame = nil
 local currentFrameTab = 0
-
+local LFG_frame
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
 
@@ -743,12 +743,16 @@ function ClearMessage(message)
 
 	message2 = message
 	for k,v in pairs(SubTable) do
+	-- " Г и л ь д и я [ - ИНТИМУСЛУГИ - ]" - косяк
 		v2 = string.gsub(v,'%/','%%/')
 		v2 = string.gsub(v2,'%-','%%-')
+		v2 = string.gsub(v2,'%[','%%[')
+		--assert(string.gsub(message2,v2,SubTableCleared[k]), 'Error:'..message2)
 		message2 = string.gsub(message2,v2,SubTableCleared[k])
 	end
 
 	if msgText~= message2 and l_debug then
+	
 		PlaySoundFile("Interface\\AddOns\\LFGSort\\res\\Xylo.mp3", 'Master')
 		LFGSort_Message('DIFF 1:'..msgText);
 		LFGSort_Message('DIFF 2:'..message2);
@@ -889,15 +893,18 @@ end
 
 function CreateSettingsFrame()
 	
-	local frame = AceGUI:Create("Frame");
+	if not LFG_frame == nil then
+		AceGUI:Release(LFG_frame)
+	end
+	LFG_frame = AceGUI:Create("Frame");
 	--local buttonAdded = false;
 	
-	frame:SetTitle("LFG sorter");
-	frame:SetStatusText(L["Настройки LFG sorter"]);
-	frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
-	frame:SetLayout("List"); 
-	frame:SetHeight(690)
-	frame:SetWidth(800)
+	LFG_frame:SetTitle("LFG sorter");
+	LFG_frame:SetStatusText(L["Настройки LFG sorter"]);
+	LFG_frame:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
+	LFG_frame:SetLayout("List"); 
+	LFG_frame:SetHeight(690)
+	LFG_frame:SetWidth(800)
 	
 	---
 	--------------------------------------------------
@@ -1000,7 +1007,7 @@ function CreateSettingsFrame()
 	
 	settingsFrame:AddChild(btn);
 
-	frame:AddChild(settingsFrame);
+	LFG_frame:AddChild(settingsFrame);
 
 	-----------------------------------------------------
 	
@@ -1016,7 +1023,7 @@ function CreateSettingsFrame()
 	
 	Tabs:SetCallback('OnGroupSelected', fill_page)
 	Tabs:SelectTab(1)
-	frame:AddChild(Tabs);
+	LFG_frame:AddChild(Tabs);
 	
 ------ settings reset
 ---------------------------------------
@@ -1028,7 +1035,7 @@ function CreateSettingsFrame()
 	btn:SetRelativeWidth(0.5)
 	btn:SetText(L["Reset"])
 	btn:SetCallback("OnClick", function() 
-		AceGUI:Release(frame)
+		AceGUI:Release(LFG_frame)
 		CustomTable = NewCustomTable();
 		CreateSettingsFrame();
 		end)
@@ -1040,7 +1047,7 @@ function CreateSettingsFrame()
 	btn_hide:SetRelativeWidth(0.5)
 	btn_hide:SetText(L["HideAll"])
 	btn_hide:SetCallback("OnClick", function() 
-		AceGUI:Release(frame)
+		AceGUI:Release(LFG_frame)
 		CustomTable_hide_all();
 		CreateSettingsFrame();
 		end)
@@ -1048,7 +1055,7 @@ function CreateSettingsFrame()
 	
 	middleFrame:AddChild(btn_hide);
 	
-	frame:AddChild(middleFrame);
+	LFG_frame:AddChild(middleFrame);
 	
 	
 ----------------------------------------
@@ -1114,11 +1121,11 @@ function CreateSettingsFrame()
 	fillChatGrp(chatFrame)
 	bottomFrame:AddChild(chatFrame);
 	 
-	frame:AddChild(bottomFrame);
+	LFG_frame:AddChild(bottomFrame);
 	
 	Tabs:SetFullHeight(true);
-	frame:SetFullHeight(true);
-	_G["LFGFrame_ala"] = frame.frame
+	LFG_frame:SetFullHeight(true);
+	_G["LFGFrame_ala"] = LFG_frame.frame
 	tinsert(UISpecialFrames, "LFGFrame_ala")
 end
 

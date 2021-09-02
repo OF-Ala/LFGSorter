@@ -441,13 +441,13 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6[''..no_cyr..'рз'..no_cyr..''] = 'РЗ'; -- разрушенные залы
 	LFGSort_Inst6['[Рр]азруш.*[зЗ]ал'] = 'РЗ'; -- SHATTERED HALLS
 	--LFGSort_Inst6['РАЗРУ.*ЗАЛ'] = 'РЗ';
-	LFGSort_Inst6['[^А-Яа-яЁ%a]шх[^А-Яа-яЁ%a]'] = 'РЗ';
+	LFGSort_Inst6[''..no_cyr..'шх[^А-Яа-яЁ%a]'] = 'РЗ';
 	LFGSort_Inst6['[^А-Яа-яЁ%a]разрушенные[^А-Яа-яЁ%a]'] = 'РЗ';
-	LFGSort_Inst6['[^А-Яа-яЁ%a]залы[^А-Яа-яЁ%a]'] = 'РЗ';	
+	LFGSort_Inst6[''..no_cyr..'залы[^А-Яа-яЁ%a]'] = 'РЗ';	
 	
-	LFGSort_Inst6['мех'] = 'МЕХ'; -- механар
+	LFGSort_Inst6[''..no_cyr..'мех'] = 'МЕХ'; -- механар
 	LFGSort_Inst6['механар'] = 'МЕХ';
-	LFGSort_Inst6['меху'..no_cyr..''] = 'МЕХ';
+	LFGSort_Inst6[''..no_cyr..'меху'..no_cyr..''] = 'МЕХ';
 	
 	LFGSort_Inst6[''..no_cyr..'бота'] = 'БОТ'; -- ботаника
 	--LFGSort_Inst6[''..no_cyr..'ботан'] = 'БОТ'; -- ботаника
@@ -458,12 +458,12 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6[''..no_cyr..'топи'..no_cyr..''] = 'ЧТ';
 	--LFGSort_Inst6[''..no_cyr..'ТОПИ'..no_cyr..''] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['BM'] = 'ЧТ'; -- Черные топи
-	LFGSort_Inst6['бм ^(хан)'] = 'ЧТ'; -- Черные топи
+	LFGSort_Inst6[''..no_cyr..'бм ^(хан)'] = 'ЧТ'; -- Черные топи
 	LFGSort_Inst6['морас'] = 'ЧТ'; -- Черные топи
 	
-	LFGSort_Inst6['арка'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6[''..no_cyr..'арка'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6['[^%a]arca'] = 'АРКА'; -- акратрац
-	LFGSort_Inst6['ал[ь]-ка'] = 'АРКА'; -- акратрац
+	LFGSort_Inst6[''..no_cyr..'ал[ь]-ка'] = 'АРКА'; -- акратрац
 	--LFGSort_Inst6['[Аа]л[ь]-ка'] = 'АРКА'; -- акратрац
 	LFGSort_Inst6[''..no_cyr..'арк[ау]-'] = 'АРКА'; -- акратрац
 	--LFGSort_Inst6[''..no_cyr..'Арк[ау]'] = 'АРКА'; 
