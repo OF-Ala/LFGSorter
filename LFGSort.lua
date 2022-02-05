@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.9.3";
+local version = "LFGSorter 2.0.9.4";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -20,7 +20,7 @@ local soundType
 local lfgsChatFrame
 local buttonsFrame = nil
 local currentFrameTab = 0
-local LFG_frame
+
 --LFGSortFirstUse = 0;
 LFGSortEnabled = 0;
 
@@ -747,7 +747,7 @@ function ClearMessage(message)
 		v2 = string.gsub(v,'%/','%%/')
 		v2 = string.gsub(v2,'%-','%%-')
 		v2 = string.gsub(v2,'%[','%%[')
-		--assert(string.gsub(message2,v2,SubTableCleared[k]), 'Error:'..message2)
+		assert(string.gsub(message2,v2,SubTableCleared[k]), 'Error:'..message2)
 		message2 = string.gsub(message2,v2,SubTableCleared[k])
 	end
 

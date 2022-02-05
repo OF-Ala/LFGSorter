@@ -140,9 +140,9 @@ L['КАРА'] = 'KARA'; -- каражан
 L['ГРУУЛ'] = 'GRUUL'; -- Груул
 L['МАГТ'] = 'MAGTH'; -- Магтеридон
 L['ЗА'] = 'ZA'; -- зул аман
-L['ССК'] = 'SSK'; -- змеиное святилище
+L['ССК'] = 'SSC'; -- змеиное святилище
 L['ТК'] = 'TK'; -- око бурь
-L['ХИДЖ'] = 'HS'; -- Вершина Хиджала 
+L['ХИДЖ'] = 'Hyjal'; -- Вершина Хиджала 
 L['БТ'] = 'BT'; -- Черный Храм 
 L['ПЛАТО'] = 'SP'; --Плато Солнечного Колодца 	
 
@@ -192,6 +192,7 @@ LFGSort_Inst_ect = {};
 	-- 6. ГЧГ
 	--LFGSort_Inst2['BRD'] = 'ГЧГ';
 	LFGSort_Inst2['brd'] = 'ГЧГ';
+	LFGSort_Inst2['blackrock depths'] = 'ГЧГ';
 
 	-- 7. ЗФ
 	LFGSort_Inst2['[^%a]zf[^%a]'] = 'ЗФ';
@@ -208,7 +209,9 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst2['ULDA'] = 'УЛЬДА';
 	-- 10. Курганы И
 	LFGSort_Inst1['[^%a]downs[^%a]'] = 'КИ';
+	LFGSort_Inst1['razorfen down'] = 'КИ';
 	LFGSort_Inst1['[^%a]rfd[^%a]'] = 'КИ'; -- КУРГАНЫ
+	LFGSort_Inst1['[^%a]rd[^%a]'] = 'КИ';
 
 	-- 11. Пещеры стенаний
 	LFGSort_Inst1['[^%a]wc[^%a]'] = 'ПС';
@@ -314,6 +317,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['[^%a]hf[^%a]'] = 'ПВ1'; -- предгорья хилсбрада
 	--LFGSort_Inst6['COT1'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['cot1'] = 'ПВ1'; -- предгорья хилсбрада
+	LFGSort_Inst6['[^%a]ohf[^%a]'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Dd]arnho'] = 'ПВ1'; -- предгорья хилсбрада
 	LFGSort_Inst6['[Oo]ld.*[Hh]i[l]*sb'] = 'ПВ1'; -- предгорья хилсбрада
 	--LFGSort_Inst6['OLD.*HI[L]*SB'] = 'ПВ1'; -- предгорья хилсбрада
@@ -375,13 +379,15 @@ LFGSort_Inst_ect = {};
 	--LFGSort_Inst4['GRUUL'] = 'ГРУУЛ'; -- Груул
 	LFGSort_Inst4['[Gg]rull'] = 'ГРУУЛ'; -- Груул
 	
-	LFGSort_Inst4['[Mm]agth'] = 'МАГТ'; -- Магтеридон
+	LFGSort_Inst4['[^%a]mag[^%a]'] = 'МАГТ';
+	LFGSort_Inst4['magth'] = 'МАГТ'; -- Магтеридон
 	LFGSort_Inst4['maggy'] = 'МАГТ'; -- Магтеридон
 	--LFGSort_Inst4['[^%a]ZA[^%a]'] = 'ЗА'; -- зул аман
-	--LFGSort_Inst4['[^%a]SSK[^%a]'] = 'ССК'; -- змеиное святилище
-	--LFGSort_Inst4['[^%a]TK[^%a]'] = 'ТК'; -- око бурь
-	--LFGSort_Inst4['[^%a]HIDG[^%a]'] = 'ХИДЖ'; -- Вершина Хиджала 
-	--LFGSort_Inst4['[^%a]BT[^%a]'] = 'БТ'; -- Черный Храм 
+	LFGSort_Inst4['[^%a]ssc[^%a]'] = 'ССК'; -- змеиное святилище
+	LFGSort_Inst4['[^%a]tk[^%a]'] = 'ТК'; -- око бурь
+	LFGSort_Inst4['hyjal'] = 'ХИДЖ'; -- Вершина Хиджала 
+	LFGSort_Inst4['[^%a]mh[^%a]'] = 'ХИДЖ'; -- Вершина Хиджала 
+	LFGSort_Inst4['[^%a]bt[^%a]'] = 'БТ'; -- Черный Храм 
 	--LFGSort_Inst4['[Ss]unwel'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
 
 	LFGSort_Inst7['2x2'] = '2x2'; --
