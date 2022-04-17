@@ -138,6 +138,17 @@ function LFGSort_OnEvent(self, event, ...)
 			num_user_fields = 0
 		end
 		
+		for index = 1, FCF_GetNumActiveChatFrames() + 1 do -- NUM_CHAT_WINDOWS
+			local chatFrame = _G["ChatFrame" .. index]
+			
+			local f_name = GetChatWindowInfo(index)
+			--LFGSort_Message('0'..f_name)
+			if f_name == "LFGS" then
+				lfgsChatFrame = chatFrame
+				--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
+				
+			end
+		end
 		
 		messageReceived = 0;
 		SlashCmdList["LFGSortCOMMAND"] = LFGSortSlash;
@@ -152,7 +163,7 @@ function LFGSort_OnEvent(self, event, ...)
 			local chatFrame = _G["ChatFrame" .. index]
 			--LFGSort_Message(chatFrame)
 			local f_name = GetChatWindowInfo(index)
-			
+			--LFGSort_Message('1'..f_name)
 			if chatFrame ~= _G.COMBATLOG then
 				hooks[chatFrame] = chatFrame.AddMessage
 				chatFrame.AddMessage = AddMessage
@@ -166,16 +177,16 @@ function LFGSort_OnEvent(self, event, ...)
 		
 	elseif (event == "PLAYER_ENTERING_WORLD") then
 	
-		for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
-			local chatFrame = _G["ChatFrame" .. index]
-			--LFGSort_Message(chatFrame)
-			local f_name = GetChatWindowInfo(index)
-			if f_name == "LFGS" then
-				lfgsChatFrame = chatFrame
-				--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
-				
-			end
-		end
+		--for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+		--	local chatFrame = _G["ChatFrame" .. index]
+		--	--LFGSort_Message(chatFrame)
+		--	local f_name = GetChatWindowInfo(index)
+		--	if f_name == "LFGS" then
+		--		lfgsChatFrame = chatFrame
+		--		--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
+		--		
+		--	end
+		--end
 		
 	end
 
@@ -1138,7 +1149,7 @@ end
 function fillChatGrp(parent_group)
 		
 
-	for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+	for index = 1, FCF_GetNumActiveChatFrames() + 1  do -- NUM_CHAT_WINDOWS
 		local f_name = GetChatWindowInfo(index)
 		if f_name == "LFGS" then
 			lfgsChatFrame = _G["ChatFrame" .. index]
@@ -1655,8 +1666,9 @@ function CreateSettingsFrame_old()
 
 	lfgsChatFrame = nil
 	
-	for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
+	for index = 1, FCF_GetNumActiveChatFrames() + 1  do -- NUM_CHAT_WINDOWS
 		local f_name = GetChatWindowInfo(index)
+
 		if f_name == "LFGS" then
 			lfgsChatFrame = _G["ChatFrame" .. index]
 		end
