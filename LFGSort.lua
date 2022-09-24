@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 2.0.9.4";
+local version = "LFGSorter 3.0.1.0";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -249,11 +249,13 @@ function SettingsTable()
 
 	if classic == false then
 		LFG_Settings_Pages = {
-		{4,5,{value = 1, text = "BC insts", disabled = false} },
-		{6,8,{value = 2, text = "BC heroics & raids", disabled = false} },
-		{9,9,{value = 3, text = "PvP", disabled = false} },
-		{10,10,{value = 4, text = "User search", disabled = false} },
-		{1,3,{value = 5, text = "Classic", disabled = false} }
+		{11,13, {value = 1, text = "Wrath insts & raids 10", disabled = false} }, --6
+		{14,16, {value = 2, text = "Wrath heroics & raids 25", disabled = false} }, --7
+		{4,5,{value = 3, text = "BC insts", disabled = false} }, -- 1
+		{6,8,{value = 4, text = "BC heroics & raids", disabled = false} }, --2
+		{9,9,{value = 5, text = "PvP", disabled = false} }, --3
+		{10,10,{value = 6, text = "User search", disabled = false} }, --4
+		{1,3,{value = 7, text = "Classic", disabled = false} } --5
 		};
 	else
 		LFG_Settings_Pages = {
@@ -272,8 +274,8 @@ function SettingsTable()
 	'ОНЯ',
 	'ОН',
 	'АК40',
-	'БВЛ',
-	'НАКС'
+	'БВЛ'
+	--,'НАКС'
 	},
 	total_check = 3};
 	
@@ -374,7 +376,7 @@ function SettingsTable()
 	'5x5'
 	},
 	total_check = 0}
-	
+
 	i = 1
 	self_data = {}
 	for k,v in pairs(UserTable)  do
@@ -384,6 +386,82 @@ function SettingsTable()
 	end
 	LFG_Settings_Table[10] = {name = L['self'], data = self_data, total_check = 0}
 	
+	
+	LFG_Settings_Table[11] = {name = L['5 ppl wrath'], data = {
+	'УТГ-К', -- крепость утгард 69
+	'НЕКС', -- нексус 71
+	'НЕРУБ', -- азжол неруб 72
+	'АНКАХ', -- анкахет 73
+	'ДРАК', -- драк тарон 74
+	'АК', -- Аметистовая крепость 75
+	'ЧК', -- чертоги камня 77
+	'ЧМ' -- Чертоги молний 79
+	},
+	total_check = 0}	
+
+	LFG_Settings_Table[12] = {name = L['5 ppl wrath2'], data = {
+	'СТРАТ-О', -- Очищение стратхольма 79
+	'ОКУ', -- Окулус 79
+	'ВЕРШ', -- Вершина утгард 79
+	'ГУНД', -- Гундрак 79+
+	'ИЧ', -- Испытание чемпиона 79+
+	'КД', -- Кузня душ 79+
+	'ЯС', -- Яма сарона 79+
+	'ЗО' -- Залы отражений 79+
+	},
+	total_check = 0}	
+
+	LFG_Settings_Table[13] = {name = L['wrath raid'], data = {
+	'НАКС10', -- Наксрамас
+	'ОКО10', -- Око вечности
+	'ОС10', -- Обсидиановое святилище
+	'УЛЬД10', -- Ульдуар
+	'ИК10', -- Испытание крестоносца
+	'ОНЯ10', -- Логово ониксии
+	'ЦЛК10', -- Цитадель ледяной короны
+	'РС10', -- Рубиновое святилище
+	'СКЛЕП10' -- склеп аркавона
+	},
+	total_check = 0}
+	
+	LFG_Settings_Table[14] = {name = L['hero wrath'], data = {
+	'Г-УТГ', -- крепость утгард 69
+	'Г-НЕКС', -- нексус 71
+	'Г-НЕРУБ', -- азжол неруб 72
+	'Г-АНКАХ', -- анкахет 73
+	'Г-ДРАК', -- драк тарон 74
+	'Г-АК', -- Аметистовая крепость 75
+	'Г-ЧК', -- чертоги камня 77
+	'Г-ЧМ' -- Чертоги молний 79
+	},
+	total_check = 0}	
+
+	LFG_Settings_Table[15] = {name = L['hero wrath2'], data = {
+	'Г-СТРАТ', -- Очищение стратхольма 79
+	'Г-ОКУ', -- Окулус 79
+	'Г-ВЕРШ', -- Вершина утгард 79
+	'Г-ГУНД', -- Гундрак 79+
+	'Г-ИЧ', -- Испытание чемпиона 79+
+	'Г-КД', -- Кузня душ 79+
+	'Г-ЯС', -- Яма сарона 79+
+	'Г-ЗО' -- Залы отражений 79+
+	},
+	total_check = 0}	
+
+	LFG_Settings_Table[16] = {name = L['wrath raid'], data = {
+	'НАКС25', -- Наксрамас
+	'ОКО25', -- Око вечности
+	'ОС25', -- Обсидиановое святилище
+	'УЛЬД25', -- Ульдуар
+	'ИК25', -- Испытание крестоносца
+	'ОНЯ25', -- Логово ониксии
+	'ЦЛК25', -- Цитадель ледяной короны
+	'РС25', -- Рубиновое святилище
+	'СКЛЕП25' -- склеп аркавона
+	},
+	total_check = 0}
+	
+
 end
 
 function UpdateCustomTable(NewTable)
@@ -445,16 +523,16 @@ function NewCustomTable()
 	newTable['НАКС'] = {0, 0, '|cFF0000CD'}; -- Goldenrod"|cFFDAA520"++
 	
 	-- tbc
-	-- старый мао --lightblue"|cFFADD8E6"
-	newTable['Inst4'] = {1, 0, '|cFFADD8E6'}; -- БК инст--"
-	newTable['БАСТ'] = {0, 0, '|cFFADD8E6'}; -- бастионы адского пламени
-	newTable['КК'] = {0, 0, '|cFFADD8E6'}; -- кузня крови-
-	newTable['УЗИ'] = {0, 0, '|cFFADD8E6'}; -- узилище--
-	newTable['ТОПЬ'] = {0, 0, '|cFFADD8E6'}; -- нижнетопь
-	newTable['ГМ'] = {0, 0, '|cFFADD8E6'}; -- гробницы маны
-	newTable['АУКГ'] = {0, 0, '|cFFADD8E6'}; -- аукенайские гробницы
-	newTable['ПВ1'] = {0, 0, '|cFFADD8E6'}; -- предгорья хилсбрада
-	newTable['СЗ'] = {0, 0, '|cFFADD8E6'}; -- сеттекские залы
+	-- старый мао --lightblue"|cFF00CED1"
+	newTable['Inst4'] = {1, 0, '|cFF00CED1'}; -- БК инст--" старый цвет cFFADD8E6
+	newTable['БАСТ'] = {0, 0, '|cFF00CED1'}; -- бастионы адского пламени
+	newTable['КК'] = {0, 0, '|cFF00CED1'}; -- кузня крови-
+	newTable['УЗИ'] = {0, 0, '|cFF00CED1'}; -- узилище--
+	newTable['ТОПЬ'] = {0, 0, '|cFF00CED1'}; -- нижнетопь
+	newTable['ГМ'] = {0, 0, '|cFF00CED1'}; -- гробницы маны
+	newTable['АУКГ'] = {0, 0, '|cFF00CED1'}; -- аукенайские гробницы
+	newTable['ПВ1'] = {0, 0, '|cFF00CED1'}; -- предгорья хилсбрада
+	newTable['СЗ'] = {0, 0, '|cFF00CED1'}; -- сеттекские залы
 	-- старая мара --DARKTURQUOISE"|cFF00CED1
 	newTable['ПП'] = {0, 0, '|cFF00CED1'}; -- паровое подземелье
 	newTable['ТЛ'] = {0, 0, '|cFF00CED1'}; -- темный лабиринт
@@ -466,41 +544,99 @@ function NewCustomTable()
 	newTable['ТМ'] = {0, 0, '|cFF00CED1'}; -- террасса магистров
 
 	--Старый ГЧГ --limegreen"|cFF32CD32"
-	newTable['Inst5'] = {1, 0, '|cFF32CD32'}; -- БК г-инст
-	newTable['ГЕР'] = {0, 0, '|cFF32CD32'}; -- БК героик любой 
-	newTable['Г-БАСТ'] = {0, 0, '|cFF32CD32'}; -- бастионы адского пламени
-	newTable['Г-КК'] = {0, 0, '|cFF32CD32'}; -- кузня крови
-	newTable['Г-УЗИ'] = {0, 0, '|cFF32CD32'}; -- узилище
-	newTable['Г-ТОПЬ'] = {0, 0, '|cFF32CD32'}; -- нижнетопь
-	newTable['Г-ГМ'] = {0, 0, '|cFF32CD32'}; -- гробницы маны
-	newTable['Г-АУКГ'] = {0, 0, '|cFF32CD32'}; -- аукенайские гробницы
-	newTable['Г-ПВ1'] = {0, 0, '|cFF32CD32'}; -- предгорья хилсбрада
-	newTable['Г-СЗ'] = {0, 0, '|cFF32CD32'}; -- сеттекские залы
-	newTable['Г-ПП'] = {0, 0, '|cFF32CD32'}; -- паровое подземелье
-	newTable['Г-ТЛ'] = {0, 0, '|cFF32CD32'}; -- темный лабиринт
-	newTable['Г-РЗ'] = {0, 0, '|cFF32CD32'}; -- разрушенные залы
-	newTable['Г-МЕХ'] = {0, 0, '|cFF32CD32'}; -- механар
-	newTable['Г-БОТ'] = {0, 0, '|cFF32CD32'}; -- ботаника
-	newTable['Г-ЧТ'] = {0, 0, '|cFF32CD32'}; -- Черные топи
-	newTable['Г-АРКА'] = {0, 0, '|cFF32CD32'}; -- акратрац
-	newTable['Г-ТМ'] = {0, 0, '|cFF32CD32'}; -- террасса магистров
+	newTable['Inst5'] = {1, 0, '|cFFADD8E6'}; -- БК г-инст
+	newTable['ГЕР'] = {0, 0, '|cFFADD8E6'}; -- БК героик любой 
+	newTable['Г-БАСТ'] = {0, 0, '|cFFADD8E6'}; -- бастионы адского пламени
+	newTable['Г-КК'] = {0, 0, '|cFFADD8E6'}; -- кузня крови
+	newTable['Г-УЗИ'] = {0, 0, '|cFFADD8E6'}; -- узилище
+	newTable['Г-ТОПЬ'] = {0, 0, '|cFFADD8E6'}; -- нижнетопь
+	newTable['Г-ГМ'] = {0, 0, '|cFFADD8E6'}; -- гробницы маны
+	newTable['Г-АУКГ'] = {0, 0, '|cFFADD8E6'}; -- аукенайские гробницы
+	newTable['Г-ПВ1'] = {0, 0, '|cFFADD8E6'}; -- предгорья хилсбрада
+	newTable['Г-СЗ'] = {0, 0, '|cFFADD8E6'}; -- сеттекские залы
+	newTable['Г-ПП'] = {0, 0, '|cFFADD8E6'}; -- паровое подземелье
+	newTable['Г-ТЛ'] = {0, 0, '|cFFADD8E6'}; -- темный лабиринт
+	newTable['Г-РЗ'] = {0, 0, '|cFFADD8E6'}; -- разрушенные залы
+	newTable['Г-МЕХ'] = {0, 0, '|cFFADD8E6'}; -- механар
+	newTable['Г-БОТ'] = {0, 0, '|cFFADD8E6'}; -- ботаника
+	newTable['Г-ЧТ'] = {0, 0, '|cFFADD8E6'}; -- Черные топи
+	newTable['Г-АРКА'] = {0, 0, '|cFFADD8E6'}; -- акратрац
+	newTable['Г-ТМ'] = {0, 0, '|cFFADD8E6'}; -- террасса магистров
 
 	-- 
 	newTable['Inst6'] = {1, 0, '|cFF483D8B'}; -- БК рейд
-	newTable['КАРА'] = {0, 0, '|cFFD2691E'}; -- каражан -- старый ДМ --chocolate"|cFFD2691E" 
+	newTable['КАРА'] = {0, 0, '|cFFBDB76B'}; -- каражан -- старый ДМ --chocolate"|cFFD2691E" 
 	newTable['ГРУУЛ'] = {0, 0, '|cFFBDB76B'}; -- Груул -- старый лбрс --darkkhaki"|cFFBDB76B"
-	newTable['МАГТ'] = {0, 0, '|cFFFF6347'}; -- Магтеридон -- старое УБРС tomato"|cFFFF6347"
-	newTable['ЗА'] = {0, 0, '|cFFC71585'}; -- зул аман -- старое АК20 --Mediumvioletred"|cFFC71585"
-	newTable['ССК'] = {0, 0, '|cFFFF4500'}; -- змеиное святилище - старая ОНЯ -- Orangered"|cFFFF4500"
-	newTable['ТК'] = {0, 0, '|cFFDC143C'}; -- око бурь -- старое ОН -  Crimson  "|cFFDC143C"
-	newTable['ХИДЖ'] = {0, 0, '|cFF800080'}; -- Вершина Хиджала -- старый АК 40 -- purple "|cFF800080"
-	newTable['БТ'] = {0, 0, '|cFF8B0000'}; -- Черный Храм - старый бвл --darkred  "|cFF8B0000"
-	newTable['ПЛАТО'] = {0, 0, '|cFFDAA520'}; --Плато Солнечного Колодца -- накс Goldenrod"|cFFDAA520
+	newTable['МАГТ'] = {0, 0, '|cFFBDB76B'}; -- Магтеридон -- старое УБРС tomato"|cFFFF6347"
+	newTable['ЗА'] = {0, 0, '|cFFBDB76B'}; -- зул аман -- старое АК20 --Mediumvioletred"|cFFC71585"
+	newTable['ССК'] = {0, 0, '|cFFBDB76B'}; -- змеиное святилище - старая ОНЯ -- Orangered"|cFFFF4500"
+	newTable['ТК'] = {0, 0, '|cFFBDB76B'}; -- око бурь -- старое ОН -  Crimson  "|cFFDC143C"
+	newTable['ХИДЖ'] = {0, 0, '|cFFBDB76B'}; -- Вершина Хиджала -- старый АК 40 -- purple "|cFF800080"
+	newTable['БТ'] = {0, 0, '|cFFBDB76B'}; -- Черный Храм - старый бвл --darkred  "|cFF8B0000"
+	newTable['ПЛАТО'] = {0, 0, '|cFFBDB76B'}; --Плато Солнечного Колодца -- накс Goldenrod"|cFFDAA520
 	
 	newTable['Inst7'] = {1, 0, '|cFF008080'}; -- БК рейд
 	newTable['2x2'] = {0, 0, '|cFF008080'}; --  
 	newTable['3x3'] = {0, 0, '|cFF008080'}; --  
 	newTable['5x5'] = {0, 0, '|cFF008080'}; -- 
+	
+	newTable['Inst8'] = {1, 0, '|cFF008000',''}; -- wrath инст
+	newTable['УТГ-К'] = {0, 0, '|cFF008000','ТЕКСТ-УТГ-К'};
+	newTable['НЕКС'] = {0, 0, '|cFF008000','ТЕКСТ-НЕКС'};
+	newTable['НЕРУБ'] = {0, 0, '|cFF008000','ТЕКСТ-НЕРУБ'};
+	newTable['АНКАХ'] = {0, 0, '|cFF008000','ТЕКСТ-АНКАХ'};
+	newTable['ДРАК'] = {0, 0, '|cFF008000','ТЕКСТ-ДРАК'};
+	newTable['АК'] = {0, 0, '|cFF008000','ТЕКСТ-АК'};
+	newTable['ЧК'] = {0, 0, '|cFF008000','ТЕКСТ-ЧК'};
+	newTable['ЧМ'] = {0, 0, '|cFF008000','ТЕКСТ-ЧМ'};
+	newTable['СТРАТ-О'] = {0, 0, '|cFF008000','ТЕКСТ-СТРАТ-О'};
+	newTable['ОКУ'] = {0, 0, '|cFF008000','ТЕКСТ-ОКУ'};
+	newTable['ВЕРШ'] = {0, 0, '|cFF008000','ТЕКСТ-ВЕРШ'}; -- вершина утгард
+	newTable['ГУНД'] = {0, 0, '|cFF008000','ТЕКСТ-ГУНД'};
+	newTable['ИЧ'] = {0, 0, '|cFF008000','ТЕКСТ-ИЧ'};
+	newTable['КД'] = {0, 0, '|cFF008000','ТЕКСТ-КД'};
+	newTable['ЯС'] = {0, 0, '|cFF008000','ТЕКСТ-ЯС'};	
+	newTable['ЗО'] = {0, 0, '|cFF008000','ТЕКСТ-ЗО'};
+	
+	newTable['Inst9'] = {1, 0, '|cFF00ff00'}; -- wrath г-инст
+	newTable['Г-УТГ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-УТГ'};
+	newTable['Г-НЕКС'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-НЕКС'};
+	newTable['Г-НЕРУБ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-НЕРУБ'};
+	newTable['Г-АНКАХ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-АНКАХ'};
+	newTable['Г-ДРАК'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ДРАК'};
+	newTable['Г-АК'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-АК'};
+	newTable['Г-ЧК'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЧК'};
+	newTable['Г-ЧМ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЧМ'};
+	newTable['Г-СТРАТ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-СТРАТ'};
+	newTable['Г-ОКУ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ОКУ'};
+	newTable['Г-ВЕРШ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ВЕРШ'}; -- вершина утгард
+	newTable['Г-ГУНД'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ГУНД'};
+	newTable['Г-ИЧ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ИЧ'};
+	newTable['Г-КД'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-КД'};
+	newTable['Г-ЯС'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЯС'};	
+	newTable['Г-ЗО'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЗО'};
+
+	newTable['Inst10'] = {1, 0, '|cFFFF4500'}; -- wrath рейды
+	newTable['НАКС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-НАКС10'};
+	newTable['ОКО10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОКО10'};
+	newTable['ОС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОС10'};
+	newTable['УЛЬД10'] = {0, 0, '|cFFFF4500','ТЕКСТ-УЛЬД10'};
+	newTable['ИК10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ИК10'};
+	newTable['ОНЯ10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОНЯ10'};
+	newTable['ЦЛК10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ЦЛК10'};
+	newTable['РС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-РС10'};
+	newTable['СКЛЕП10'] = {0, 0, '|cFFFF4500','ТЕКСТ-СКЛЕП10'};
+	
+	newTable['Inst11'] = {1, 0, '|cFFDC143C'}; -- wrath рейды
+	newTable['НАКС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-НАКС25'};
+	newTable['ОКО25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОКО25'};
+	newTable['ОС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОС25'};
+	newTable['УЛЬД25'] = {0, 0, '|cFFDC143C','ТЕКСТ-УЛЬД25'};
+	newTable['ИК25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ИК25'};
+	newTable['ОНЯ25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОНЯ25'};
+	newTable['ЦЛК25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ЦЛК25'};
+	newTable['РС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-РС25'};
+	newTable['СКЛЕП25'] = {0, 0, '|cFFDC143C','ТЕКСТ-СКЛЕП25'};
 	
 	for k,v in pairs(UserTable) do
 		
@@ -533,7 +669,8 @@ function GetInstTable()
 	LFGSort_Insts[5] = L['LFGSort_Inst5']
 	LFGSort_Insts[6] = L['LFGSort_Inst6']
 	LFGSort_Insts[7] = L['LFGSort_Inst7']
-	
+	LFGSort_Insts[8] = L['LFGSort_Inst8']
+	LFGSort_Insts[9] = L['LFGSort_Inst9']	
 end
 
 function AddMessage(frame, message, ...)
@@ -1027,6 +1164,8 @@ function CreateSettingsFrame()
 	Tab_list = {}
 	for l,m in pairs(LFG_Settings_Pages) do
 		Tab_list[l] = m[3];
+		--LFGSort_Message('tab:'..tostring(l));
+		--LFGSort_Message(' name '..m[3]);
 	end
 	Tabs:SetLayout("Flow")
 	Tabs:SetTabs(Tab_list);
@@ -1234,7 +1373,9 @@ end
 
 function fill_page(parent_group, event, page_number)
 
-	if page_number == 4 then
+	--LFGSort_Message('page num:'..page_number);
+	
+	if page_number == 6 then
 		fill_page_user_table(parent_group, event, page_number)
 		return;
 	end
@@ -1279,7 +1420,7 @@ function fill_page(parent_group, event, page_number)
 			v = CustomTable[n];
 			
 			local desc = AceGUI:Create("Label")
-			
+			--LFGSort_Message('inst:'..n);
 			desc:SetText(''..v[3]..L[n]..'|r');
 			desc:SetRelativeWidth(0.15);
 			elem:AddChild(desc)
@@ -1304,6 +1445,13 @@ function fill_page(parent_group, event, page_number)
 		
 			group:AddChild(elem);
 			
+			if #v > 3 then
+				local inst_desc = AceGUI:Create("Label")
+				--LFGSort_Message('inst:'..n);
+				inst_desc:SetText(''..L[v[4]]);--..L[v[4]]
+				inst_desc:SetRelativeWidth(1);
+				group:AddChild(inst_desc);
+			end
 		end
 		parent_group:AddChild(group);
 	end

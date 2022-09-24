@@ -32,6 +32,13 @@ L['5 ppl bk2'] = 'high lvl inst BC';
 L['hero bk'] = 'Hero BC';
 L['hero bk2'] = 'Hero BC 2';
 L['raid bk'] = 'Raids BC';
+L['Wrath insts'] = 'what 1';
+L['Wrath insts2'] = 'what 2';
+L['5 ppl wrath'] = 'low lvl wrath inst';
+L['5 ppl wrath2'] = 'high lvl wrath inst';
+L['hero wrath'] = 'Hero wrath';
+L['hero wrath2'] = 'Hero wrath 2';
+L['wrath raid'] = 'Raids wrath';
 
 L['Inst1'] = 'Detect low lvl inst.';
 L['Inst2'] = 'Detect high lvl inst.';
@@ -146,6 +153,116 @@ L['ХИДЖ'] = 'Hyjal'; -- Вершина Хиджала
 L['БТ'] = 'BT'; -- Черный Храм 
 L['ПЛАТО'] = 'SP'; --Плато Солнечного Колодца 	
 
+L['УТГ-К'] = 'UTK'; --,'Крепость утгард 69+'};
+L['НЕКС'] = 'NEX'; --,'Нексус 71+'};
+L['НЕРУБ'] = 'AZN'; --,'Азжол неруб 72+'};
+L['АНКАХ'] = 'ANK'; --,'Анкахет 73+'};
+L['ДРАК'] = 'DTK'; --,'Драк тарон 74+'};
+L['АК'] = 'VH'; --,'Аметистовая крепость 75+'};
+L['ЧК'] = 'HoS'; --,'Чертоги камня 77+'};
+L['ЧМ'] = 'HoL'; --,'Чертоги молний 79+'};
+L['СТРАТ-О'] = 'C-STRAT'; --,'Очищение стратхольма 79+'};
+L['ОКУ'] = 'OCC'; --,'Окулус 79+'};
+L['ВЕРШ'] = 'UP'; --,'Вершина Утгард 69+'}; -- вершина утгард
+L['ГУНД'] = 'GD'; --,'Гундрак 79+'};
+L['ИЧ'] = 'ToC'; --,'Испытание чемпиона 79+'};
+L['КД'] = 'FoS'; --,'Кузня душ 79+'};
+L['ЯС'] = 'PoS'; --,'Яма сарона 79+'};	
+L['ЗО'] = 'HoR'; --,'Залы отражений 79+'};
+
+L['Г-УТГ'] = 'H-UTK'; --,'Крепость утгард (гер)'};
+L['Г-НЕКС'] = 'H-NEX'; --,'Нексус (гер)'};
+L['Г-НЕРУБ'] = 'H-AZN'; --,'Азжол неруб (гер)'};
+L['Г-АНКАХ'] = 'H-ANK'; --,'Анкахет (гер)'};
+L['Г-ДРАК'] = 'H-DTK'; --,'Драк тарон (гер)'};
+L['Г-АК'] = 'H-VH'; --,'Аметистовая крепость (гер)'};
+L['Г-ЧК'] = 'H-HoS'; --,'Чертоги камня (гер)'};
+L['Г-ЧМ'] = 'H-HoL'; --,'Чертоги молний (гер)'};
+L['Г-СТРАТ'] = 'H-STRAT'; --,'Очищение стратхольма (гер)'};
+L['Г-ОКУ'] = 'H-OCC'; --,'Окулус (гер)'};
+L['Г-ВЕРШ'] = 'H-UP'; --,'Вершина Утгард (гер)'}; -- вершина утгард
+L['Г-ГУНД'] = 'H-GD'; --,'Гундрак (гер)'};
+L['Г-ИЧ'] = 'H-ToC'; --,'Испытание чемпиона (гер)'};
+L['Г-КД'] = 'H-FoS'; --,'Кузня душ (гер)'};
+L['Г-ЯС'] = 'H-PoS'; --,'Яма сарона (гер)'};	
+L['Г-ЗО'] = 'H-HoR'; --,'Залы отражений (гер)'};
+
+L['НАКС10'] = 'NAX10'; --,'Наксрамас'};
+L['ОКО10'] = 'EYE10'; --,'Око вечности'};
+L['ОС10'] = 'OS10'; --,'Обсидиановое святилище'};
+L['УЛЬД10'] = 'ULD10'; --,'Ульдуар'};
+L['ИК10'] = 'TOC10'; --,'Испытание крестоносца'};
+L['ОНЯ10'] = 'ONY10'; --,'Логово ониксии'};
+L['ЦЛК10'] = 'ICC10'; --,'Цитадель ледяной короны'};
+L['РС10'] = 'RS10'; --,'Рубиновое святилище'};
+L['СКЛЕП10'] = 'VALUT10'; --,'Склеп Аркавона'};
+
+L['НАКС25'] = 'NAX25'; --,'Наксрамас'};
+L['ОКО25'] = 'EYE25'; --,'Око вечности'};
+L['ОС25'] = 'OS25'; --,'Обсидиановое святилище'};
+L['УЛЬД25'] = 'ULD25'; --,'Ульдуар'};
+L['ИК25'] = 'TOC25'; --,'Испытание крестоносца'};
+L['ОНЯ25'] = 'ONY25'; --,'Логово ониксии'};
+L['ЦЛК25'] = 'ICC25'; --,'Цитадель ледяной короны'};
+L['РС25'] = 'RS25'; --,'Рубиновое святилище'};
+L['СКЛЕП25'] = 'VALUT5'; --,'Склеп Аркавона'};
+
+--------------------------------
+
+L['ТЕКСТ-УТГ-К'] = 'Utgarde Keep 69+';
+L['ТЕКСТ-НЕКС'] = 'The Nexus 71+';
+L['ТЕКСТ-НЕРУБ'] = 'Azjol-Nerub 72+';
+L['ТЕКСТ-АНКАХ'] = 'Ahn\'kahet: The Old Kingdom 73+';
+L['ТЕКСТ-ДРАК'] = 'Drak\'Tharon Keep 74+';
+L['ТЕКСТ-АК'] = 'The Violet Hold 75+';
+L['ТЕКСТ-ЧК'] = 'Halls of Stone 77+';
+L['ТЕКСТ-ЧМ'] = 'Halls of Lightning 79+';
+L['ТЕКСТ-СТРАТ-О'] = 'The Culling of Stratholme 79+';
+L['ТЕКСТ-ОКУ'] = 'The Oculus 79+';
+L['ТЕКСТ-ВЕРШ'] = 'Utgarde Pinnacle 79+'; -- вершина утгард
+L['ТЕКСТ-ГУНД'] = 'Gundrak 79+';
+L['ТЕКСТ-ИЧ'] = 'Trial of the Champion 79+';
+L['ТЕКСТ-КД'] = 'The Forge of Souls 79+';
+L['ТЕКСТ-ЯС'] = 'Pit of Saron 79+';	
+L['ТЕКСТ-ЗО'] = 'Halls of Reflection 79+';
+
+L['ТЕКСТ-Г-УТГ'] = 'Utgarde Keep (H)';
+L['ТЕКСТ-Г-НЕКС'] = 'The Nexus (H)';
+L['ТЕКСТ-Г-НЕРУБ'] = 'Azjol-Nerub (H)';
+L['ТЕКСТ-Г-АНКАХ'] = 'Ahn\'kahet: The Old Kingdom (H)';
+L['ТЕКСТ-Г-ДРАК'] = 'Drak\'Tharon Keep (H)';
+L['ТЕКСТ-Г-АК'] = 'The Violet Hold (H)';
+L['ТЕКСТ-Г-ЧК'] = 'Halls of Stone (H)';
+L['ТЕКСТ-Г-ЧМ'] = 'Halls of Lightning (H)';
+L['ТЕКСТ-Г-СТРАТ'] = 'The Culling of Stratholme (H)';
+L['ТЕКСТ-Г-ОКУ'] = 'The Oculus (H)';
+L['ТЕКСТ-Г-ВЕРШ'] = 'Utgarde Pinnacle (H)'; -- вершина утгард
+L['ТЕКСТ-Г-ГУНД'] = 'Gundrak (H)';
+L['ТЕКСТ-Г-ИЧ'] = 'Trial of the Champion (H)';
+L['ТЕКСТ-Г-КД'] = 'The Forge of Souls (H)';
+L['ТЕКСТ-Г-ЯС'] = 'Pit of Saron (H)';	
+L['ТЕКСТ-Г-ЗО'] = 'Halls of Reflection (H)';
+
+L['ТЕКСТ-НАКС10'] = 'Naxxramas 10';
+L['ТЕКСТ-ОКО10'] = 'Eye of Eternity 10';
+L['ТЕКСТ-ОС10'] = 'Obsidian Sanctum 10';
+L['ТЕКСТ-УЛЬД10'] = 'Ulduar 10';
+L['ТЕКСТ-ИК10'] = 'Trial of the Crusader 10';
+L['ТЕКСТ-ОНЯ10'] = 'Onyxia\'s Lair 10';
+L['ТЕКСТ-ЦЛК10'] = 'Icecrown Citadel 10';
+L['ТЕКСТ-РС10'] = 'Ruby Sanctum 10';
+L['ТЕКСТ-СКЛЕП10'] = 'Vault of Archavon 10';
+
+L['ТЕКСТ-НАКС25'] = 'Naxxramas 25';
+L['ТЕКСТ-ОКО25'] = 'Eye of Eternity 25';
+L['ТЕКСТ-ОС25'] = 'Obsidian Sanctum 25';
+L['ТЕКСТ-УЛЬД25'] = 'Ulduar 25';
+L['ТЕКСТ-ИК25'] = 'Trial of the Crusader 25';
+L['ТЕКСТ-ОНЯ25'] = 'Onyxia\'s Lair 25';
+L['ТЕКСТ-ЦЛК25'] = 'Icecrown Citadel 25';
+L['ТЕКСТ-РС25'] = 'Ruby Sanctum 25';
+L['ТЕКСТ-СКЛЕП25'] = 'Vault of Archavon 25';
+
 LFGSort_Inst1 = {};
 LFGSort_Inst2 = {};
 LFGSort_Inst3 = {};
@@ -153,7 +270,10 @@ LFGSort_Inst4 = {};
 LFGSort_Inst5 = {};
 LFGSort_Inst6 = {};
 LFGSort_Inst7 = {};
-
+LFGSort_Inst8 = {};
+LFGSort_Inst9 = {};
+LFGSort_Inst10 = {};
+LFGSort_Inst11 = {};
 LFGSort_Inst_ect = {};
 
 	-- 0. AFK / boost /
@@ -207,7 +327,7 @@ LFGSort_Inst_ect = {};
 	-- 9. Ульдаман
 	LFGSort_Inst2['[uU]lda'] = 'УЛЬДА';
 	--LFGSort_Inst2['ULDA'] = 'УЛЬДА';
-	-- 10. Курганы И
+	-- 25. Курганы И
 	LFGSort_Inst1['[^%a]downs[^%a]'] = 'КИ';
 	LFGSort_Inst1['razorfen down'] = 'КИ';
 	LFGSort_Inst1['[^%a]rfd[^%a]'] = 'КИ'; -- КУРГАНЫ
@@ -359,7 +479,7 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst6['[^%a]arcat'] = 'АРКА'; -- акратрац
 	--LFGSort_Inst6['ARCA'] = 'АРКА'; -- акратрац
 	
-	--LFGSort_Inst6['MT'] = 'ТМ'; -- террасса магистров
+	LFGSort_Inst6['mgt'] = 'ТМ'; -- террасса магистров
 	LFGSort_Inst6['[Tt]errac'] = 'ТМ'; -- террасса магистров
 
 	LFGSort_Inst5['[^%a][hH]ero'] = 'ГЕР';
@@ -388,8 +508,9 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst4['hyjal'] = 'ХИДЖ'; -- Вершина Хиджала 
 	LFGSort_Inst4['[^%a]mh[^%a]'] = 'ХИДЖ'; -- Вершина Хиджала 
 	LFGSort_Inst4['[^%a]bt[^%a]'] = 'БТ'; -- Черный Храм 
-	--LFGSort_Inst4['[Ss]unwel'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
-
+	LFGSort_Inst4['[Ss]unwel'] = 'ПЛАТО'; --Плато Солнечного Колодца 	
+	LFGSort_Inst4['[^%a]swp[^%a]'] = 'ПЛАТО'; --Плато Солнечного Колодца 
+	
 	LFGSort_Inst7['2x2'] = '2x2'; --
 	LFGSort_Inst7['2c '] = '2x2';
 	LFGSort_Inst7['2 ?v ?2'] = '2x2';
@@ -401,6 +522,102 @@ LFGSort_Inst_ect = {};
 	LFGSort_Inst7['5x5'] = '5x5'; -- 
 	LFGSort_Inst7['5c '] = '5x5';
 	LFGSort_Inst7['5 ?v ?5'] = '5x5';
+
+	LFGSort_Inst8['utgard keep'] = 'УТГ-К';
+	LFGSort_Inst8['[^%a]utk[^%a]'] = 'УТГ-К';
+	LFGSort_Inst8['nexus'] = 'НЕКС';
+	LFGSort_Inst8['[^%a]nex[^%a]'] = 'НЕКС';
+	
+	LFGSort_Inst8['nerub'] = 'НЕРУБ';
+	LFGSort_Inst8['azjol'] = 'НЕРУБ';
+	LFGSort_Inst8['[^%a]AZN[^%a]'] = 'НЕРУБ';
+	
+	LFGSort_Inst8['[^%a]ANK[^%a]'] = 'АНКАХ';
+	LFGSort_Inst8['[^%a]AKO[^%a]'] = 'АНКАХ';
+	LFGSort_Inst8['[^%a]ahn\''] = 'АНКАХ';
+	LFGSort_Inst8['[^%a]ahnkahet'] = 'АНКАХ';
+	LFGSort_Inst8['kahet[^%a]'] = 'АНКАХ';
+	
+	LFGSort_Inst8['[^%a]drak[^о]'] = 'ДРАК';
+	LFGSort_Inst8['[^%a]DTK[^о]'] = 'ДРАК';
+	LFGSort_Inst8['tharon[^%a]'] = 'ДРАК';
+	
+	LFGSort_Inst8['violet'] = 'АК';
+	LFGSort_Inst8['[^%a]vh[^%a]'] = 'АК';
+	
+	LFGSort_Inst8['[^%a]hos[^%a]'] = 'ЧК';
+	LFGSort_Inst8['[^%a]of stone[^%a]'] = 'ЧК';
+	LFGSort_Inst8['[^%a]hol[^%a]'] = 'ЧМ';
+	LFGSort_Inst8['[^%a]of light[^%a]'] = 'ЧМ';
+	LFGSort_Inst8['strath'] = 'СТРАТ-О';
+	LFGSort_Inst8['culling'] = 'СТРАТ-О';
+	LFGSort_Inst8['[^%a]cos[^%a]'] = 'СТРАТ-О';
+	
+	LFGSort_Inst8['oculus'] = 'ОКУ';
+	LFGSort_Inst8['[^%a]occ[^%a]'] = 'ОКУ';
+	LFGSort_Inst8['[^%a]pinnacle'] = 'ВЕРШ'; -- вершина утгард
+
+	LFGSort_Inst8['gundrak'] = 'ГУНД';
+	LFGSort_Inst8['[^%a]GD[^%a'] = 'ГУНД';
+	
+	LFGSort_Inst8['[^%a]toc[^%a]'] = 'ИЧ';
+	LFGSort_Inst8['trial.*champ'] = 'ИЧ';
+
+	LFGSort_Inst8['[^%a]fos[^%a]'] = 'КД';	
+	LFGSort_Inst8['[^%a]forge.*soul'] = 'КД';
+	LFGSort_Inst8['[^%a]pos[^%a]'] = 'ЯС';
+	LFGSort_Inst8['[^%a]pit.*saron'] = 'ЯС';	
+	LFGSort_Inst8['[^%a]hall.*refle'] = 'ЗО';
+	LFGSort_Inst8['[^%a]hor[^%a]'] = 'ЗО';
+	
+	LFGSort_Inst9['[^%a]h[^%a]'] = 'ГЕР';
+
+	LFGSort_Inst10['[^%a]nax.*10^гgu'] = 'НАКС10';
+	LFGSort_Inst10['[^%a]eye.*10^гgu'] = 'ОКО10';
+	LFGSort_Inst10['[^%a]obsidi.*10^гgu'] = 'ОС10';
+	--LFGSort_Inst10['[^%a]святили.*10^гgu'] = 'ОС10';
+	LFGSort_Inst10['[^%a]os[^%a].*10^гgu'] = 'ОС10';
+	LFGSort_Inst10['[^%a]uldu.*10^гgu'] = 'УЛЬД10';
+	LFGSort_Inst10['[^%a]uld[^%a].*10^гgu'] = 'УЛЬД10';
+	LFGSort_Inst10['[^%a]tria.*crus.*10^гgu'] = 'ИК10';
+	LFGSort_Inst10['[^%a]toc[^%a].*10^гgu'] = 'ИК10';
+	
+	LFGSort_Inst10['[^%a]onix.*10^гgu'] = 'ОНЯ10';
+	LFGSort_Inst10['[^%a]ony[^%a].*10^гgu'] = 'ОНЯ10';
+	LFGSort_Inst10['[^%a]icc[^%a].*10^гgu'] = 'ЦЛК10';
+	LFGSort_Inst10['[^%a]icecrown.*10^гgu'] = 'ЦЛК10';
+	LFGSort_Inst10['[^%a]citad.*10^гgu'] = 'ЦЛК10';
+	
+	LFGSort_Inst10['[^%a]rs[^%a].*10^гgu'] = 'РС10';
+	LFGSort_Inst10['[^%a]halion[^%a].*10^гgu'] = 'РС10';
+	LFGSort_Inst10['[^%a]ruby[^%a].*10^гgu'] = 'РС10';
+	
+	LFGSort_Inst10['[^%a]vault[^%a].*10^гgu'] = 'СКЛЕП10';
+	LFGSort_Inst10['[^%a]archa.*10^гgu'] = 'СКЛЕП10';
+	
+
+	LFGSort_Inst11['[^%a]nax.*25^гgu'] = 'НАКС25';
+	LFGSort_Inst11['[^%a]eye.*25^гgu'] = 'ОКО25';
+	LFGSort_Inst11['[^%a]obsidi.*25^гgu'] = 'ОС25';
+	--LFGSort_Inst11['[^%a]святили.*25^гgu'] = 'ОС25';
+	LFGSort_Inst11['[^%a]os[^%a].*25^гgu'] = 'ОС25';
+	LFGSort_Inst11['[^%a]uldu.*25^гgu'] = 'УЛЬД25';
+	LFGSort_Inst11['[^%a]uld[^%a].*25^гgu'] = 'УЛЬД25';
+	LFGSort_Inst11['[^%a]tria.*crus.*25^гgu'] = 'ИК25';
+	LFGSort_Inst11['[^%a]toc[^%a].*25^гgu'] = 'ИК25';
+	
+	LFGSort_Inst11['[^%a]onix.*25^гgu'] = 'ОНЯ25';
+	LFGSort_Inst11['[^%a]ony[^%a].*25^гgu'] = 'ОНЯ25';
+	LFGSort_Inst11['[^%a]icc[^%a].*25^гgu'] = 'ЦЛК25';
+	LFGSort_Inst11['[^%a]icecrown.*25^гgu'] = 'ЦЛК25';
+	LFGSort_Inst11['[^%a]citad.*25^гgu'] = 'ЦЛК25';
+	
+	LFGSort_Inst11['[^%a]rs[^%a].*25^гgu'] = 'РС25';
+	LFGSort_Inst11['[^%a]halion[^%a].*25^гgu'] = 'РС25';
+	LFGSort_Inst11['[^%a]ruby[^%a].*25^гgu'] = 'РС25';
+	
+	LFGSort_Inst11['[^%a]vault[^%a].*25^гgu'] = 'СКЛЕП25';
+	LFGSort_Inst11['[^%a]archa.*25^гgu'] = 'СКЛЕП25';
 	
 L['LFGSort_Inst_ect'] = LFGSort_Inst_ect;
 L['LFGSort_Inst1'] = LFGSort_Inst1
@@ -412,4 +629,9 @@ L['LFGSort_Inst5'] = LFGSort_Inst5
 L['LFGSort_Inst6'] = LFGSort_Inst6
 
 L['LFGSort_Inst7'] = LFGSort_Inst7
+
+L['LFGSort_Inst8'] = LFGSort_Inst8
+L['LFGSort_Inst9'] = LFGSort_Inst9
+L['LFGSort_Inst10'] = LFGSort_Inst10
+L['LFGSort_Inst11'] = LFGSort_Inst11
 end
