@@ -1,7 +1,7 @@
 local info = ChatTypeInfo["SYSTEM"];
 local SName = GetCVar( "realmName" );
 local PName = UnitName("player");
-local version = "LFGSorter 3.0.1.0";
+local version = "LFGSorter 3.0.1.4";
 local classic = false;
 local clear_saves = false;
 local AceGUI = LibStub("AceGUI-3.0");
@@ -46,7 +46,7 @@ local LFG_Settings_Pages = {};
 function LFGSort_OnEvent(self, event, ...)
 	
 	if (event == "VARIABLES_LOADED") then
-	
+		--LFGSort_Message("загружены переменные");
 		if (LFGSortFirstUse ~= version) then
 			LFGSort_Message(L["LFG sorter loading default"]);
 			LFGNum = 4;
@@ -137,19 +137,7 @@ function LFGSort_OnEvent(self, event, ...)
 		if num_user_fields == nil then
 			num_user_fields = 0
 		end
-		
-		for index = 1, FCF_GetNumActiveChatFrames() + 1 do -- NUM_CHAT_WINDOWS
-			local chatFrame = _G["ChatFrame" .. index]
-			
-			local f_name = GetChatWindowInfo(index)
-			--LFGSort_Message('0'..f_name)
-			if f_name == "LFGS" then
-				lfgsChatFrame = chatFrame
-				--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
 				
-			end
-		end
-		
 		messageReceived = 0;
 		SlashCmdList["LFGSortCOMMAND"] = LFGSortSlash;
 		SLASH_LFGSortCOMMAND1 = "/lfgsorter"; 
@@ -161,33 +149,44 @@ function LFGSort_OnEvent(self, event, ...)
 		-- todo подписывать только те вкладки, в которых есть отслеживаемые каналы?
 		for index = 1, NUM_CHAT_WINDOWS  do -- NUM_CHAT_WINDOWS
 			local chatFrame = _G["ChatFrame" .. index]
-			--LFGSort_Message(chatFrame)
+			--LFGSort_Message('pp'..chatFrame)
 			local f_name = GetChatWindowInfo(index)
 			--LFGSort_Message('1'..f_name)
 			if chatFrame ~= _G.COMBATLOG then
 				hooks[chatFrame] = chatFrame.AddMessage
 				chatFrame.AddMessage = AddMessage
 			end
+
 		end
 			
 		LFGSetSound(DingSound)
-
 		
 		CreateMMB();
 		
 	elseif (event == "PLAYER_ENTERING_WORLD") then
-	
-		--for index = 1, FCF_GetNumActiveChatFrames()  do -- NUM_CHAT_WINDOWS
-		--	local chatFrame = _G["ChatFrame" .. index]
-		--	--LFGSort_Message(chatFrame)
-		--	local f_name = GetChatWindowInfo(index)
-		--	if f_name == "LFGS" then
-		--		lfgsChatFrame = chatFrame
-		--		--LFGSort_Message('2 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
-		--		
-		--	end
+		--local var1, other = ...
+		--if var1 == true then
+			--LFGSort_Message("вход в мир");
+			foundLFGS = false;
+			for index = 1, NUM_CHAT_WINDOWS  do -- NUM_CHAT_WINDOWS
+				local chatFrame = _G["ChatFrame" .. index]
+				--LFGSort_Message('pp'..chatFrame)
+				local f_name = GetChatWindowInfo(index)
+				--LFGSort_Message('2'..f_name)
+
+				if f_name == "LFGS" then
+				
+					if foundLFGS == true then
+						ChatFrame_RemoveAllChannels(chatFrame);	
+						FCF_Close(chatFrame);
+					else
+						lfgsChatFrame = chatFrame
+						--LFGSort_Message('5 found lfgs chat frame #'..tostring(index)..' shown '..tostring(chatFrame.Show))
+						foundLFGS = true;
+					end
+				end
+			end
 		--end
-		
 	end
 
 end
@@ -196,9 +195,7 @@ function filterAddonChatMsg(chat_frame, event, msg, author, ...)
 	if (event == "CHAT_MSG_CHANNEL") then
 		
 		lfg_instID = IdentifyInst(' '..msg, false)
-		if lfg_instID == 'КАРА' or lfg_instID == 'БОТ' or lfg_instID == 'БАП' or lfg_instID == 'ЗФ' then
-			--LFGSort_Message('found : '..lfg_instID..' ')
-		end
+
 		if chat_frame == lfgsChatFrame then
 			--LFGSort_Message('found: '..lfg_instID..' in lfgs tab');
 			if lfg_instID == '' then
@@ -388,7 +385,7 @@ function SettingsTable()
 	
 	
 	LFG_Settings_Table[11] = {name = L['5 ppl wrath'], data = {
-	'УТГ-К', -- крепость утгард 69
+	'УТГ', -- крепость утгард 69
 	'НЕКС', -- нексус 71
 	'НЕРУБ', -- азжол неруб 72
 	'АНКАХ', -- анкахет 73
@@ -412,15 +409,15 @@ function SettingsTable()
 	total_check = 0}	
 
 	LFG_Settings_Table[13] = {name = L['wrath raid'], data = {
-	'НАКС10', -- Наксрамас
-	'ОКО10', -- Око вечности
-	'ОС10', -- Обсидиановое святилище
-	'УЛЬД10', -- Ульдуар
-	'ИК10', -- Испытание крестоносца
-	'ОНЯ10', -- Логово ониксии
-	'ЦЛК10', -- Цитадель ледяной короны
-	'РС10', -- Рубиновое святилище
-	'СКЛЕП10' -- склеп аркавона
+	'10-НАКС', -- Наксрамас
+	'10-ОКО', -- Око вечности
+	'10-ОС', -- Обсидиановое святилище
+	'10-УЛЬД', -- Ульдуар
+	'10-ИК', -- Испытание крестоносца
+	'10-ОНЯ', -- Логово ониксии
+	'10-ЦЛК', -- Цитадель ледяной короны
+	'10-РС', -- Рубиновое святилище
+	'10-СКЛЕП' -- склеп аркавона
 	},
 	total_check = 0}
 	
@@ -437,7 +434,7 @@ function SettingsTable()
 	total_check = 0}	
 
 	LFG_Settings_Table[15] = {name = L['hero wrath2'], data = {
-	'Г-СТРАТ', -- Очищение стратхольма 79
+	'Г-СТРАТ-О', -- Очищение стратхольма 79
 	'Г-ОКУ', -- Окулус 79
 	'Г-ВЕРШ', -- Вершина утгард 79
 	'Г-ГУНД', -- Гундрак 79+
@@ -449,15 +446,15 @@ function SettingsTable()
 	total_check = 0}	
 
 	LFG_Settings_Table[16] = {name = L['wrath raid'], data = {
-	'НАКС25', -- Наксрамас
-	'ОКО25', -- Око вечности
-	'ОС25', -- Обсидиановое святилище
-	'УЛЬД25', -- Ульдуар
-	'ИК25', -- Испытание крестоносца
-	'ОНЯ25', -- Логово ониксии
-	'ЦЛК25', -- Цитадель ледяной короны
-	'РС25', -- Рубиновое святилище
-	'СКЛЕП25' -- склеп аркавона
+	'25-НАКС', -- Наксрамас
+	'25-ОКО', -- Око вечности
+	'25-ОС', -- Обсидиановое святилище
+	'25-УЛЬД', -- Ульдуар
+	'25-ИК', -- Испытание крестоносца
+	'25-ОНЯ', -- Логово ониксии
+	'25-ЦЛК', -- Цитадель ледяной короны
+	'25-РС', -- Рубиновое святилище
+	'25-СКЛЕП' -- склеп аркавона
 	},
 	total_check = 0}
 	
@@ -489,15 +486,15 @@ function NewCustomTable()
 	
 	-- старое ОП
 	newTable['Inst1'] = {1, 0, '|cFF483D8B'}; -- классик лоу лвл инст
-	newTable['ОП'] = {0, 0, '|cFF483D8B'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
-	newTable['МК'] = {0, 0, '|cFF483D8B'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
-	newTable['ПС'] = {0, 0, '|cFF483D8B'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
-	newTable['КТК'] = {0, 0, '|cFF483D8B'};--mediumblue"|cFF0000CD"//-- mediumseagreen "|cFF3CB371" ++  --LIGHTBLUE"|cFFADD8E6"
-	newTable['НП'] = {0, 0, '|cFF483D8B'};--mediumpurple"|cFF9370DB"//-- darkolivegreen "|cFF556B2F ++ --LIGHTSEAGREEN  "|cFF20B2AA"
-	newTable['ТЮ'] = {0, 0, '|cFF483D8B'};--mediumorchid"|cFFBA55D3"//--darkgreen"|cFF006400" ++ --MEDIUMSPRINGGREEN "|cFF00FA9A"
-	newTable['ГНОМ'] = {0, 0, '|cFF483D8B'};--DODGERBLUE  "|cFF1E90FF"//--limegreen"|cFF32CD32" ++ --AQUAMARINE
-	newTable['ЛИ'] = {0, 0, '|cFF483D8B'};----steelblue"|cFF4682B4"//-- darkkhaki"|cFFBDB76B" ++--LIGHTSKYBLUE"|cFF87CEFA"
-	newTable['МАО'] = {0, 0, '|cFF483D8B'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
+	newTable['ОП'] = {0, 0, '|cFF6A5ACD'};--darkslateblue"|cFF483D8B"//--cyan"|cFF00FFFF" ++ --CADETBLUE"|cFF5F9EA0"
+	newTable['МК'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//-- PALEGREEN"|cFF98FB98" ++ --CORNFLOWERBLUE "|cFF6495ED" 
+	newTable['ПС'] = {0, 0, '|cFF6A5ACD'};--slateblue"|cFF6A5ACD"//--PALEGREEN"|cFF98FB98" ++ --DODGERBLUE  "|cFF1E90FF"
+	newTable['КТК'] = {0, 0, '|cFF6A5ACD'};--mediumblue"|cFF0000CD"//-- mediumseagreen "|cFF3CB371" ++  --LIGHTBLUE"|cFFADD8E6"
+	newTable['НП'] = {0, 0, '|cFF6A5ACD'};--mediumpurple"|cFF9370DB"//-- darkolivegreen "|cFF556B2F ++ --LIGHTSEAGREEN  "|cFF20B2AA"
+	newTable['ТЮ'] = {0, 0, '|cFF6A5ACD'};--mediumorchid"|cFFBA55D3"//--darkgreen"|cFF006400" ++ --MEDIUMSPRINGGREEN "|cFF00FA9A"
+	newTable['ГНОМ'] = {0, 0, '|cFF6A5ACD'};--DODGERBLUE  "|cFF1E90FF"//--limegreen"|cFF32CD32" ++ --AQUAMARINE
+	newTable['ЛИ'] = {0, 0, '|cFF6A5ACD'};----steelblue"|cFF4682B4"//-- darkkhaki"|cFFBDB76B" ++--LIGHTSKYBLUE"|cFF87CEFA"
+	newTable['МАО'] = {0, 0, '|cFF6A5ACD'};--lightblue"|cFFADD8E6"//-- coral"|cFFFF7F50" ++ --TEAL  "|cFF008080"
 	-- старое МК
 	newTable['КИ'] = {0, 0, '|cFF6A5ACD'};--cyan"|cFF00FFFF"//-- darkorange"|cFFFF8C00" ++ --STEELBLUE"|cFF4682B4"	
 	newTable['Inst2'] = {1, 0, '|cFF483D8B'}; -- классик хай лвл инст
@@ -506,21 +503,21 @@ function NewCustomTable()
 	newTable['УЛЬДА'] = {0, 0, '|cFF6A5ACD'};--mediumseagreen "|cFF3CB371" //--sienna"|cFFA0522D" ++ --CORNFLOWERBLUE "|cFF6495ED"
 	newTable['ХРАМ'] = {0, 0, '|cFF6A5ACD'};--darkolivegreen "|cFF556B2F //--mediumorchid"|cFFBA55D3" ++ --ROYALBLUE"|cFF4169E1"
 	-- старая тюрьма
-	newTable['ГЧГ'] = {0, 0, '|cFFBA55D3'};--limegreen"|cFF32CD32" //--mediumpurple"|cFF9370DB" ++--ROYALBLUE"|cFF4169E1"
-	newTable['ЛБРС'] = {0, 0, '|cFFBA55D3'};--darkkhaki"|cFFBDB76B"//-- slateblue"|cFF6A5ACD" ++--MEDIUMBLUE  "|cFF0000CD"	
-	newTable['СТРАТ'] = {0, 0, '|cFFBA55D3'};-- coral"|cFFFF7F50"//--lightblue"|cFFADD8E6"++ --MEDIUMPURPLE"|cFF9370DB"
-	newTable['ШОЛО'] = {0, 0, '|cFFBA55D3'};--darkorange"|cFFFF8C00"//--darkslateblue"|cFF483D8B" ++ mediumblue"|cFF0000CD"++ --DARKORCHID  "|cFF9932CC"!!!!
-	newTable['ДМ'] = {0, 0, '|cFFBA55D3'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
-	newTable['УБРС'] = {0, 0, '|cFFBA55D3'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
+	newTable['ГЧГ'] = {0, 0, '|cFF6A5ACD'};--limegreen"|cFF32CD32" //--mediumpurple"|cFF9370DB" ++--ROYALBLUE"|cFF4169E1"
+	newTable['ЛБРС'] = {0, 0, '|cFF6A5ACD'};--darkkhaki"|cFFBDB76B"//-- slateblue"|cFF6A5ACD" ++--MEDIUMBLUE  "|cFF0000CD"	
+	newTable['СТРАТ'] = {0, 0, '|cFF6A5ACD'};-- coral"|cFFFF7F50"//--lightblue"|cFFADD8E6"++ --MEDIUMPURPLE"|cFF9370DB"
+	newTable['ШОЛО'] = {0, 0, '|cFF6A5ACD'};--darkorange"|cFFFF8C00"//--darkslateblue"|cFF483D8B" ++ mediumblue"|cFF0000CD"++ --DARKORCHID  "|cFF9932CC"!!!!
+	newTable['ДМ'] = {0, 0, '|cFF6A5ACD'};--chocolate"|cFFD2691E" //--steelblue"|cFF4682B4" ++ --MEDIUMORCHID"|cFFBA55D3"	
+	newTable['УБРС'] = {0, 0, '|cFF6A5ACD'};--tomato"|cFFFF6347"//--mediumblue"|cFF0000CD"++ darkslateblue"|cFF483D8B" ++ --DARKMAGENTA "|cFF8B008B"!!!!
 	-- старый КТК
 	newTable['Inst3'] = {1, 0, '|cFF0000CD'}; -- классик рейды
-	newTable['ЗГ'] = {0, 0, '|cFF0000CD'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
-	newTable['АК20'] = {0, 0, '|cFF0000CD'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
-	newTable['ОНЯ'] = {0, 0, '|cFF0000CD'}; -- Orangered"|cFFFF4500" ++
-	newTable['ОН'] = {0, 0, '|cFF0000CD'}; -- Crimson  "|cFFDC143C"++
-	newTable['АК40'] = {0, 0, '|cFF0000CD'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
-	newTable['БВЛ'] = {0, 0, '|cFF0000CD'}; -- darkred  "|cFF8B0000"++
-	newTable['НАКС'] = {0, 0, '|cFF0000CD'}; -- Goldenrod"|cFFDAA520"++
+	newTable['ЗГ'] = {0, 0, '|cFF6A5ACD'}; -- Yellowgreen/lawngreen YELLOWGREEN "|cFF9ACD32"
+	newTable['АК20'] = {0, 0, '|cFF6A5ACD'};--Mediumvioletred"|cFFC71585" ++  --LIGHTRED "|cFFFF6060"
+	newTable['ОНЯ'] = {0, 0, '|cFF6A5ACD'}; -- Orangered"|cFFFF4500" ++
+	newTable['ОН'] = {0, 0, '|cFF6A5ACD'}; -- Crimson  "|cFFDC143C"++
+	newTable['АК40'] = {0, 0, '|cFF6A5ACD'};-- purple "|cFF800080" / blueviolet  "|cFF8A2BE2" ++ --GOLDENROD"|cFFDAA520"  -- cFF800080
+	newTable['БВЛ'] = {0, 0, '|cFF6A5ACD'}; -- darkred  "|cFF8B0000"++
+	newTable['НАКС'] = {0, 0, '|cFF6A5ACD'}; -- Goldenrod"|cFFDAA520"++
 	
 	-- tbc
 	-- старый мао --lightblue"|cFF00CED1"
@@ -581,7 +578,7 @@ function NewCustomTable()
 	newTable['5x5'] = {0, 0, '|cFF008080'}; -- 
 	
 	newTable['Inst8'] = {1, 0, '|cFF008000',''}; -- wrath инст
-	newTable['УТГ-К'] = {0, 0, '|cFF008000','ТЕКСТ-УТГ-К'};
+	newTable['УТГ'] = {0, 0, '|cFF008000','ТЕКСТ-УТГ-К'};
 	newTable['НЕКС'] = {0, 0, '|cFF008000','ТЕКСТ-НЕКС'};
 	newTable['НЕРУБ'] = {0, 0, '|cFF008000','ТЕКСТ-НЕРУБ'};
 	newTable['АНКАХ'] = {0, 0, '|cFF008000','ТЕКСТ-АНКАХ'};
@@ -607,7 +604,7 @@ function NewCustomTable()
 	newTable['Г-АК'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-АК'};
 	newTable['Г-ЧК'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЧК'};
 	newTable['Г-ЧМ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЧМ'};
-	newTable['Г-СТРАТ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-СТРАТ'};
+	newTable['Г-СТРАТ-О'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-СТРАТ'};
 	newTable['Г-ОКУ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ОКУ'};
 	newTable['Г-ВЕРШ'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ВЕРШ'}; -- вершина утгард
 	newTable['Г-ГУНД'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ГУНД'};
@@ -617,26 +614,26 @@ function NewCustomTable()
 	newTable['Г-ЗО'] = {0, 0, '|cFF00ff00','ТЕКСТ-Г-ЗО'};
 
 	newTable['Inst10'] = {1, 0, '|cFFFF4500'}; -- wrath рейды
-	newTable['НАКС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-НАКС10'};
-	newTable['ОКО10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОКО10'};
-	newTable['ОС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОС10'};
-	newTable['УЛЬД10'] = {0, 0, '|cFFFF4500','ТЕКСТ-УЛЬД10'};
-	newTable['ИК10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ИК10'};
-	newTable['ОНЯ10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ОНЯ10'};
-	newTable['ЦЛК10'] = {0, 0, '|cFFFF4500','ТЕКСТ-ЦЛК10'};
-	newTable['РС10'] = {0, 0, '|cFFFF4500','ТЕКСТ-РС10'};
-	newTable['СКЛЕП10'] = {0, 0, '|cFFFF4500','ТЕКСТ-СКЛЕП10'};
+	newTable['10-НАКС'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-НАКС'};
+	newTable['10-ОКО'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-ОКО'};
+	newTable['10-ОС'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-ОС'};
+	newTable['10-УЛЬД'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-УЛЬД'};
+	newTable['10-ИК'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-ИК'};
+	newTable['10-ОНЯ'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-ОНЯ'};
+	newTable['10-ЦЛК'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-ЦЛК'};
+	newTable['10-РС'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-РС'};
+	newTable['10-СКЛЕП'] = {0, 0, '|cFFFF4500','ТЕКСТ-10-СКЛЕП'};
 	
 	newTable['Inst11'] = {1, 0, '|cFFDC143C'}; -- wrath рейды
-	newTable['НАКС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-НАКС25'};
-	newTable['ОКО25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОКО25'};
-	newTable['ОС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОС25'};
-	newTable['УЛЬД25'] = {0, 0, '|cFFDC143C','ТЕКСТ-УЛЬД25'};
-	newTable['ИК25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ИК25'};
-	newTable['ОНЯ25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ОНЯ25'};
-	newTable['ЦЛК25'] = {0, 0, '|cFFDC143C','ТЕКСТ-ЦЛК25'};
-	newTable['РС25'] = {0, 0, '|cFFDC143C','ТЕКСТ-РС25'};
-	newTable['СКЛЕП25'] = {0, 0, '|cFFDC143C','ТЕКСТ-СКЛЕП25'};
+	newTable['25-НАКС'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-НАКС'};
+	newTable['25-ОКО'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-ОКО'};
+	newTable['25-ОС'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-ОС'};
+	newTable['25-УЛЬД'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-УЛЬД'};
+	newTable['25-ИК'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-ИК'};
+	newTable['25-ОНЯ'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-ОНЯ'};
+	newTable['25-ЦЛК'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-ЦЛК'};
+	newTable['25-РС'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-РС'};
+	newTable['25-СКЛЕП'] = {0, 0, '|cFFDC143C','ТЕКСТ-25-СКЛЕП'};
 	
 	for k,v in pairs(UserTable) do
 		
@@ -666,11 +663,19 @@ function GetInstTable()
 	LFGSort_Insts[2] = L['LFGSort_Inst2']	
 	LFGSort_Insts[3] = L['LFGSort_Inst3']	
 	LFGSort_Insts[4] = L['LFGSort_Inst4']	
-	LFGSort_Insts[5] = L['LFGSort_Inst5']
+	--LFGSort_Insts[5] = L['LFGSort_Inst5']
 	LFGSort_Insts[6] = L['LFGSort_Inst6']
 	LFGSort_Insts[7] = L['LFGSort_Inst7']
 	LFGSort_Insts[8] = L['LFGSort_Inst8']
-	LFGSort_Insts[9] = L['LFGSort_Inst9']	
+	--LFGSort_Insts[9] = L['LFGSort_Inst9']
+	LFGSort_Insts[10] = L['LFGSort_Inst10']
+	LFGSort_Insts[11] = L['LFGSort_Inst11']
+	--LFGSort_Insts[12] = L['LFGSort_Inst12']
+	
+	LFGSort_Insts_spr = {}
+	LFGSort_Insts_spr[2] = L['LFGSort_Inst5']
+	LFGSort_Insts_spr[1] = L['LFGSort_Inst9']
+	
 end
 
 function AddMessage(frame, message, ...)
@@ -775,11 +780,15 @@ function AddMessage(frame, message, ...)
 	--end
 end
 
-function IdentifyInst(msgString, is_adding_message)
-
+function IdentifyInst(msgString, is_adding_message, ...)
+	otladka = ...
+	if otladka == true then
+		l_debug_old = l_debug;
+		l_debug = true;
+	end
 	
 	lfg_instID = ''
-	--probs = (string.find(msgString, 'ПАРОВОЕ') ~= nil) or (string.find(msgString, 'Паровое') ~= nil);
+	probs = (string.find(msgString, 'аметист') ~= nil) or (string.find(msgString, 'накс') ~= nil);
 	
 	--if probs then
 	--	LFGSort_Message('here: '..msgString);
@@ -810,27 +819,79 @@ function IdentifyInst(msgString, is_adding_message)
 		--LFGSort_De
 		LFGSort_Debug_Message('looking more');
 
+		lfg_instID_spr = '';
+		
+		for l,LFGSort_Inst_spr in pairs(LFGSort_Insts_spr) do
+			--if CustomTable['Inst'..l][1] == 1 then
+				--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
+				
+				for x,y in pairs(LFGSort_Inst_spr) do
+					if string.find(msgText..'.', x) then
+						if y == 'ГЕР' then
+							lfg_instID_spr = lfg_instID_spr..'Г-';
+							LFGSort_Debug_Message('found - '..y..' with '..x..' in '..msgText);
+							--DEFAULT_CHAT_FRAME:AddMessage('found - '..y..' with '..x..' in '..msgText);
+							break;
+						else
+							lfg_instID_spr = lfg_instID_spr..y..'-';
+							LFGSort_Debug_Message('found - '..y..' with '..x);
+							--DEFAULT_CHAT_FRAME:AddMessage('found - '..y..' with '..x);
+							break;
+						end
+					end
+				end
+			--else
+			--	LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
+			--end
+			if lfg_instID_spr ~= '' then
+				LFGSort_Debug_Message('stop looking');
+				--DEFAULT_CHAT_FRAME:AddMessage('found spr '..lfg_instID_spr..' in '..msgText);
+				break;
+			else
+				LFGSort_Debug_Message('keep looking, lfg_instID = '..lfg_instID);
+			end
+		end
+	
+	-- тут нашли геру, 10,25 или альфа беты
+	
 		for l,LFGSort_Inst in pairs(LFGSort_Insts) do
 			
 			if CustomTable['Inst'..l][1] == 1 then
 				--LFGSort_Debug_Message('looking table '..l..' - '..L['Inst'..l]);
 				for x,y in pairs(LFGSort_Inst) do
 					if string.find(msgText..'.', x) then
-						if lfg_instID == 'ГЕР' then
-							lfg_instID = 'Г-'..y
-							LFGSort_Debug_Message('found - Г-'..y..' with '..x);
-							break;
-						else
-							lfg_instID = y;
+						--if lfg_instID == 'ГЕР' then
+						--	lfg_instID = 'Г-'..y
+						--	LFGSort_Debug_Message('found - '..lfg_instID..' with '..x);
+						--	break;
+						--else
+							lfg_instID = lfg_instID_spr..y;
 							LFGSort_Debug_Message('found - '..y..' with '..x);
+							if lfg_instID == 'ОС10' then
+								DEFAULT_CHAT_FRAME:AddMessage('found - '..y..' in '..msgText..' with '..x);
+							end
+							if lfg_instID == 'ОС25' then
+								DEFAULT_CHAT_FRAME:AddMessage('found - '..y..' in '..msgText..' with '..x);
+							end
+							--DEFAULT_CHAT_FRAME:AddMessage('found '..lfg_instID..' in '..msgText);
 							break;
-						end
+						--end
 					end
 				end
 			else
 				LFGSort_Debug_Message('not looking table '..l..' - '..L['Inst'..l]..' - false settings');
 			end
-			if lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
+			-- костыли
+			if lfg_instID == '25-ИЧ' then
+				lfg_instID = '25-ИК'
+				LFGSort_Debug_Message('stop looking');
+				break;
+			elseif lfg_instID == '10-ИЧ' then
+				lfg_instID = '10-ИК'
+				LFGSort_Debug_Message('stop looking');
+				break;
+			-- конец костылей для европы
+			elseif lfg_instID ~= '' and lfg_instID ~= 'ГЕР' then
 				LFGSort_Debug_Message('stop looking');
 				break;
 			else
@@ -846,6 +907,10 @@ function IdentifyInst(msgString, is_adding_message)
 	if probs then
 
 		l_debug = false;
+	end
+	
+	if otladka then
+		l_debug = l_debug_old;
 	end
 	
 	return lfg_instID
@@ -971,6 +1036,24 @@ function LFGSortSlash(msg)
 				end
 			end
 		end
+	elseif (command == 'testwl') then
+		comand_arg = string.lower(comand_arg)
+		DEFAULT_CHAT_FRAME:AddMessage('проверка фразы: '..comand_arg);
+		IdentifyInst(comand_arg, true, true)
+		
+	elseif (command == 'testw') then
+		comand_arg = string.lower(comand_arg)
+		DEFAULT_CHAT_FRAME:AddMessage('проверка фразы: '..comand_arg);
+
+		for k,v in pairs(LFGSort_Insts[8]) do
+			DEFAULT_CHAT_FRAME:AddMessage('проверка идентификации по шаблону: '..k);
+			if string.find(''..comand_arg, k) then
+				--color = CustomTable[v][3]
+				DEFAULT_CHAT_FRAME:AddMessage('найдено : '..v)
+				
+			end
+		end
+				
 	elseif (command == 'testfirst') then
 		for l,m in pairs(LFGSort_Insts) do
 			for k,v in pairs(m) do
